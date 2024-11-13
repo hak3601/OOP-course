@@ -20,7 +20,7 @@ private:
     vector<string> enroled_courses;
 
 public:
-    Student(string, int);
+    Student(string, string);
     Student(const Student&);
     ~Student();
 
@@ -35,7 +35,7 @@ private:
     vector<string> instructing_courses;
 
 public:
-    Professor(string, int);
+    Professor(string, string);
     Professor(const Professor&);
     ~Professor();
 
