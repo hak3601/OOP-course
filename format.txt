@@ -1,3 +1,0 @@
-for question set(True/False) => 
-Title: ProfName, CouseName, QuestionType
-Question format: No, Question sentence, answer?
