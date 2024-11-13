@@ -21,6 +21,27 @@ Exam taking system
    File name - all low caps(student.h, main.cpp)
 2. For text file, save under “data” folder separately
 3. For all code files, save under “code” folder separately
+4. Follow the below laws for comments
+
+   1. method(function)and class explanation comments should be inside the function
+      example ->
+      void simplefunc(int a, int b){
+      /_
+      (explantion about method right here)
+      _/
+      ...
+      }
+
+   2. variable comments should be on the right side of declaration
+      example ->
+      int simplevar; // (explantion about variable right here)
+
+   3. Ordinary comments should be placed clean lines(lines with no code)
+      example ->
+      // calling simplefunc to perform operation
+      simplevar = simplefunc(args);
+      ...
+
    —----------------------—----------------------—----------------------—---------------------
    user:
    User(1) => Professor View
