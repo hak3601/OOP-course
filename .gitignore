@@ -2,3 +2,5 @@
 /*.exe
 code/*.exe
 help.txt
+/questions1.cpp
+/test_takeExam.cpp
