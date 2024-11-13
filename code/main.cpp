@@ -35,12 +35,36 @@ int main(int argc, char const *argv[])
     cin >> user_id;
     
     cout << "Checking if your information is already in the database..." << endl;
-    int verify_key = verifyUser(datafolder, user_name, user_id);
-    cout<<verify_key;
+    int userType = verifyUser(datafolder, user_name, user_id);
+
+    if (userType == 0) // can't open file
+    {
+        return 0;
+    }
+    else if (userType == 1) // student
+    {
+        Student student(user_name, user_id);
+    }
+    else if (userType == 2) // professor
+    {
+        Professor Professor(user_name, user_id);
+    }
+    else if (userType == 3) // user name, ID not found in database
+    {
+        // Add your code for this case
+    }
+    else
+    {
+        // Optional default case handling
+    }
+
     
     return 0;
 }
 
+void displayMenu(){
+
+}
 int verifyUser(const string& datafolder, const string& user_name, const string& user_id){
     int return_value = 0;
     string name, id;
@@ -50,7 +74,7 @@ int verifyUser(const string& datafolder, const string& user_name, const string& 
 
     if(!file_stream_student){
         cerr << "Can't open student.txt file";
-        return return_value;
+        return 0;
     }
 
     while(getline(file_stream_student, line)){
@@ -80,6 +104,9 @@ int verifyUser(const string& datafolder, const string& user_name, const string& 
             break;
         }
     }
+
+    return_value = 3;
+
     file_stream_student.close();
     file_stream_professor.close();
     return return_value;
