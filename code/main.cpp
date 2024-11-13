@@ -33,32 +33,32 @@ int main(int argc, char const *argv[])
     cin >> user_name;
     cout << "ID : ";
     cin >> user_id;
-    
+
     cout << "Checking if your information is already in the database..." << endl;
     int userType = verifyUser(datafolder, user_name, user_id);
 
     if (userType == 0) // can't open file
     {
-        return 0;
+    return 0;
     }
     else if (userType == 1) // student
     {
-        Student student(user_name, user_id);
+
     }
     else if (userType == 2) // professor
     {
-        Professor Professor(user_name, user_id);
+
     }
     else if (userType == 3) // user name, ID not found in database
     {
-        // Add your code for this case
+    // Add your code for this case
     }
     else
     {
-        // Optional default case handling
+    // Optional default case handling
     }
 
-    
+
     return 0;
 }
 
