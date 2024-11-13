@@ -19,7 +19,8 @@ Exam taking system
    File name - all low caps(student.h, main.cpp)
 2. For text file, save under “data” folder separately
 3. For all code files, save under “code” folder separately
-—----------------------—----------------------—----------------------—---------------------
+
+## Outline
    user:
    User(1) => Professor View
    User(2) => Student View
