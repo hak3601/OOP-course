@@ -42,7 +42,7 @@ Exam taking system
       simplevar = simplefunc(args);
       ...
 
-   —----------------------—----------------------—----------------------—---------------------
+# Program flow
    user:
    User(1) => Professor View
    User(2) => Student View
