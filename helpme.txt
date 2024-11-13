@@ -1,0 +1,3 @@
+cd "/Users/htetarkar/Documents/GitHub/Uni_course/OOP-course/code/" 
+
+g++ -std=c++14 *****.cpp -o program.exe && ./program.exe
