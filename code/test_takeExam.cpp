@@ -36,3 +36,7 @@ int main() {
 
     return 0;
 }
+/*
+*   cd "/Users/htetarkar/Documents/GitHub/Uni_course/OOP-course/code/"
+*   g++ -std=c++14 test_takeExam.cpp -o test && ./test
+*/
