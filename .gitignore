@@ -1,3 +1,4 @@
 /.vscode
 /*.exe
 code/*.exe
+/sub_main.cpp
