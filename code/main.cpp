@@ -44,24 +44,20 @@ int main(int argc, char const *argv[])
         cin >> user_id;
         int user_type = verifyUser(user_name, user_id, datafolder);
         cout << "Checking if your information is already in the database..." << endl;
-        if (user_type == 0) // can't open file
-        {
+        if (user_type == 0){ // can't open file
             return 0;
         }
-        else if (user_type == 1) // student
-        {
+        else if (user_type == 1){ // student
             cout << "You are a student!!" << endl;
             Student user_s(user_name, user_id, fetchEnroled(user_name, user_id, datafolder));
             break;
         }
-        else if (user_type == 2) // professor
-        {
+        else if (user_type == 2){ // professor
             cout << "You are a professor!!" << endl;
             Professor user_p(user_name, user_id, fetchInstructing(user_name, user_id, datafolder));
             break;
         }
-        else if (user_type == 3) // user name, ID not found in database
-        {
+        else if (user_type == 3) { // user name, ID not found in database
             char command;
             cout << "No matching found(type 1 to retry, type 2 to registrate) >> ";
             cin >> command;
@@ -71,13 +67,11 @@ int main(int argc, char const *argv[])
             }
                 
         }
-        else
-        {
-        // Optional default case handling
-        }
-
     }
     
+    while(1){
+        
+    }
     return 0;
 }
 
