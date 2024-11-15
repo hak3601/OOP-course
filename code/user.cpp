@@ -19,11 +19,11 @@ Student::Student(const Student& other)
 Student::~Student() {}
 
 Student& Student::operator=(const Student& other) {
-        if (this != &other) { // Self-assignment check
-            User::operator=(other); // Use assignment operator of base class
-            enroled_courses = other.enroled_courses; // Assign vector
-        }
-        return *this;
+    if (this != &other) { // Self-assignment check
+        User::operator=(other); // Use assignment operator of base class
+        enroled_courses = other.enroled_courses; // Assign vector
+    }
+    return *this;
 }
 
 vector<string> Student::getEnroledCourses() {return enroled_courses;}
@@ -37,9 +37,9 @@ Professor::Professor(const Professor& other)
 Professor::~Professor() {}
 
 Professor& Professor::operator=(const Professor& other) {
-        if (this != &other) { // Self-assignment check
-            User::operator=(other); // Use assignment operator of base class
-            instructing_courses = other.instructing_courses; // Assign vector
-        }
-        return *this;
+    if (this != &other) { // Self-assignment check
+        User::operator=(other); // Use assignment operator of base class
+        instructing_courses = other.instructing_courses; // Assign vector
+    }
+    return *this;
 }
