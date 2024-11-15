@@ -12,6 +12,9 @@ public:
     User(string, string);
     User(const User&);
     ~User();
+
+    string getName();
+    string getId();
 };
 
 class Student : public User{
@@ -26,7 +29,7 @@ public:
 
     Student& operator=(const Student&);
 
-    void displayEnroledCourses();
+    vector<string> getEnroledCourses();
     void take_exam();
 };
 
@@ -36,12 +39,13 @@ private:
 
 public:
     Professor();
-    Professor(string, string);
+    Professor(string, string, vector<string>);
     Professor(const Professor&);
     ~Professor();
 
     Professor& operator=(const Professor&);
 
+    vector<string> getInstructingCourses();
     void displayInstructingCourses();
     void create_exam();
     void mark_exam();

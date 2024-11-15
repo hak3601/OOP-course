@@ -5,45 +5,41 @@
 #include <fstream>
 using namespace std;
 
-class User{
-protected:
-    string name;
-    string id;
-public:
-    User(string user_name, string user_id) : name(user_name), id(user_id) {}
-    User(const User &other) : name(other.name), id(other.id) {}
-    virtual ~User() {}
+User::User(string user_name, string user_id) : name(user_name), id(user_id) {}
+User::User(const User &other) : name(other.name), id(other.id) {}
+User::~User() {}
+string User::getName() {return name;}
+string User::getId() {return id;}
 
-
-    string getName(){return name;}
-    string getId(){return id;}
-};
-
-class Student : public User{
-private:
-    vector<string> enroled_courses;
-
-public:
-    Student() : User("NULL", "NULL") {}
-    Student(string student_name, string student_id, vector<string> student_enroled_courses)
+Student::Student() : User("NULL", "NULL") {}
+Student::Student(string student_name, string student_id, vector<string> student_enroled_courses)
         : User(student_name, student_id), enroled_courses(student_enroled_courses) {}
-    Student(const Student& other)
+Student::Student(const Student& other)
         : User(other), enroled_courses(other.enroled_courses) {}
-    ~Student() {}
+Student::~Student() {}
 
-    Student& operator=(const Student& other) {
-    if (this != &other) { // Self-assignment check
-        User::operator=(other); // Use assignment operator of base class
-        enroled_courses = other.enroled_courses; // Assign vector
-    }
-    return *this;
-    }
-
-    void displayEnroledCourses(){
-        printf("<Currently enroled courses by '%s'>", getName());
-        for(const auto& course : enroled_courses){
-            cout << course << endl;
+Student& Student::operator=(const Student& other) {
+        if (this != &other) { // Self-assignment check
+            User::operator=(other); // Use assignment operator of base class
+            enroled_courses = other.enroled_courses; // Assign vector
         }
-    }
-    void take_exam();
-};
+        return *this;
+}
+
+vector<string> Student::getEnroledCourses() {return enroled_courses;}
+vector<string> Professor::getInstructingCourses() {return instructing_courses;}
+
+Professor::Professor() : User("NULL", "NULL") {}
+Professor::Professor(string prof_name, string prof_id, vector<string> prof_instructing_courses)
+        : User(prof_name, prof_id), instructing_courses(prof_instructing_courses) {}
+Professor::Professor(const Professor& other)
+        : User(other), instructing_courses(other.instructing_courses) {}
+Professor::~Professor() {}
+
+Professor& Professor::operator=(const Professor& other) {
+        if (this != &other) { // Self-assignment check
+            User::operator=(other); // Use assignment operator of base class
+            instructing_courses = other.instructing_courses; // Assign vector
+        }
+        return *this;
+}
