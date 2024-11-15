@@ -5,12 +5,11 @@
 #include <vector>
 using namespace std;
 class User{
-private:
+protected:
     string name;
-    int id;
+    string id;
 public:
-    User(string);
-    User(int );
+    User(string, string);
     User(const User&);
     ~User();
 };
@@ -20,14 +19,15 @@ private:
     vector<string> enroled_courses;
 
 public:
-    Student(string, string);
+    Student();
+    Student(string, string, vector<string>);
     Student(const Student&);
     ~Student();
 
     Student& operator=(const Student&);
 
-    friend void displayEnroledCourses();
-    friend void take_exam();
+    void displayEnroledCourses();
+    void take_exam();
 };
 
 class Professor : public User{
@@ -35,16 +35,17 @@ private:
     vector<string> instructing_courses;
 
 public:
+    Professor();
     Professor(string, string);
     Professor(const Professor&);
     ~Professor();
 
     Professor& operator=(const Professor&);
 
-    friend void displayInstructingCourses();
-    friend void create_exam();
-    friend void mark_exam();
-    friend void comment_exam();
+    void displayInstructingCourses();
+    void create_exam();
+    void mark_exam();
+    void comment_exam();
 };
 
 #endif 
