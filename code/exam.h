@@ -18,18 +18,18 @@ protected:
     vector<Question*> questions;
     int duration; // in minutes
     chrono::system_clock::time_point start_time;
-    int max_score;
+    int total_score;
+    vector<vector<string>> individual_problem_RW_tracker; 
 
 public:
     Exam(const string &title, vector<Question*> qs);
     ~Exam();
 
-    void startExam();
-    void endExam();
-    void displayQuestions() const;
-    void recordScore(const string &user_id, int score);
-    void publishResults() const;
-    void printSummary() const;
+    virtual void startExam() = 0; // will be called in main
+    virtual void endExam() = 0; // will be called when exam is over and will update the test result file
+    virtual void displayQuestions() const = 0; // ~
+    virtual void recordScore(const string &user_id, int score) = 0; // 
+    virtual void printSummary() const = 0;
 };
 
 class TrainExam : public Exam{
@@ -41,7 +41,7 @@ public:
 
 class TestExam : public Exam{
 private:
-
+    int max_score;
 public:
 
 };
