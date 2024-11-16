@@ -12,13 +12,19 @@ Question::Question(int idx, const string &text, int point)
 int Question::getIdx() {return idx;}
 string Question::getQuestionText() {return question_text;}
 int Question::getpoint() {return point;}
+bool Question::grade() {return false;}
 
 TrueFalseQuestion::TrueFalseQuestion(int idx, const string &text, int point, bool correctAns)
-        : Question(idx, text, point), correctAnswer(correctAns) {}
+        : Question(idx, text, point), correct_answer(correctAns) {}
 void TrueFalseQuestion::display() const{
-    printf("%d. %s (%s points)\nT/F? >> ", idx, question_text, point);
+    printf("%d. %s (%s points)\nt/f? >> ", idx, question_text, point);
 }
-
+bool TrueFalseQuestion::grade(string user_ans){
+    bool boolean_user_ans;
+    if(!user_ans.compare("t") || !user_ans.compare("T") || !user_ans.compare("true") || !user_ans.compare("True")) boolean_user_ans = true;
+    else if(!user_ans.compare("f") || !user_ans.compare("F") || !user_ans.compare("false") || !user_ans.compare("False")) boolean_user_ans = false;
+    return boolean_user_ans == correct_answer;
+}
 
 MultipleChoiceQuestion::MultipleChoiceQuestion(int idx, const string &text, int point, const vector<string> &opts, const string &correctans)
         : Question(idx, text, point), options(opts), correct_answer(correctans) {}
@@ -29,9 +35,16 @@ void MultipleChoiceQuestion::display() const{
     }
     cout << "Which is correct? >> ";
 }
+bool MultipleChoiceQuestion::grade(string user_ans){
+    return !user_ans.compare(correct_answer);
+}
+
 
 CompletionQuestion::CompletionQuestion(int idx, const string &text, int point, const string &correctans)
         : Question(idx, text, point), correct_answer(correctans) {}
 void CompletionQuestion::display() const{
     printf("%d. %s (%d points)\nFill in the blank >> ", idx, question_text, point);
+}
+bool CompletionQuestion::grade(string user_ans){
+    return !user_ans.compare(correct_answer);
 }

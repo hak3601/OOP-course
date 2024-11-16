@@ -22,37 +22,40 @@ public:
     virtual int getIdx();
     virtual string getQuestionText();
     virtual int getpoint();
-    
+    virtual bool grade();
 };
 
 // Derived class for True/False Question
 class TrueFalseQuestion : public Question {
-    bool correctAnswer;
+private:
+    bool correct_answer;
 
 public:
     TrueFalseQuestion(int, const string&, int, bool);
-
+    bool grade(string user_ans);
     void display() const override;
 };
 
 // Derived class for Multiple Choice Question
 class MultipleChoiceQuestion : public Question {
+private:
     vector<string> options;
     string correct_answer;
 
 public:
     MultipleChoiceQuestion(int, const string&, int, const vector<string>&, const string&);
-
+    bool grade(string user_ans);
     void display() const override;
 };
 
 // Derived class for Completion (Fill in the Blank) Question
 class CompletionQuestion : public Question {
+private:
     string correct_answer;
 
 public:
     CompletionQuestion(int, const string&, int, const string&);
-
+    bool grade(string user_ans);
     void display() const override;
 };
 

@@ -26,8 +26,8 @@ Student& Student::operator=(const Student& other) {
     return *this;
 }
 
-vector<string> Student::getEnroledCourses() {return enroled_courses;}
-vector<string> Professor::getInstructingCourses() {return instructing_courses;}
+vector<string> Student::getInternalContent() {return enroled_courses;}
+vector<string> Professor::getInternalContent() {return instructing_courses;}
 
 Professor::Professor() : User("NULL", "NULL") {}
 Professor::Professor(string prof_name, string prof_id, vector<string> prof_instructing_courses)
