@@ -5,29 +5,45 @@
 #include <vector>
 #include <map>
 #include <chrono>
-#include "questions.h" // Include the questions header
+#include "user.cpp"
+#include "questions.cpp" // Include the questions header
+#include "dynamic_difficulty_engine.cpp"
+using namespace std;
 
 // Class representing an Exam
 class Exam {
-    std::string examTitle;
-    std::vector<Question*> questions;
+protected:
+    User* object_user;
+    string exam_title;
+    vector<Question*> questions;
     int duration; // in minutes
-    std::chrono::system_clock::time_point startTime;
-    std::map<std::string, int> userScores; // Maps user IDs to scores
-    std::map<std::string, std::string> userComments; // Maps user IDs to comments
+    chrono::system_clock::time_point start_time;
+    int max_score;
 
 public:
-    Exam(const std::string &title, int dur);
+    Exam(const string &title, vector<Question*> qs);
     ~Exam();
 
-    void addQuestion(Question *question);
     void startExam();
     void endExam();
     void displayQuestions() const;
-    void recordScore(const std::string &userID, int score);
-    void addComment(const std::string &userID, const std::string &comment);
+    void recordScore(const string &user_id, int score);
     void publishResults() const;
     void printSummary() const;
+};
+
+class TrainExam : public Exam{
+private:
+    DynamicDifficultyEngine DDE;
+public:
+
+};
+
+class TestExam : public Exam{
+private:
+
+public:
+
 };
 
 #endif // EXAM_H

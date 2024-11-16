@@ -75,21 +75,25 @@ int main(int argc, char const *argv[])
         cout << "Enter your command >> ";
         cin >> user_command;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        if(user_command == 1){ // Take exam
 
+        if(user_command == 1){ // Take test exam
+            
         } else if (user_command == 2){ // Train for test
 
         } else if (user_command == 3){ // Create test
             
         } else if (user_command == 4){ // Create train test
             
-        } else if (user_command == 5){ // Exit
+        } else if (user_command == 5){ // Professor inspection on test
             break;
-        } else{
+        } else if (user_command == 6){ // Exit
+            break;
+        }else{
             cout << "Invalid input, please try again" << endl;
         }
     }
     cout << "Program terminated" << endl;
+    delete user;
     return 0;
 }
 
