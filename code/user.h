@@ -5,14 +5,18 @@
 #include <vector>
 using namespace std;
 class User{
-private:
+protected:
     string name;
-    int id;
+    string id;
 public:
-    User(string);
-    User(int );
+    User();
+    User(string, string);
     User(const User&);
-    ~User();
+    virtual ~User();
+
+    string getName();
+    string getId();
+    virtual vector<string> getInternalContent() = 0;
 };
 
 class Student : public User{
@@ -20,14 +24,16 @@ private:
     vector<string> enroled_courses;
 
 public:
-    Student(string, string);
+    Student();
+    Student(string, string, vector<string>);
     Student(const Student&);
     ~Student();
 
     Student& operator=(const Student&);
 
-    friend void displayEnroledCourses();
-    friend void take_exam();
+    vector<string> getInternalContent();
+    void displayInstructingCourses();
+    void take_exam();
 };
 
 class Professor : public User{
@@ -35,16 +41,18 @@ private:
     vector<string> instructing_courses;
 
 public:
-    Professor(string, string);
+    Professor();
+    Professor(string, string, vector<string>);
     Professor(const Professor&);
     ~Professor();
 
     Professor& operator=(const Professor&);
 
-    friend void displayInstructingCourses();
-    friend void create_exam();
-    friend void mark_exam();
-    friend void comment_exam();
+    vector<string> getInternalContent()override;
+    void displayInstructingCourses();
+    void create_exam();
+    void mark_exam();
+    void comment_exam();
 };
 
 #endif 
