@@ -54,7 +54,7 @@ int main() {
         Child c(1,2);
         p = &c;
     }
-    
+    cout<<typeid(*p).name()<<endl;
     cout << p->f1();
     exit(1);
     std::string filename = "data/Artificial_intelligence-TF-train.csv";
