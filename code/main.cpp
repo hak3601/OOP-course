@@ -11,7 +11,8 @@ using namespace std;
 
 void assignUserToDatabase(const string&, const string&, const string&);
 void printButton(const vector<string>&);
-void displayMainMenu();
+void studentMainMenu(User*, string);
+void professorMainMenu(User*, string);
 int verifyUser(const string&, const string&, const string&);
 
 int main(int argc, char const *argv[])
@@ -30,9 +31,9 @@ int main(int argc, char const *argv[])
     string user_name;
     string user_id;
     User* user;
-
+    
     cout << "*** Welcome to Exam Management System ***";
-
+    
     while(1){
         cout << "\nVerify yourself with your name and ID" << endl;
         cout << "Name >> ";
@@ -46,15 +47,12 @@ int main(int argc, char const *argv[])
         }
         else if (user_type == 1){ // student
             cout << "You are a student!!" << endl;
-            Student user_s(user_name, user_id, fetchEnroledOrInstructing(user_name, user_id, datafolder, "student.csv"));
-            user = &user_s;
+            user = new Student(user_name, user_id, fetchEnroledOrInstructing(user_name, user_id, datafolder, "student.csv"));
             break;
         }
         else if (user_type == 2){ // professor
             cout << "You are a professor!!" << endl;
-            Professor user_p(user_name, user_id, fetchEnroledOrInstructing(user_name, user_id, datafolder, "professor.csv"));
-            user = &user_p;
-            
+            user = new Professor(user_name, user_id, fetchEnroledOrInstructing(user_name, user_id, datafolder, "professor.csv"));           
             break;
         }
         else if (user_type == 3) { // user name, ID not found in database
@@ -68,10 +66,25 @@ int main(int argc, char const *argv[])
         }
     }
 
-    int user_command;
+    if(!string("7Student").compare(typeid(*user).name())){
+        studentMainMenu(user, datafolder);
+    } else if(!string("9Professor").compare(typeid(*user).name())){
+        professorMainMenu(user, datafolder);
+    }
 
+    cout << "Program terminated" << endl;
+    delete user;
+    return 0;
+}
+
+void studentMainMenu(User* user, string datafolder){
+    int user_command;
     while(1){
-        displayMainMenu();
+        cout << "Student Main Menu" << endl;
+        cout << "==========" << endl;
+
+        vector<string> ls = {"1. Take Exam", "2. Train for Test", "3. Create Train Test","4. Exit"};
+        printButton(ls);
         cout << "Enter your command >> ";
         cin >> user_command;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -86,21 +99,41 @@ int main(int argc, char const *argv[])
             */
         } else if (user_command == 2){ // Train for test
 
-        } else if (user_command == 3){ // Create tests
+        } else if (user_command == 3){ // Create train tests
             
-        } else if (user_command == 4){ // Create train test?
-            
-        } else if (user_command == 5){ // Professor inspection on test
+        } else if (user_command == 4){ // Exit
             break;
-        } else if (user_command == 6){ // Exit
-            break;
-        }else{
+        } else{
             cout << "Invalid input, please try again" << endl;
         }
     }
-    cout << "Program terminated" << endl;
-    delete user;
-    return 0;
+}
+
+void professorMainMenu(User* user, string datafolder){
+    int user_command;
+    for(const auto& v : user->getInternalContent()){
+        cout << v;
+    }
+    while(1){
+        cout << "Professor Main Menu" << endl;
+        cout << "==========" << endl;
+
+        vector<string> ls = {"1. Create Exam", "2. Inspect results", "3. Exit"};
+        printButton(ls);
+        cout << "Enter your command >> ";
+        cin >> user_command;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        if(user_command == 1){ // Create exam
+
+        } else if (user_command == 2){ // Inspect results
+
+        } else if (user_command == 3){ // Exit
+            break;
+        } else{
+            cout << "Invalid input, please try again" << endl;
+        }
+    }
 }
 
 void printButton(const vector<string>& labels) {
@@ -121,13 +154,7 @@ void printButton(const vector<string>& labels) {
     cout<<"\n";
 }
 
-void displayMainMenu() {
-    cout << "Main Menu" << endl;
-    cout << "==========" << endl;
 
-    vector<string> ls = {"1. Take Exam","2. Train for Test","3. Create Test","4. Create Train Test","5. Exit"};
-    printButton(ls);
-}
 
 // Do not use this yet
 // void assignUserToDatabase(const string& name, const string& id, const string& datapath) {

@@ -7,7 +7,6 @@ using namespace std;
 
 User::User(string user_name, string user_id) : name(user_name), id(user_id) {}
 User::User(const User &other) : name(other.name), id(other.id) {}
-User::~User() {}
 string User::getName() {return name;}
 string User::getId() {return id;}
 

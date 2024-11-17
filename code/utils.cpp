@@ -75,10 +75,6 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
             break;
         }
     }
-    
-    for(const auto& v : ret_vec){
-        cout << v << endl;
-    }
     return ret_vec;
 }
 
