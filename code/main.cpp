@@ -188,19 +188,19 @@ int verifyUser(const string& user_name, const string& user_id, const string& dat
     Verifies whether there is a user_name + user_id that matches in the DB
     */
     int return_value = 0;
-    vector<vector<string>> csvData = readCSV(datafolder, "student.csv");
+    vector<vector<string>> csv_data = readCSV(datafolder, "student.csv");
 
-    if(csvData.empty()){return return_value;}
+    if(csv_data.empty()){return return_value;}
 
-    for(const vector<string> vec : csvData){
+    for(const vector<string> vec : csv_data){
         if(!user_name.compare(vec[0]) && !user_id.compare(vec[1])){
             return_value = 1;
             return return_value;
         }
     }
 
-    csvData = readCSV(datafolder, "professor.csv");
-    for(const vector<string> vec : csvData){
+    csv_data = readCSV(datafolder, "professor.csv");
+    for(const vector<string> vec : csv_data){
         if(!user_name.compare(vec[0]) && !user_id.compare(vec[1])){
             return_value = 2;
             return return_value;
