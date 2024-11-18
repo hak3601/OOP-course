@@ -15,6 +15,7 @@ void studentMainMenu(User*, string);
 void professorMainMenu(User*, string);
 int verifyUser(const string&, const string&, const string&);
 vector<string> showAvailableCourses(User* user, const string& datafolder, const string& filename);
+void updateAvailableState(User* user, int order, const string& datafolder, const string& filename);
 
 int main(int argc, char const *argv[])
 {
@@ -102,6 +103,7 @@ void studentMainMenu(User* user, string datafolder){
             for (string s: available_courses) {
                 cout << s << endl;
             }
+
         } else if (user_command == 2){ // Train for test
 
         } else if (user_command == 3){ // Create train tests
@@ -167,18 +169,18 @@ void printButton(const vector<string>& labels) {
 //     string version;
 //     cout << "Which type of user do you want to registrate (type s for student, type p for professor)? >> ";
 //     cin >> version;
-
+//
 //     ofstream file_stream;
 //     openUserFileForWrite(file_stream, datapath, version);
-
+//
 //     if (!file_stream) {
 //         cerr << "Failed to open the file for writing." << endl;
 //         return;
 //     }
-
+//
 //     file_stream << '\n' << name << "/" << id;
 //     cout << "User \'" << name << "\' with ID \'" << id << "\' has been registered successfully." << endl;
-
+//
 //     file_stream.close();
 // }
 
@@ -251,4 +253,37 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
     }
     courses = fetchEnroledOrInstructing(user->getName(), user->getId(), datafolder, "courses_available.csv");
     return courses;
+}
+
+void updateAvailableState(User* user, int order, const string& datafolder, const string& filename) {
+    vector<vector<string>> available_courses = readCSV(datafolder, filename);
+
+    // Check if the user exists in the student CSV
+    string userId = user->getId();
+    int row = 0;
+    // Find the row for the given userId
+    for (int i = 0; i < available_courses.size(); i++) {
+        if (!available_courses[i].empty() && available_courses[i][1] == userId) {
+            row = i; // Reference to the matching row
+            break;
+        }
+    }
+
+    if (row == available_courses.size() || available_courses.empty()) {
+        cout << "No data" << endl;
+        return;
+
+    } else {
+            // Open the file for appending (datafolder/filename)
+            ofstream out_file(datafolder + '/' + filename, ios::app);
+
+            if (out_file.is_open()) {
+                out_file << user->getName() << "," << userId; // Write the userId
+                for (string course : user->getInternalContent()) {
+                    out_file << ",[O] " << course; // Write each course with [O] to indicate availability
+                }
+                out_file << endl;
+                out_file.close();
+            }
+    }
 }
