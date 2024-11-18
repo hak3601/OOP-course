@@ -98,7 +98,10 @@ void studentMainMenu(User* user, string datafolder){
             bring csv file according to course name, instructor
             create exam object ~
             */
-            showAvailableCourses(user, datafolder, "courses_available.csv");
+            vector<string> available_courses = showAvailableCourses(user, datafolder, "courses_available.csv");
+            for (string s: available_courses) {
+                cout << s << endl;
+            }
         } else if (user_command == 2){ // Train for test
 
         } else if (user_command == 3){ // Create train tests
@@ -212,3 +215,40 @@ int verifyUser(const string& user_name, const string& user_id, const string& dat
 }
 
 
+// Function to show available courses for a user
+vector<string> showAvailableCourses(User* user, const string& datafolder, const string& filename) {
+    vector<string> courses; // To store available course information
+
+    // Read CSV data
+    vector<vector<string>> student_data = readCSV(datafolder, "/student.csv");
+    vector<vector<string>> available_courses = readCSV(datafolder, filename);
+
+    // Check if the user exists in the student CSV
+    string userId = user->getId();
+    int row = 0;
+    // Find the row for the given userId
+    for (int i = 0; i < student_data.size(); i++) {
+        if (!student_data[i].empty() && student_data[i][1] == userId) {
+            row = i; // Reference to the matching row
+            break;
+        }
+    }
+
+    if (row == student_data.size() || available_courses.empty()) {
+        // Open the file for appending (datafolder/filename)
+        ofstream out_file(datafolder + '/' + filename, ios::app);
+
+        if (out_file.is_open()) {
+            out_file << user->getName() << "," << userId; // Write the userId
+            for (string course : user->getInternalContent()) {
+                out_file << ",[O] " << course; // Write each course with [O] to indicate availability
+            }
+            out_file << endl;
+            out_file.close();
+        } else {
+            cerr << "Unable to open the file!" << endl;
+        }
+    }
+    courses = fetchEnroledOrInstructing(user->getName(), user->getId(), datafolder, "courses_available.csv");
+    return courses;
+}
