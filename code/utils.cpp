@@ -79,3 +79,12 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
     return ret_vec;
 }
 
+// Function to show available courses
+vector<string> showAvailableCourses(const string& datafolder, const string& filename) {
+    vector<string> courses; // To store available course information
+    vector<vector<string>> csv_data = readCSV(datafolder, filename);
+    // if the file doesn't contain the student, user's courses in student.csv to courses_available.csv
+    // All courses of new student are available in the initial state 
+
+    return courses;
+}
