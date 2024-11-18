@@ -16,8 +16,8 @@ public:
     User(const User&);
     virtual ~User() = default;
 
-    string getName();
-    string getId();
+    string getName() const;
+    string getId() const;
     virtual vector<string> getInternalContent() = 0;
 };
 
@@ -33,7 +33,7 @@ public:
 
     Student& operator=(const Student&);
 
-    vector<string> getInternalContent();
+    vector<string> getInternalContent() const;
     void displayInstructingCourses();
     void take_exam();
 };

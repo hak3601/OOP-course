@@ -79,12 +79,45 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
     return ret_vec;
 }
 
-// Function to show available courses
-vector<string> showAvailableCourses(const string& datafolder, const string& filename) {
+// Function to show available courses for a user
+vector<string> showAvailableCourses(const User* user, const string& datafolder, const string& filename) {
     vector<string> courses; // To store available course information
-    vector<vector<string>> csv_data = readCSV(datafolder, filename);
-    // if the file doesn't contain the student, user's courses in student.csv to courses_available.csv
-    // All courses of new student are available in the initial state 
+
+    // Read CSV data
+    vector<vector<string>> student_data = readCSV(datafolder, "/student.csv");
+    vector<vector<string>> available_courses = readCSV(datafolder, filename);
+
+    // Check if the user exists in the student CSV
+    string userId = user->getId();
+    vector<string>* matching_row = nullptr;
+
+    // Find the row for the given userId
+    for (int i = 0; i < student_data.size(); i++) {
+        if (!student_data[i].empty() && student_data[i][1] == userId) {
+            matching_row = &student_data[i]; // Reference to the matching row
+            break;
+        }
+    }
+
+    if (matching_row == nullptr) {
+    // Open the file for appending (datafolder/filename)
+    ofstream outFile(datafolder+'/'+ filename, ios::app);
+
+    if (outFile.is_open()) {
+        // Assuming you have student data and available courses
+        outFile << userId; // Write the userId
+        for (string course : user->getInternalContent()) {
+            outFile << " [O] " << course; // Write each course with [O] to indicate availability
+        }
+        outFile << std::endl; // Add a newline at the end
+        outFile.close(); // Close the file
+    } else {
+        cerr << "Unable to open the file!" << endl;
+    }
+    } else {
+        // user에게 모든 수강과목 availabe 여부와 함께 보여준다.
+    }
 
     return courses;
 }
+
