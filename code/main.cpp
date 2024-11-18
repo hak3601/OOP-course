@@ -81,6 +81,7 @@ int main(int argc, char const *argv[])
 
 void studentMainMenu(User* user, string datafolder){
     int user_command;
+    int course_order;
     while(1){
         cout << "Student Main Menu" << endl;
         cout << "==========" << endl;
@@ -103,7 +104,9 @@ void studentMainMenu(User* user, string datafolder){
             for (string s: available_courses) {
                 cout << s << endl;
             }
-
+            cout << "Select the course to take exam by entering the order: ";
+            cin >> course_order;
+            updateAvailableState(user, course_order, datafolder, "courses_available.csv");
         } else if (user_command == 2){ // Train for test
 
         } else if (user_command == 3){ // Create train tests
@@ -255,6 +258,8 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
     return courses;
 }
 
+
+
 void updateAvailableState(User* user, int order, const string& datafolder, const string& filename) {
     vector<vector<string>> available_courses = readCSV(datafolder, filename);
 
@@ -264,26 +269,37 @@ void updateAvailableState(User* user, int order, const string& datafolder, const
     // Find the row for the given userId
     for (int i = 0; i < available_courses.size(); i++) {
         if (!available_courses[i].empty() && available_courses[i][1] == userId) {
-            row = i; // Reference to the matching row
+            row = i; // save the row position
             break;
         }
     }
+    
+    // Ensure row and order validity before proceeding
+    if (row >= 0 && order - 1 >= 0 && order - 1 < available_courses[row].size()) {
+        // Check if the cell starts with "[O]" (followed by a space and course name)
+        if (available_courses[row][order + 1].substr(0, 3) == "[O]") {
+            // Replace "[O]" with "[X]" but keep the rest of the string (course name)
+            available_courses[row][order + 1] = "[X]" + available_courses[row][order + 1].substr(3);
+        } else {
+            cout << "you've already done" << endl;
+            return;
+        }
+    }
 
-    if (row == available_courses.size() || available_courses.empty()) {
-        cout << "No data" << endl;
-        return;
-
-    } else {
-            // Open the file for appending (datafolder/filename)
-            ofstream out_file(datafolder + '/' + filename, ios::app);
-
-            if (out_file.is_open()) {
-                out_file << user->getName() << "," << userId; // Write the userId
-                for (string course : user->getInternalContent()) {
-                    out_file << ",[O] " << course; // Write each course with [O] to indicate availability
+    // Open the file for writing (overwrite mode) to save updated data
+    ofstream out_file(datafolder + '/' + filename, ios::trunc);
+    if (out_file.is_open()) {
+        for (const auto& course_row : available_courses) {
+            for (size_t i = 0; i < course_row.size(); ++i) {
+                out_file << course_row[i];
+                if (i < course_row.size() - 1) {
+                    out_file << ","; // delimiter for CSV
                 }
-                out_file << endl;
-                out_file.close();
             }
+            out_file << "\n"; // new line for next row
+        }
+        out_file.close();
+    } else {
+        cerr << "Failed to open the file for writing.\n";
     }
 }
