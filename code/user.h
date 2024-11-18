@@ -4,15 +4,17 @@
 #include <string>
 #include <vector>
 using namespace std;
+
 class User{
 protected:
     string name;
     string id;
+    
 public:
     User();
     User(string, string);
     User(const User&);
-    virtual ~User();
+    virtual ~User() = default;
 
     string getName();
     string getId();

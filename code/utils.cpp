@@ -44,7 +44,8 @@ vector<string> parseString2Vec(string input){
     return type -> a vector that parsed input string
 
     The input is either string of enroled_courses or instructing_courses.
-    Thus this function converts the input string to a vector. 
+    Thus this function converts the input string to a vector.
+    user's course (csv_data) to vector (string)? readCSV already has done 
     */
     vector<string> tokens;
     size_t start = 0;
@@ -66,18 +67,14 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
     return type -> a vector that contains 'enroled course' informations about a particular student
     */
     vector<string> ret_vec;
-    vector<vector<string>> csvData = readCSV(datafolder, filename);
-    for(const vector<string> vec : csvData){
+    vector<vector<string>> csv_data = readCSV(datafolder, filename);
+    for(const vector<string> vec : csv_data){
         if(!user_name.compare(vec[0]) && !user_id.compare(vec[1])){
             for (size_t i = 2; i < vec.size(); i++){
                 ret_vec.push_back(vec[i]);
             }
             break;
         }
-    }
-    
-    for(const auto& v : ret_vec){
-        cout << v << endl;
     }
     return ret_vec;
 }
