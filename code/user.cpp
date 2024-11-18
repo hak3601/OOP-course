@@ -7,8 +7,8 @@ using namespace std;
 
 User::User(string user_name, string user_id) : name(user_name), id(user_id) {}
 User::User(const User &other) : name(other.name), id(other.id) {}
-string User::getName() const {return name;}
-string User::getId() const {return id;}
+string User::getName() {return name;}
+string User::getId() {return id;}
 
 Student::Student() : User("NULL", "NULL") {}
 Student::Student(string student_name, string student_id, vector<string> student_enroled_courses)
@@ -25,7 +25,7 @@ Student& Student::operator=(const Student& other) {
     return *this;
 }
 
-vector<string> Student::getInternalContent() const {return enroled_courses;}
+vector<string> Student::getInternalContent() {return enroled_courses;}
 vector<string> Professor::getInternalContent() {return instructing_courses;}
 
 Professor::Professor() : User("NULL", "NULL") {}

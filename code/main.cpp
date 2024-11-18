@@ -14,6 +14,7 @@ void printButton(const vector<string>&);
 void studentMainMenu(User*, string);
 void professorMainMenu(User*, string);
 int verifyUser(const string&, const string&, const string&);
+vector<string> showAvailableCourses(User* user, const string& datafolder, const string& filename);
 
 int main(int argc, char const *argv[])
 {
@@ -97,6 +98,7 @@ void studentMainMenu(User* user, string datafolder){
             bring csv file according to course name, instructor
             create exam object ~
             */
+            showAvailableCourses(user, datafolder, "courses_available.csv");
         } else if (user_command == 2){ // Train for test
 
         } else if (user_command == 3){ // Create train tests
@@ -154,8 +156,6 @@ void printButton(const vector<string>& labels) {
     cout<<"\n";
 }
 
-
-
 // Do not use this yet
 // void assignUserToDatabase(const string& name, const string& id, const string& datapath) {
 //     /*
@@ -210,3 +210,5 @@ int verifyUser(const string& user_name, const string& user_id, const string& dat
     return_value = 3;
     return return_value;
 }
+
+
