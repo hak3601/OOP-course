@@ -23,6 +23,7 @@ public:
 
         cout << "Next question difficulty: " << endl;
         // return proper_difficulty (may be problem set);
+        return 0;
     }
 
     // help getNextQuestion to get the proper question reflecting the difficulty
