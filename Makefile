@@ -1,43 +1,69 @@
-# Variables for compiler and flags
-CXX = g++
-CXXFLAGS = -std=c++14 -Wall
-LDFLAGS =
+########################################################################
+####################### Makefile Template ##############################
+########################################################################
 
-# Platform-specific settings
-ifeq ($(OS), Windows_NT)
-    # Windows settings
-    EXECUTABLE = main.exe
-    RM = del /Q /F
-else
-    # macOS/Linux settings
-    EXECUTABLE = main
-    RM = rm -f
-endif
+# Compiler settings - Can be customized.
+CC = g++
+CXXFLAGS = -std=c++11 -Wall
+LDFLAGS = 
 
-# Directories
-SRC_DIR = code
-OBJ_DIR = obj
+# Makefile settings - Can be customized.
+APPNAME = program
+EXT = .cpp
+SRCDIR = C:\Users\User\Desktop\OOP-course\code
+OBJDIR = obj
 
-# Source and object files
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
-OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
+############## Do not change anything from here downwards! #############
+SRC = $(wildcard $(SRCDIR)/*$(EXT))
+OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
+DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
+# UNIX-based OS variables & settings
+RM = rm
+DELOBJ = $(OBJ)
+# Windows OS variables & settings
+DEL = del
+EXE = .exe
+WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 
-# Default target
-all: $(EXECUTABLE)
+########################################################################
+####################### Targets beginning here #########################
+########################################################################
 
-# Build the executable
-$(EXECUTABLE): $(OBJS)
-	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+all: $(APPNAME)
 
-# Compile object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(OBJ_DIR)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+# Builds the app
+$(APPNAME): $(OBJ)
+	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-# Clean target
+# Creates the dependecy rules
+%.d: $(SRCDIR)/%$(EXT)
+	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
+
+# Includes all .h files
+-include $(DEP)
+
+# Building rule for .o files and its .c/.cpp in combination with all .h
+$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
+	$(CC) $(CXXFLAGS) -o $@ -c $<
+
+################### Cleaning rules for Unix-based OS ###################
+# Cleans complete project
+.PHONY: clean
 clean:
-	$(RM) $(EXECUTABLE)
-	$(RM) $(OBJ_DIR)/*.o
+	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
 
-# Phony targets
-.PHONY: all clean
+# Cleans only all files with the extension .d
+.PHONY: cleandep
+cleandep:
+	$(RM) $(DEP)
+
+#################### Cleaning rules for Windows OS #####################
+# Cleans complete project
+.PHONY: cleanw
+cleanw:
+	$(DEL) $(WDELOBJ) $(DEP) $(APPNAME)$(EXE)
+
+# Cleans only all files with the extension .d
+.PHONY: cleandepw
+cleandepw:
+	$(DEL) $(DEP)

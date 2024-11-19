@@ -232,7 +232,6 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
 
     // Check if the user exists in the student CSV
     string userId = user->getId();
-    size_t row = 0;
 
     // Find the row for the given userId
     for (size_t i = 0; i < available_courses.size(); i++) {
@@ -268,7 +267,7 @@ void updateAvailableState(User* user, const string& course, const string& datafo
     int row = 0, target_pos = -1;
 
     // Find the row for the given userId
-    for (int i = 0; i < available_courses.size(); i++) {
+    for (size_t i = 0; i < available_courses.size(); i++) {
         if (!available_courses[i].empty() && available_courses[i][1] == userId) {
             row = i; // Save the row position
             break;
