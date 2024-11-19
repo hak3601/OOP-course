@@ -259,7 +259,8 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
     return courses;
 }
 
-void updateAvailableState(User* user, int order, const string& datafolder, const string& filename) {
+void updateAvailableState(User* user, const string& course, const string& datafolder, const string& filename) {
+    // Read the CSV file into a 2D vector
     vector<vector<string>> available_courses = readCSV(datafolder, filename);
     string userId = user->getId();
     int row = 0, target_pos = -1;
