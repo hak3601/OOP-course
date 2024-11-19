@@ -10,6 +10,7 @@ User::User(const User &other) : name(other.name), id(other.id) {}
 string User::getName() {return name;}
 string User::getId() {return id;}
 
+/*-------------------------------------------------------------------------------------------*/
 Student::Student() : User("NULL", "NULL") {}
 Student::Student(string student_name, string student_id, vector<string> student_enroled_courses)
         : User(student_name, student_id), enroled_courses(student_enroled_courses) {}
@@ -26,6 +27,10 @@ Student& Student::operator=(const Student& other) {
 }
 
 vector<string> Student::getInternalContent() {return enroled_courses;}
+void Student::displayInstructingCourses(){}
+void Student::take_exam(){}
+
+/*-------------------------------------------------------------------------------------------*/
 vector<string> Professor::getInternalContent() {return instructing_courses;}
 
 Professor::Professor() : User("NULL", "NULL") {}
@@ -42,3 +47,7 @@ Professor& Professor::operator=(const Professor& other) {
     }
     return *this;
 }
+void Professor::displayInstructingCourses(){}
+void Professor::create_exam(){}
+void Professor::mark_exam(){}
+void Professor::comment_exam(){}

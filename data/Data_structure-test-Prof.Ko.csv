@@ -1,0 +1,13 @@
+TF,1,A binary search tree (BST) is always balanced.,False,1
+MC,2,Which data structure is typically used to implement a queue?,b,2,a) Stack b) Linked List c) Binary Tree d) Priority Queue
+CQ,3,The time complexity of searching for an element in an unsorted array is O(__).,n,2
+TF,4,In a stack,the last element added is the first one to be removed.,True,1
+MC,5,What is the maximum number of children a node can have in a binary tree?,b,2,a) 1 b) 2 c) 3 d) 4
+CQ,6,In a hash table,collisions can be resolved using the __ method.,chaining or open addressing,3
+TF,7,A graph can contain cycles.,True,1
+MC,8,Which data structure would be best for implementing a LIFO behavior?,b,2,a) Queue b) Stack c) Tree d) Graph
+CQ,9,The height of a balanced binary tree is O(__) in terms of the number of nodes n.,log(n),3
+MC,10,What is the worst-case time complexity of inserting an element into a binary search tree (BST)?,a,3,a) O(n) b) O(log n) c) O(n log n) d) O(1)
+CQ,11,The Breadth-First Search (BFS) algorithm for traversing a graph uses a __.,queue,3
+TF,12,An adjacency matrix is used to represent graphs and has a space complexity of O(V^2) where V is the number of vertices.,True,2
+MC,13,Which traversal method visits the left subtree,then the node,then the right subtree?,b,2,a) Pre-order b) In-order c) Post-order d) Level-order
