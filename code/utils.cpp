@@ -3,11 +3,8 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include "questions.h"
 using namespace std;
-
-vector<string> fetchEnroledOrInstructing(const string&, const string&, const string&, const string&);
-vector<string> parseString2Vec(string);
-vector<vector<string>> readCSV(const string&, const string&);
 
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -77,4 +74,15 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
         }
     }
     return ret_vec;
+}
+
+vector<Question*> vec2Questions(vector<vector<string>> q_vec){
+    // just to show whether the questions are read properly
+    for(const auto& vv : q_vec){
+        for(const auto& v : vv){
+            cout<<v<<" ";
+        }
+        cout<<""<<endl;
+    }
+    exit(1);
 }

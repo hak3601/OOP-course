@@ -7,12 +7,12 @@
 
 using namespace std;
 
-Question::Question(int idx, const string &text, int point)
-        : idx(idx), question_text(text), point(point) {}
-int Question::getIdx() {return idx;}
-string Question::getQuestionText() {return question_text;}
-int Question::getpoint() {return point;}
-bool Question::grade() {return false;}
+Question::Question(int idx, const string& text, int point) : idx(idx), question_text(text), point(point) {};
+int Question::getIdx() {}
+string Question::getQuestionText() {}
+int Question::getpoint() {}
+bool Question::grade(string) {}
+
 
 TrueFalseQuestion::TrueFalseQuestion(int idx, const string &text, int point, bool correctAns)
         : Question(idx, text, point), correct_answer(correctAns) {}
@@ -26,7 +26,8 @@ bool TrueFalseQuestion::grade(string user_ans){
     return boolean_user_ans == correct_answer;
 }
 
-MultipleChoiceQuestion::MultipleChoiceQuestion(int idx, const string &text, int point, const vector<string> &opts, const string &correctans)
+
+MultipleChoiceQuestion::MultipleChoiceQuestion(int idx, const string &text, int point, const string &opts, const string &correctans)
         : Question(idx, text, point), options(opts), correct_answer(correctans) {}
 void MultipleChoiceQuestion::display() const{
     printf("%d. %s (%d points)", idx, question_text, point);
