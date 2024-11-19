@@ -28,7 +28,7 @@ public:
     virtual void startExam();
     virtual void endExam() = 0; // will be called when exam is over and will update the test result file
     virtual void displayQuestions() const = 0; // ~
-    virtual void recordScore(const string &, int) = 0; // 
+    virtual void recordScore(const string &user_id, int score) = 0; // 
     virtual void printSummary() const = 0;
 };
 

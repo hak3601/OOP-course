@@ -106,6 +106,8 @@ void studentMainMenu(User* user, string datafolder){
             }
             cout << "Select the course to take exam by entering the order: ";
             getline(cin, course_name);
+            exam = new TestExam(course_name, datafolder);
+            exam->startExam();
             updateAvailableState(user, course_name, datafolder, "courses_available.csv");
         } else if (user_command == 2){ // Train for test
 
@@ -230,7 +232,6 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
 
     // Check if the user exists in the student CSV
     string userId = user->getId();
-    size_t row = 0;
 
     // Find the row for the given userId
     for (size_t i = 0; i < available_courses.size(); i++) {
@@ -266,7 +267,7 @@ void updateAvailableState(User* user, const string& course, const string& datafo
     int row = 0, target_pos = -1;
 
     // Find the row for the given userId
-    for (int i = 0; i < available_courses.size(); i++) {
+    for (size_t i = 0; i < available_courses.size(); i++) {
         if (!available_courses[i].empty() && available_courses[i][1] == userId) {
             row = i; // Save the row position
             break;
@@ -274,7 +275,7 @@ void updateAvailableState(User* user, const string& course, const string& datafo
     }
 
     // Find the column for the given course name
-    for (int j = 2; j < available_courses[row].size(); j++) {
+    for (size_t j = 2; j < available_courses[row].size(); j++) {
         // Check if the course name matches, any problem?
         string cell = available_courses[row][j];
         if (cell == "[O] " + course || cell == "[X] " + course) {

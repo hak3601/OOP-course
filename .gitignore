@@ -1,8 +1,6 @@
 /.vscode
+/makefile
 /*.exe
 code/*.exe
-help.txt
-/questions1.cpp
-/test_takeExam.cpp
 code/program
-/sub_main.cpp
+*.o
