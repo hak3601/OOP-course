@@ -79,11 +79,17 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
 vector<Question*> vec2Questions(vector<vector<string>> q_vec){
     // just to show whether the questions are read properly
     vector<Question*> ret_qvec;
+
     for(const auto& v : q_vec){
         Question* q;
         string q_version = v[0];
+        cout<<q_version<<" "<<v.size()<<endl;
         if (q_version == "TF"){
             q = new TrueFalseQuestion(stoi(v[1]),v[2],stoi(v[4]),v[3]);
+        } else if(q_version == "MC"){
+            q = new MultipleChoiceQuestion(stoi(v[1]),v[2],stoi(v[4]),v[5],v[3]);
+        } else if(q_version == "CQ"){
+            q = new CompletionQuestion(stoi(v[1]),v[2],stoi(v[4]),v[3]);
         }
         ret_qvec.push_back(q);
     }

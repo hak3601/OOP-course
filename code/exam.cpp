@@ -17,6 +17,7 @@ void TestExam::startExam() { // the main function of test exam
     vector<vector<string>> raw_questions = readCSV(datafolder, exam_file_name);
 
     questions = vec2Questions(raw_questions);
+    
     cout << exam_title << "Starts now.";
     
     endExam();
