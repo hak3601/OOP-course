@@ -78,4 +78,3 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
     }
     return ret_vec;
 }
-
