@@ -22,6 +22,7 @@ public:
     virtual int getIdx();
     virtual string getQuestionText();
     virtual int getpoint();
+    virtual string getCurrectAnswer();
     virtual int grade(string) = 0;
 };
 
