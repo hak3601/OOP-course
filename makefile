@@ -1,43 +1,26 @@
-# Variables for compiler and flags
+# Compiler and flags
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall
-LDFLAGS =
-
-# Platform-specific settings
-ifeq ($(OS), Windows_NT)
-    # Windows settings
-    EXECUTABLE = main.exe
-    RM = del /Q /F
-else
-    # macOS/Linux settings
-    EXECUTABLE = main
-    RM = rm -f
-endif
-
-# Directories
+CXXFLAGS = -Wall -Wextra -O2
 SRC_DIR = code
-OBJ_DIR = obj
-
-# Source and object files
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
-OBJS = $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
+SRC = $(wildcard $(SRC_DIR)/*.cpp)
+OBJ = $(SRC:.cpp=.o)
+TARGET = main
 
 # Default target
-all: $(EXECUTABLE)
+all: $(TARGET)
 
-# Build the executable
-$(EXECUTABLE): $(OBJS)
-	$(CXX) $(OBJS) -o $@ $(LDFLAGS)
+# Link object files to create the executable
+$(TARGET): $(OBJ)
+	$(CXX) $(OBJ) -o $(TARGET)
 
-# Compile object files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
-	@mkdir -p $(OBJ_DIR)
+# Compile source files to object files
+code/%.o: code/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean target
-clean:
-	$(RM) $(EXECUTABLE)
-	$(RM) $(OBJ_DIR)/*.o
+# Run the compiled program
+run: $(TARGET)
+	./$(TARGET)
 
-# Phony targets
-.PHONY: all clean
+# Clean up object files and the executable
+clean:
+	rm -f $(TARGET) $(OBJ)
