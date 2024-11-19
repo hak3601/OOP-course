@@ -8,6 +8,11 @@
 using namespace std;
 
 Question::Question(int idx, const string& text, int point) : idx(idx), question_text(text), point(point) {};
+int Question::getIdx() {}
+string Question::getQuestionText() {}
+int Question::getpoint() {}
+bool Question::grade(string) {}
+
 
 TrueFalseQuestion::TrueFalseQuestion(int idx, const string &text, int point, bool correctAns)
         : Question(idx, text, point), correct_answer(correctAns) {}
@@ -20,6 +25,7 @@ bool TrueFalseQuestion::grade(string user_ans){
     else if(!user_ans.compare("f") || !user_ans.compare("F") || !user_ans.compare("false") || !user_ans.compare("False")) boolean_user_ans = false;
     return boolean_user_ans == correct_answer;
 }
+
 
 MultipleChoiceQuestion::MultipleChoiceQuestion(int idx, const string &text, int point, const string &opts, const string &correctans)
         : Question(idx, text, point), options(opts), correct_answer(correctans) {}

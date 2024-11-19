@@ -1,7 +1,7 @@
 #include "exam.h"
 #include "questions.h"
 #include "user.h"
-#include "utils.cpp"
+#include "utils.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -108,6 +108,7 @@ void studentMainMenu(User* user, string datafolder){
             cin >> course_order;
             string n = "Data_structure";
             exam = new TestExam(n, datafolder);
+            exam->startExam();
 
             updateAvailableState(user, course_order, datafolder, "courses_available.csv");
         } else if (user_command == 2){ // Train for test
@@ -222,7 +223,6 @@ int verifyUser(const string& user_name, const string& user_id, const string& dat
     return return_value;
 }
 
-
 // Function to show available courses for a user
 vector<string> showAvailableCourses(User* user, const string& datafolder, const string& filename) {
     vector<string> courses; // To store available course information
@@ -233,9 +233,9 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
 
     // Check if the user exists in the student CSV
     string userId = user->getId();
-    int row = 0;
+    size_t row = 0;
     // Find the row for the given userId
-    for (int i = 0; i < student_data.size(); i++) {
+    for (size_t i = 0; i < student_data.size(); i++) {
         if (!student_data[i].empty() && student_data[i][1] == userId) {
             row = i; // Reference to the matching row
             break;
@@ -261,16 +261,14 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
     return courses;
 }
 
-
-
 void updateAvailableState(User* user, int order, const string& datafolder, const string& filename) {
     vector<vector<string>> available_courses = readCSV(datafolder, filename);
 
     // Check if the user exists in the student CSV
     string userId = user->getId();
-    int row = 0;
+    size_t row = 0;
     // Find the row for the given userId
-    for (int i = 0; i < available_courses.size(); i++) {
+    for (size_t i = 0; i < available_courses.size(); i++) {
         if (!available_courses[i].empty() && available_courses[i][1] == userId) {
             row = i; // save the row position
             break;
@@ -278,7 +276,7 @@ void updateAvailableState(User* user, int order, const string& datafolder, const
     }
     
     // Ensure row and order validity before proceeding
-    if (row >= 0 && order - 1 >= 0 && order - 1 < available_courses[row].size()) {
+    if (row >= 0 && order - 1 >= 0 && static_cast<std::size_t>(order) - 1 < available_courses[row].size()) {
         // Check if the cell starts with "[O]" (followed by a space and course name)
         if (available_courses[row][order + 1].substr(0, 3) == "[O]") {
             // Replace "[O]" with "[X]" but keep the rest of the string (course name)

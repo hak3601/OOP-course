@@ -15,7 +15,6 @@ protected:
 
 public:
     Question(int, const string&, int);
-    virtual ~Question() = default;
 
     virtual void display() const = 0;
 
@@ -34,7 +33,6 @@ public:
     TrueFalseQuestion(int, const string&, int, bool);
     bool grade(string);
     void display() const override;
-    ~TrueFalseQuestion();
 };
 
 // Derived class for Multiple Choice Question
@@ -47,7 +45,6 @@ public:
     MultipleChoiceQuestion(int, const string&, int, const string&, const string&);
     bool grade(string);
     void display() const override;
-    ~MultipleChoiceQuestion();
 };
 
 // Derived class for Completion (Fill in the Blank) Question
@@ -59,7 +56,6 @@ public:
     CompletionQuestion(int, const string&, int, const string&);
     bool grade(string);
     void display() const override;
-    ~CompletionQuestion();
 };
 
 #endif // QUESTIONS_H
