@@ -1,4 +1,4 @@
-// #include "exam.cpp"
+#include "exam.cpp"
 #include "questions.cpp"
 #include "user.cpp"
 #include "dynamic_difficulty_engine.cpp"
@@ -82,6 +82,7 @@ int main(int argc, char const *argv[])
 void studentMainMenu(User* user, string datafolder){
     int user_command;
     int course_order;
+    Exam* exam;
     while(1){
         cout << "Student Main Menu" << endl;
         cout << "==========" << endl;
@@ -106,6 +107,9 @@ void studentMainMenu(User* user, string datafolder){
             }
             cout << "Select the course to take exam by entering the order: ";
             cin >> course_order;
+            string n = "Data_structure";
+            exam = new TestExam(n);
+
             updateAvailableState(user, course_order, datafolder, "courses_available.csv");
         } else if (user_command == 2){ // Train for test
 
