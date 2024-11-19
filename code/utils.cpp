@@ -83,7 +83,6 @@ vector<Question*> vec2Questions(vector<vector<string>> q_vec){
     for(const auto& v : q_vec){
         Question* q;
         string q_version = v[0];
-        cout<<q_version<<" "<<v.size()<<endl;
         if (q_version == "TF"){
             q = new TrueFalseQuestion(stoi(v[1]),v[2],stoi(v[4]),v[3]);
         } else if(q_version == "MC"){

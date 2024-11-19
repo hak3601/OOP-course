@@ -18,7 +18,7 @@ void TestExam::startExam() { // the main function of test exam
 
     questions = vec2Questions(raw_questions);
     
-    cout << exam_title << "Starts now.";
+    cout << exam_title << " starts now.";
     
     endExam();
 }
