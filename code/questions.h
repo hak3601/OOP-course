@@ -12,26 +12,26 @@ protected:
     int idx;
     string question_text;
     int point;
+    string correct_answer;
 
 public:
-    Question(int, const string&, int);
+    Question(int, const string&, int, const string&);
 
     virtual void display() const = 0;
 
     virtual int getIdx();
     virtual string getQuestionText();
     virtual int getpoint();
-    virtual bool grade(string);
+    virtual int grade(string) = 0;
 };
 
 // Derived class for True/False Question
 class TrueFalseQuestion : public Question {
 private:
-    bool correct_answer;
 
 public:
-    TrueFalseQuestion(int, const string&, int, bool);
-    bool grade(string);
+    TrueFalseQuestion(int, const string&, int, const string&);
+    int grade(string);
     void display() const override;
 };
 
@@ -39,22 +39,21 @@ public:
 class MultipleChoiceQuestion : public Question {
 private:
     string options;
-    string correct_answer;
+    
 
 public:
     MultipleChoiceQuestion(int, const string&, int, const string&, const string&);
-    bool grade(string);
+    int grade(string);
     void display() const override;
 };
 
 // Derived class for Completion (Fill in the Blank) Question
 class CompletionQuestion : public Question {
 private:
-    string correct_answer;
 
 public:
     CompletionQuestion(int, const string&, int, const string&);
-    bool grade(string);
+    int grade(string);
     void display() const override;
 };
 
