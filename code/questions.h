@@ -22,7 +22,7 @@ public:
     virtual int getIdx();
     virtual string getQuestionText();
     virtual int getpoint();
-    virtual bool grade(string);
+    virtual int grade(string) = 0;
 };
 
 // Derived class for True/False Question
@@ -31,7 +31,7 @@ private:
 
 public:
     TrueFalseQuestion(int, const string&, int, const string&);
-    bool grade(string);
+    int grade(string);
     void display() const override;
 };
 
@@ -43,18 +43,17 @@ private:
 
 public:
     MultipleChoiceQuestion(int, const string&, int, const string&, const string&);
-    bool grade(string);
+    int grade(string);
     void display() const override;
 };
 
 // Derived class for Completion (Fill in the Blank) Question
 class CompletionQuestion : public Question {
 private:
-    string correct_answer;
 
 public:
     CompletionQuestion(int, const string&, int, const string&);
-    bool grade(string);
+    int grade(string);
     void display() const override;
 };
 
