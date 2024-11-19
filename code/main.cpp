@@ -80,7 +80,7 @@ int main(int argc, char const *argv[])
 
 void studentMainMenu(User* user, string datafolder){
     int user_command;
-    int course_order;
+    string course_name;
     Exam* exam;
     while(1){
         cout << "Student Main Menu" << endl;
@@ -105,8 +105,8 @@ void studentMainMenu(User* user, string datafolder){
                 cout << s << endl;
             }
             cout << "Select the course to take exam by entering the order: ";
-            cin >> course_order;
-            updateAvailableState(user, course_order, datafolder, "courses_available.csv");
+            getline(cin, course_name);
+            updateAvailableState(user, course_name, datafolder, "courses_available.csv");
         } else if (user_command == 2){ // Train for test
 
         } else if (user_command == 3){ // Create train tests
@@ -258,29 +258,46 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
 }
 
 
-
-void updateAvailableState(User* user, int order, const string& datafolder, const string& filename) {
+void updateAvailableState(User* user, const string& course, const string& datafolder, const string& filename) {
+    // Read the CSV file into a 2D vector
     vector<vector<string>> available_courses = readCSV(datafolder, filename);
     string userId = user->getId();
-    int row = 0;
+    int row = 0, target_pos = -1;
+
     // Find the row for the given userId
-    for (size_t i = 0; i < available_courses.size(); i++) {
+    for (int i = 0; i < available_courses.size(); i++) {
         if (!available_courses[i].empty() && available_courses[i][1] == userId) {
             row = i; // Save the row position
             break;
         }
     }
-    
-    // Ensure row and order validity before proceeding
-    if (row >= 0 && order - 1 >= 0 && order - 1 < available_courses[row].size()) {
-        // Check if the cell starts with "[O]" (followed by a space and course name)
-        if (available_courses[row][order + 1].substr(0, 3) == "[O]") {
-            // Replace "[O]" with "[X]" but keep the rest of the string (course name)
-            available_courses[row][order + 1] = "[X]" + available_courses[row][order + 1].substr(3);
-        } else {
-            cout << "you've already done" << endl;
-            return;
+
+    // Find the column for the given course name
+    for (int j = 2; j < available_courses[row].size(); j++) {
+        // Check if the course name matches, any problem?
+        string cell = available_courses[row][j];
+        if (cell == "[O] " + course || cell == "[X] " + course) {
+            target_pos = j;
+            break;
         }
+    }
+
+    // If the course was not found, exit
+    if (target_pos == -1) {
+        cout << "Course not found for the user.\n";
+        return;
+    }
+
+    // Update the availability status
+    if (available_courses[row][target_pos].substr(0, 3) == "[O]") {
+        // Replace "[O]" with "[X]" but keep the course name
+        available_courses[row][target_pos] = "[X] " + course;
+    } else if (available_courses[row][target_pos].substr(0, 3) == "[X]") {
+        cout << "You've already marked this course as completed.\n";
+        return;
+    } else {
+        // If the course is not marked, assume it's available and mark it as completed
+        available_courses[row][target_pos] = "[X] " + course;
     }
 
     // Open the file for writing (overwrite mode) to save updated data
@@ -300,3 +317,4 @@ void updateAvailableState(User* user, int order, const string& datafolder, const
         cerr << "Failed to open the file for writing.\n";
     }
 }
+
