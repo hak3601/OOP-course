@@ -7,13 +7,14 @@ using namespace std;
 
 class DynamicDifficultyEngine {
 private:
-    float current_student_correct_rate;  // tracing student's performance(I think it would be from performance tracker)
-    unsigned int current_problem_number; // current question's number
     int current_difficulty_level;  // current difficulty level
+    unsigned int current_problem_number; // current question's number
+    float current_student_correct_rate;  // tracing student's performance(I think it would be from performance tracker)
 
 public:
     // initialize difficulty engine
-    DynamicDifficultyEngine(int initial_difficulty) : current_difficulty_level(initial_difficulty), current_problem_number(0), current_student_correct_rate(0.0f) {
+    DynamicDifficultyEngine(int initial_difficulty) 
+    : current_difficulty_level(initial_difficulty), current_problem_number(0), current_student_correct_rate(0.0f) {
         
     }
 
