@@ -1,7 +1,10 @@
 /.vscode
+/makefile
 /*.exe
 code/*.exe
 code/program
-/sub_main.cpp
 *.o
-*.d
+<<<<<<<<< Temporary merge branch 1
+/obj
+=========
+>>>>>>>>> Temporary merge branch 2
