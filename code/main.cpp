@@ -106,6 +106,8 @@ void studentMainMenu(User* user, string datafolder){
             }
             cout << "Select the course to take exam by entering the order: ";
             getline(cin, course_name);
+            exam = new TestExam(course_name, datafolder);
+            exam->startExam();
             updateAvailableState(user, course_name, datafolder, "courses_available.csv");
         } else if (user_command == 2){ // Train for test
 
@@ -274,7 +276,7 @@ void updateAvailableState(User* user, const string& course, const string& datafo
     }
 
     // Find the column for the given course name
-    for (int j = 2; j < available_courses[row].size(); j++) {
+    for (size_t j = 2; j < available_courses[row].size(); j++) {
         // Check if the course name matches, any problem?
         string cell = available_courses[row][j];
         if (cell == "[O] " + course || cell == "[X] " + course) {

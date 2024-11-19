@@ -8,9 +8,10 @@
 using namespace std;
 
 Question::Question(int idx, const string& text, int point, const string& correct_answer) : idx(idx), question_text(text), point(point), correct_answer(correct_answer) {};
-int Question::getIdx() {}
-string Question::getQuestionText() {}
-int Question::getpoint() {}
+int Question::getIdx() {return idx;}
+string Question::getQuestionText() {return question_text;}
+int Question::getpoint() {return point;}
+string Question::getCurrectAnswer() {return correct_answer;}
 
 
 TrueFalseQuestion::TrueFalseQuestion(int idx, const string &text, int point, const string& correct_answer)
