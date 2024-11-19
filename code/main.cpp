@@ -222,6 +222,7 @@ int verifyUser(const string& user_name, const string& user_id, const string& dat
 // Function to show available courses for a user
 vector<string> showAvailableCourses(User* user, const string& datafolder, const string& filename) {
     vector<string> courses; // To store available course information
+    bool is_new_record = true;
 
     // Read CSV data
     vector<vector<string>> student_data = readCSV(datafolder, "/student.csv");
@@ -230,15 +231,16 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
     // Check if the user exists in the student CSV
     string userId = user->getId();
     size_t row = 0;
+
     // Find the row for the given userId
-    for (size_t i = 0; i < student_data.size(); i++) {
-        if (!student_data[i].empty() && student_data[i][1] == userId) {
-            row = i; // Reference to the matching row
+    for (size_t i = 0; i < available_courses.size(); i++) {
+        if (!available_courses[i].empty() && available_courses[i][1] == userId) {
+            is_new_record = false;
             break;
         }
     }
 
-    if (row == student_data.size() || available_courses.empty()) {
+    if (is_new_record) {
         // Open the file for appending (datafolder/filename)
         ofstream out_file(datafolder + '/' + filename, ios::app);
 
