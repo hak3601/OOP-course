@@ -78,10 +78,14 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
 
 vector<Question*> vec2Questions(vector<vector<string>> q_vec){
     // just to show whether the questions are read properly
+    vector<Question*> ret_qvec;
     for(const auto& v : q_vec){
+        Question* q;
         string q_version = v[0];
-        
-        cout<<""<<endl;
+        if (q_version == "TF"){
+            q = new TrueFalseQuestion(stoi(v[1]),v[2],stoi(v[4]),v[3]);
+        }
+        ret_qvec.push_back(q);
     }
-    exit(1);
+    return ret_qvec;
 }
