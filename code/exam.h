@@ -5,28 +5,57 @@
 #include <vector>
 #include <map>
 #include <chrono>
+#include "user.h"
 #include "questions.h" // Include the questions header
+//#include "dynamic_difficulty_engine.h"
+using namespace std;
 
 // Class representing an Exam
 class Exam {
-    std::string examTitle;
-    std::vector<Question*> questions;
+protected:
+    string exam_title;
+    string datafolder;
+    User* object_user;
+    
+    vector<Question*> questions;
     int duration; // in minutes
-    std::chrono::system_clock::time_point startTime;
-    std::map<std::string, int> userScores; // Maps user IDs to scores
-    std::map<std::string, std::string> userComments; // Maps user IDs to comments
+    chrono::system_clock::time_point start_time;
+    int total_score;
 
 public:
-    Exam(const std::string &title, int dur);
+    Exam(const string &,const string &);
     ~Exam();
+    virtual void startExam();
+    virtual void endExam() = 0; // will be called when exam is over and will update the test result file
+    virtual void displayQuestions() const = 0; // ~
+    virtual void recordScore(const string &user_id, int score) = 0; // 
+    virtual void printSummary() const = 0;
+};
 
-    void addQuestion(Question *question);
-    void startExam();
-    void endExam();
-    void displayQuestions() const;
-    void recordScore(const std::string &userID, int score);
-    void addComment(const std::string &userID, const std::string &comment);
-    void publishResults() const;
+class TrainExam : public Exam{
+private:
+    //DynamicDifficultyEngine DDE;
+    vector<vector<string>> individual_problem_RW_tracker; 
+public:
+    // void startExam(); // will be called in main
+    // void endExam(); // will be called when exam is over and will update the test result file
+    // void displayQuestions() const; // ~
+    // void recordScore(const string &, int); // 
+    // void printSummary() const;
+};
+
+class TestExam : public Exam{
+private:
+    int max_score;
+public:
+    TestExam(const string &,const string &);
+    ~TestExam();
+    void startExam(); // will be called in main
+    void setMaxScore();
+    void timeIsOver();
+    void endExam(); // will be called when exam is over and will update the test result file
+    void displayQuestions() const; // ~
+    void recordScore(const string &, int); // 
     void printSummary() const;
 };
 

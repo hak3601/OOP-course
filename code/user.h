@@ -4,17 +4,20 @@
 #include <string>
 #include <vector>
 using namespace std;
+
 class User{
 protected:
     string name;
     string id;
+    
 public:
     User(string, string);
     User(const User&);
-    ~User();
+    virtual ~User() = default;
 
     string getName();
     string getId();
+    virtual vector<string> getInternalContent() = 0;
 };
 
 class Student : public User{
@@ -29,7 +32,8 @@ public:
 
     Student& operator=(const Student&);
 
-    vector<string> getEnroledCourses();
+    vector<string> getInternalContent();
+    void displayInstructingCourses();
     void take_exam();
 };
 
@@ -45,7 +49,7 @@ public:
 
     Professor& operator=(const Professor&);
 
-    vector<string> getInstructingCourses();
+    vector<string> getInternalContent()override;
     void displayInstructingCourses();
     void create_exam();
     void mark_exam();
