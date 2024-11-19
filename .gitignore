@@ -2,4 +2,5 @@
 /*.exe
 code/*.exe
 code/program
+/sub_main.cpp
 *.o
