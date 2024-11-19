@@ -15,14 +15,14 @@ protected:
 
 public:
     Question(int, const string&, int);
-    virtual ~Question() {}
+    virtual ~Question() = default;
 
     virtual void display() const = 0;
 
     virtual int getIdx();
     virtual string getQuestionText();
     virtual int getpoint();
-    virtual bool grade();
+    virtual bool grade(string);
 };
 
 // Derived class for True/False Question
@@ -32,20 +32,22 @@ private:
 
 public:
     TrueFalseQuestion(int, const string&, int, bool);
-    bool grade(string user_ans);
+    bool grade(string);
     void display() const override;
+    ~TrueFalseQuestion();
 };
 
 // Derived class for Multiple Choice Question
 class MultipleChoiceQuestion : public Question {
 private:
-    vector<string> options;
+    string options;
     string correct_answer;
 
 public:
-    MultipleChoiceQuestion(int, const string&, int, const vector<string>&, const string&);
-    bool grade(string user_ans);
+    MultipleChoiceQuestion(int, const string&, int, const string&, const string&);
+    bool grade(string);
     void display() const override;
+    ~MultipleChoiceQuestion();
 };
 
 // Derived class for Completion (Fill in the Blank) Question
@@ -55,8 +57,9 @@ private:
 
 public:
     CompletionQuestion(int, const string&, int, const string&);
-    bool grade(string user_ans);
+    bool grade(string);
     void display() const override;
+    ~CompletionQuestion();
 };
 
 #endif // QUESTIONS_H

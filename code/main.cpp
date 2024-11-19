@@ -1,7 +1,6 @@
-#include "exam.cpp"
-#include "questions.cpp"
-#include "user.cpp"
-#include "dynamic_difficulty_engine.cpp"
+#include "exam.h"
+#include "questions.h"
+#include "user.h"
 #include "utils.cpp"
 #include <iostream>
 #include <string>
@@ -108,7 +107,7 @@ void studentMainMenu(User* user, string datafolder){
             cout << "Select the course to take exam by entering the order: ";
             cin >> course_order;
             string n = "Data_structure";
-            exam = new TestExam(n);
+            exam = new TestExam(n, datafolder);
 
             updateAvailableState(user, course_order, datafolder, "courses_available.csv");
         } else if (user_command == 2){ // Train for test

@@ -5,9 +5,9 @@
 #include <vector>
 #include <map>
 #include <chrono>
-#include "user.cpp"
-#include "questions.cpp" // Include the questions header
-#include "dynamic_difficulty_engine.cpp"
+#include "user.h"
+#include "questions.h" // Include the questions header
+//#include "dynamic_difficulty_engine.h"
 using namespace std;
 
 // Class representing an Exam
@@ -33,7 +33,7 @@ public:
 
 class TrainExam : public Exam{
 private:
-    DynamicDifficultyEngine DDE;
+    //DynamicDifficultyEngine DDE;
     vector<vector<string>> individual_problem_RW_tracker; 
 public:
     void startExam(); // will be called in main
