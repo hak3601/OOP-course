@@ -10,7 +10,7 @@ LDFLAGS =
 # Makefile settings - Can be customized.
 APPNAME = program
 EXT = .cpp
-SRCDIR = C:\Users\User\Desktop\OOP-course\code
+SRCDIR = C:\Users\User\Desktop\OOP-course
 OBJDIR = obj
 
 ############## Do not change anything from here downwards! #############

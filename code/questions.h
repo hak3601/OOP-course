@@ -12,9 +12,10 @@ protected:
     int idx;
     string question_text;
     int point;
+    string correct_answer;
 
 public:
-    Question(int, const string&, int);
+    Question(int, const string&, int, const string&);
 
     virtual void display() const = 0;
 
@@ -27,10 +28,9 @@ public:
 // Derived class for True/False Question
 class TrueFalseQuestion : public Question {
 private:
-    bool correct_answer;
 
 public:
-    TrueFalseQuestion(int, const string&, int, bool);
+    TrueFalseQuestion(int, const string&, int, const string&);
     bool grade(string);
     void display() const override;
 };
@@ -39,7 +39,7 @@ public:
 class MultipleChoiceQuestion : public Question {
 private:
     string options;
-    string correct_answer;
+    
 
 public:
     MultipleChoiceQuestion(int, const string&, int, const string&, const string&);

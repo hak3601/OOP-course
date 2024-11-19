@@ -78,11 +78,9 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
 
 vector<Question*> vec2Questions(vector<vector<string>> q_vec){
     // just to show whether the questions are read properly
-    for(const auto& vv : q_vec){
-        for(const auto& v : vv){
-            cout<<v<<" ";
-        }
-        cout<<""<<endl;
-    }
+    // for(const auto& vv : q_vec){
+    //     Question* q;
+
+    // }
     exit(1);
 }
