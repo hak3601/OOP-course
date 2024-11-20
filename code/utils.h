@@ -13,3 +13,4 @@ vector<Question*> vec2Questions(vector<vector<string>>);
 void setTextColor(int foreground, int background);
 void resetTextColor();
 void clearConsole();
+vector<string> splitString2CourseAndProf(string);

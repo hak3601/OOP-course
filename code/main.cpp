@@ -8,7 +8,6 @@
 #include <fstream>
 using namespace std;
 
-void assignUserToDatabase(const string&, const string&, const string&);
 void printButton(const vector<string>&);
 void studentMainMenu(User*, string);
 void professorMainMenu(User*, string);
@@ -80,7 +79,7 @@ int main(int argc, char const *argv[])
 
 void studentMainMenu(User* user, string datafolder){
     int user_command;
-    string course_name;
+    string course_prof_name;
     Exam* exam;
     while(1){
         cout << "Student Main Menu" << endl;
@@ -102,18 +101,29 @@ void studentMainMenu(User* user, string datafolder){
             */
             showAvailableCourses(user, datafolder, "courses_available.csv");
 
-            cout << "Select the course to take exam by entering the course name: ";
-            getline(cin, course_name);
+            cout << "Select the course to take exam by entering the \"course name(professor name)\" >> ";
+            getline(cin, course_prof_name);
+            vector<string> c_f_vector = splitString2CourseAndProf(course_prof_name);
             
-            if (updateAvailableState(user, course_name, datafolder, "courses_available.csv")) {
-                exam = new TestExam(course_name, datafolder);
+            if (updateAvailableState(user, course_prof_name, datafolder, "courses_available.csv")) {
+                
+                exam = new TestExam(c_f_vector[0], datafolder, user, c_f_vector[1]);
                 exam->startExam();
+                
             } else {
                 continue;
             }
             
             
         } else if (user_command == 2){ // Train for test
+            user->displayCourses();
+            cout << "Select the course to train by entering the course name: ";
+            getline(cin, course_prof_name);
+            vector<string> c_f_vector = splitString2CourseAndProf(course_prof_name);
+            cout << "here";
+            exam = new TrainExam(c_f_vector[0], datafolder, user, c_f_vector[1]);
+            cout << "here";
+            exam->startExam();
 
         } else if (user_command == 3){ // Create train tests
             
@@ -170,29 +180,6 @@ void printButton(const vector<string>& labels) {
     }
     cout<<"\n";
 }
-
-// Do not use this yet
-// void assignUserToDatabase(const string& name, const string& id, const string& datapath) {
-//     /*
-//     Assigning a new user(student or professor) to the DB.
-//     */
-//     string version;
-//     cout << "Which type of user do you want to registrate (type s for student, type p for professor)? >> ";
-//     cin >> version;
-//
-//     ofstream file_stream;
-//     openUserFileForWrite(file_stream, datapath, version);
-//
-//     if (!file_stream) {
-//         cerr << "Failed to open the file for writing." << endl;
-//         return;
-//     }
-//
-//     file_stream << '\n' << name << "/" << id;
-//     cout << "User \'" << name << "\' with ID \'" << id << "\' has been registered successfully." << endl;
-//
-//     file_stream.close();
-// }
 
 int verifyUser(const string& user_name, const string& user_id, const string& datafolder){
     /*

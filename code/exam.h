@@ -7,7 +7,7 @@
 #include <chrono>
 #include "user.h"
 #include "questions.h" // Include the questions header
-//#include "dynamic_difficulty_engine.h"
+#include "dynamic_difficulty_engine.h"
 using namespace std;
 
 // Class representing an Exam
@@ -15,42 +15,49 @@ class Exam {
 protected:
     string exam_title;
     string datafolder;
-    User* object_user;
+    const User* object_user;
     
     vector<Question*> questions;
     int duration; // in minutes
     chrono::system_clock::time_point start_time;
-    int total_score;
-    int cur_idx;
+    int total_score = 0;
+    int cur_idx = 0;
+    
 
 public:
-    Exam(const string &,const string &);
+    Exam(const string &,const string &, const User*);
     ~Exam();
     virtual void startExam() = 0;
     virtual void endExam() = 0; // will be called when exam is over and will update the test result file
-    virtual void displayQuestions() const =0; // ~
+    virtual void displayQuestions() const = 0; // ~
     virtual void recordScore(const string &user_id, int score) = 0; // 
     virtual void printSummary() const = 0;
 };
 
 class TrainExam : public Exam{
 private:
-    //DynamicDifficultyEngine DDE;
-    vector<vector<string>> individual_problem_RW_tracker; 
+    DynamicDifficultyEngine* DDE;
+    vector<string> individual_problem_RW_tracker;
+    int cur_total_score = 0;
+    int cur_gained_score = 0;
+    string prof_name;
 public:
-    // void startExam(); // will be called in main
-    // void endExam(); // will be called when exam is over and will update the test result file
-    // void displayQuestions() const; // ~
-    // void recordScore(const string &, int); // 
-    // void printSummary() const;
+    TrainExam(const string &,const string &, const User*, const string&);
+    void startExam(); // will be called in main
+    void endExam(); // will be called when exam is over and will update the test result file
+    void displayQuestions() const; // ~
+    void recordScore(const string &, int); // 
+    void printSummary() const;
+    void displayQuestionList() const;
 };
 
 class TestExam : public Exam{
 private:
-    int max_score;
+    int max_score = 0;
+    string prof_name;
     vector<string> answers;
 public:
-    TestExam(const string &,const string &);
+    TestExam(const string &,const string &, const User*, const string&);
     ~TestExam();
     void startExam(); // will be called in main
     void setMaxScore();
@@ -68,6 +75,7 @@ public:
     void goToNextQuestion();
     void goToAnotherQuestion();
     int getCurrentIndex() const ;
+    string getProfessorName() const;
 };
 
 #endif // EXAM_H

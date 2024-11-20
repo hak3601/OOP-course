@@ -1,0 +1,15 @@
+TF,1,Relational databases store data in tables.,True,1,
+TF,2,SQL is a programming language used to create and manage databases.,True,1,
+MC,3,Which of the following is a type of database?,b,2,a) Python b) NoSQL c) HTML d) XML
+MC,4,Which SQL statement is used to retrieve data from a database?,a,2,a) SELECT b) UPDATE c) DELETE d) INSERT
+CQ,5,The unique identifier for a record in a database table is called the __.,Primary Key,2,
+TF,6,Foreign keys are used to enforce relationships between tables.,True,1,
+TF,7,A database index speeds up the retrieval of rows by using a data structure.,True,1,
+MC,8,Which of these is a database management system?,d,2,a) Linux b) Apache c) Java d) MySQL
+MC,9,Which SQL clause is used to filter results?,c,2,a) JOIN b) GROUP BY c) WHERE d) ORDER BY
+CQ,10,A database schema defines the __ of a database.,structure,2,
+TF,11,Normalization reduces redundancy in a database.,True,1,
+TF,12,A transaction in a database is a single unit of work.,True,1,
+MC,13,What does ACID stand for in database systems?,b,2,a) Availability Consistency Isolation Durability b) Atomicity Consistency Isolation Durability c) Accessibility Consistency Isolation Durability d) Atomicity Consistency Integrity Durability
+MC,14,Which of these is a type of database relationship?,a,2,a) One-to-Many b) One-to-One c) Many-to-Many d) All of the above
+CQ,15,The command to add a new row to a table in SQL is __.,INSERT,2,

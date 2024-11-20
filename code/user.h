@@ -15,9 +15,10 @@ public:
     User(const User&);
     virtual ~User() = default;
 
-    string getName();
-    string getId();
+    virtual string getName()const = 0 ;
+    virtual string getId() const= 0 ;
     virtual vector<string> getInternalContent() = 0;
+    virtual void displayCourses() = 0;
 };
 
 class Student : public User{
@@ -33,8 +34,10 @@ public:
     Student& operator=(const Student&);
 
     vector<string> getInternalContent();
-    void displayInstructingCourses();
+    void displayCourses();
     void take_exam();
+    string getName()const;
+    string getId()const;
 };
 
 class Professor : public User{
@@ -50,10 +53,12 @@ public:
     Professor& operator=(const Professor&);
 
     vector<string> getInternalContent()override;
-    void displayInstructingCourses();
+    void displayCourses();
     void create_exam();
     void mark_exam();
     void comment_exam();
+    string getName()const;
+    string getId()const;
 };
 
 #endif 

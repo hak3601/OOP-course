@@ -7,8 +7,7 @@ using namespace std;
 
 User::User(string user_name, string user_id) : name(user_name), id(user_id) {}
 User::User(const User &other) : name(other.name), id(other.id) {}
-string User::getName() {return name;}
-string User::getId() {return id;}
+
 
 /*-------------------------------------------------------------------------------------------*/
 Student::Student() : User("NULL", "NULL") {}
@@ -17,6 +16,8 @@ Student::Student(string student_name, string student_id, vector<string> student_
 Student::Student(const Student& other)
         : User(other), enroled_courses(other.enroled_courses) {}
 Student::~Student() {}
+string Student::getName()const {return name;}
+string Student::getId()const {return id;}
 
 Student& Student::operator=(const Student& other) {
     if (this != &other) { // Self-assignment check
@@ -27,7 +28,11 @@ Student& Student::operator=(const Student& other) {
 }
 
 vector<string> Student::getInternalContent() {return enroled_courses;}
-void Student::displayInstructingCourses(){}
+void Student::displayCourses(){
+    for(const auto& c_name : enroled_courses){
+        cout << "- " << c_name << endl;
+    }
+}
 void Student::take_exam(){}
 
 /*-------------------------------------------------------------------------------------------*/
@@ -39,7 +44,8 @@ Professor::Professor(string prof_name, string prof_id, vector<string> prof_instr
 Professor::Professor(const Professor& other)
         : User(other), instructing_courses(other.instructing_courses) {}
 Professor::~Professor() {}
-
+string Professor::getName() const{return name;}
+string Professor::getId() const{return id;}
 Professor& Professor::operator=(const Professor& other) {
     if (this != &other) { // Self-assignment check
         User::operator=(other); // Use assignment operator of base class
@@ -47,7 +53,7 @@ Professor& Professor::operator=(const Professor& other) {
     }
     return *this;
 }
-void Professor::displayInstructingCourses(){}
+void Professor::displayCourses(){}
 void Professor::create_exam(){}
 void Professor::mark_exam(){}
 void Professor::comment_exam(){}

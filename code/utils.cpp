@@ -84,7 +84,7 @@ vector<Question*> vec2Questions(vector<vector<string>> q_vec){
         Question* q;
         string q_version = v[0];
         if (q_version == "TF"){
-            q = new TrueFalseQuestion(v[0],stoi(v[1]),v[2],stoi(v[4]),v[3]);
+            q = new TrueFalseQuestion((v[0]),stoi(v[1]),v[2],stoi(v[4]),v[3]); //string q_ver ,int idx, const string &text, int point, const string& correct_answer
         } else if(q_version == "MC"){
             q = new MultipleChoiceQuestion(v[0],stoi(v[1]),v[2],stoi(v[4]),v[5],v[3]);
         } else if(q_version == "CQ"){
@@ -133,9 +133,29 @@ void resetTextColor() {
 
 // Clear the console screen
 void clearConsole() {
+
+
     #if defined(_WIN32)
     system("cls");
     #else
     cout << "\033[2J\033[1;1H"; // ANSI escape sequence for clearing screen
     #endif
+}
+
+vector<string> splitString2CourseAndProf(string course_prof){
+    size_t openParenPos = course_prof.find('(');
+    // Find the position of the closing parenthesis
+    size_t closeParenPos = course_prof.find(')');
+    vector<string> ret_vec = {"",""};
+    // Validate the input format
+    if (openParenPos != std::string::npos && closeParenPos != std::string::npos && closeParenPos > openParenPos) {
+        // Extract the course part
+        ret_vec[0] = course_prof.substr(0, openParenPos);
+        // Extract the professor part
+        ret_vec[1] = course_prof.substr(openParenPos + 1, closeParenPos - openParenPos - 1);
+    } else {
+        // Handle invalid format
+        throw std::invalid_argument("Invalid input format. Expected: course(professor)");
+    }
+    return ret_vec;
 }

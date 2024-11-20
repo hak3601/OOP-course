@@ -3,38 +3,17 @@
 #include <cstdlib>
 #include <ctime>
 #include <cmath>  // for using abs
+#include "dynamic_difficulty_engine.h"
 using namespace std;
 
-class DynamicDifficultyEngine {
-private:
-    int current_difficulty_level;  // current difficulty level
-    unsigned int current_problem_number; // current question's number
-    float current_student_correct_rate;  // tracing student's performance(I think it would be from performance tracker)
 
-public:
-    // initialize difficulty engine
-    DynamicDifficultyEngine(int initial_difficulty) 
-    : current_difficulty_level(initial_difficulty), current_problem_number(0), current_student_correct_rate(0.0f) {
-        
-    }
+DynamicDifficultyEngine::DynamicDifficultyEngine(int low, int up) : difficulty_lowerbound(low), difficulty_upperbound(up){}
+int DynamicDifficultyEngine::getUpperbound(){return difficulty_upperbound;}
+int DynamicDifficultyEngine::getLowerbound(){return difficulty_lowerbound;}
+int DynamicDifficultyEngine::getCurrentDifficulty(){return cur_difficulty;}
+int DynamicDifficultyEngine::recommendDifficulty(int cur_idx, int cur_total_score, int cur_gained_score){
+    int ret_difficulty = 1;
+    float div = static_cast<float>(cur_gained_score) / cur_total_score;
+    ret_difficulty = (div * difficulty_upperbound);
+}
 
-    // get new question from the question set 
-    int getNextQuestion(bool correct_answer) {
-        adjustDifficulty(correct_answer);  // adjusting difficulty of the new question
-
-        cout << "Next question difficulty: " << endl;
-        // return proper_difficulty (may be problem set);
-        return 0;
-    }
-
-    // help getNextQuestion to get the proper question reflecting the difficulty
-    void adjustDifficulty(bool correct_answer) {
-        // adjusting difficulty based on whether the answer is correct
-        if (correct_answer) {
-            current_difficulty_level = min(current_difficulty_level + 1, 10);  // minimum difficulty: 10
-        } else {
-            current_difficulty_level = max(current_difficulty_level - 1, 1);  // minimum difficulty: 1
-        }
-        cout << "Adjusted Difficulty Level: " << current_difficulty_level << endl;
-    }
-};

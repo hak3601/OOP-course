@@ -26,7 +26,11 @@ int TrueFalseQuestion::grade(string user_ans){
     }
     if(!user_ans.compare("t") || !user_ans.compare("T") || !user_ans.compare("true") || !user_ans.compare("True")) converted_ans = "True";
     else if(!user_ans.compare("f") || !user_ans.compare("F") || !user_ans.compare("false") || !user_ans.compare("False")) converted_ans = "False";
-    return 0==converted_ans.compare(correct_answer);
+    if(!converted_ans.compare(correct_answer)){
+        return point;
+    } else{
+        return 0;
+    }
 }
 
 
@@ -42,8 +46,11 @@ void MultipleChoiceQuestion::display() const{
 int MultipleChoiceQuestion::grade(string user_ans){
     if (user_ans == "None"){
         return 0;
+    } else if(!user_ans.compare(correct_answer)){
+        return point;
+    } else{
+        return 0;
     }
-    return !user_ans.compare(correct_answer);
 }
 string TrueFalseQuestion::getQversion(){return q_ver;}
 string MultipleChoiceQuestion::getQversion(){return q_ver;}
@@ -59,6 +66,10 @@ void CompletionQuestion::display() const{
 int CompletionQuestion::grade(string user_ans){
     if (user_ans == "None"){
         return 0;
+    } else if(!user_ans.compare(correct_answer)){
+        return point;
+    } else{
+        return 0;
     }
-    return !user_ans.compare(correct_answer);
+    
 }

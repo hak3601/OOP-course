@@ -2,18 +2,100 @@
 #include <vector>
 #include <map>
 #include <chrono>
+#include <sstream>
 #include "utils.h"
 #include "exam.h"
 #include "questions.h"
+#include "dynamic_difficulty_engine.h"
 using namespace std;
 
-Exam::Exam(const string &title, const string &datafolder) : exam_title(title), datafolder(datafolder) {}
+Exam::Exam(const string &title, const string &datafolder, const User* user) : exam_title(title), datafolder(datafolder), object_user(user) {}
 Exam::~Exam() {}
+
+/*-------------------------------------------------------------------------------------------*/
+TrainExam::TrainExam(const string &title, const string &datafolder,const User* user, const string& prof_name) : Exam(title,datafolder,user), prof_name(prof_name) {
+    string exam_file_name = exam_title+"-train-"+prof_name+".csv";
+    vector<vector<string>> raw_questions = readCSV(datafolder, exam_file_name);
+    int low = 100;
+    int top = 0;
+    for(const auto& vv : raw_questions){
+        low = (low < stoi(vv[4])) ? low : stoi(vv[4]);
+        top = (top > stoi(vv[4])) ? top : stoi(vv[4]);
+    }
+    DDE = new DynamicDifficultyEngine(low, top);
+}
+
+void TrainExam::startExam(){
+    cur_idx = 0;
+    string exam_file_name = exam_title+"-train-"+prof_name+".csv";
+    vector<vector<string>> raw_questions = readCSV(datafolder, exam_file_name);
+
+    questions = vec2Questions(raw_questions);
+    cout << exam_title << " starts now.";
+    
+    char command;
+    string input;
+    while (true) {
+        clearConsole();
+
+        displayQuestionList();
+        cout << endl;
+        displayQuestions();
+        cout << "Commands: [e]dit answer, [q]uit" << endl;
+        cout << "Enter command: ";
+        cin >> command;
+
+        if (command == 'e') {
+            cout << "Enter new answer: ";
+            cin.ignore(); // Ignore newline from previous input
+            getline(cin, input);
+            //editAnswer(input); // Automatically moves to the next question after editing
+            //goToNextQuestion();
+        } else if (command == 'q') {
+            cout << "Exiting training." << endl;
+            break;
+        } else {
+            cout << "Invalid command. Please try again." << endl;
+        }
+    }
+    printSummary();
+}
+
+void TrainExam::displayQuestionList() const {
+    for(size_t i = 0; i < individual_problem_RW_tracker.size(); i++){
+        if(!individual_problem_RW_tracker[i].compare("O")){
+            setTextColor(10, -1);
+            cout<<i+1<<". O ";
+            resetTextColor();
+        } else{
+            setTextColor(1, -1);
+            cout<<i+1<<". X ";
+            resetTextColor();
+        }
+        cout << " ";
+    }
+}
+
+void TrainExam::endExam(){
+    cout << "end train" << endl;
+}
+
+void TrainExam::displayQuestions() const {
+    int recommended_level = DDE->recommendDifficulty(cur_idx, cur_total_score, cur_gained_score);
+}
+
+void TrainExam::recordScore(const string &, int) {
+
+}
+
+void TrainExam::printSummary() const {
+    cout << "print summary" << endl;
+}
+
 
 /*-------------------------------------------------------------------------------------------*/
 void TestExam::startExam() { // the main function of test exam
     cur_idx = 0;
-    string prof_name = "Prof.Ko";
     string exam_file_name = exam_title+"-test-"+prof_name+".csv";
     vector<vector<string>> raw_questions = readCSV(datafolder, exam_file_name);
 
@@ -27,8 +109,7 @@ void TestExam::startExam() { // the main function of test exam
         clearConsole();
         if (cur_idx == static_cast<int>(questions.size())) {
             // Special handling if at the end of the exam
-            int buff = handleEndOfExam();
-            if(buff==1)break;
+            if(handleEndOfExam()==1)break;
             continue;
         }
 
@@ -39,28 +120,25 @@ void TestExam::startExam() { // the main function of test exam
         cout << "Enter command: ";
         cin >> command;
 
-        switch (command) {
-            case 'e':
-                cout << "Enter new answer: ";
-                cin.ignore(); // Ignore newline from previous input
-                getline(cin, input);
-                editAnswer(input); // Automatically moves to the next question after editing
-                goToNextQuestion();
-                break;
-            case 'm':
-                goToPreviousQuestion();
-                break;
-            case 'n':
-                goToNextQuestion();
-                break;
-            case 'q':
-                cout << "Exiting the exam." << endl;
-                break;
-            default:
-                cout << "Invalid command. Please try again." << endl;
+        if (command == 'e') {
+            cout << "Enter new answer: ";
+            cin.ignore(); // Ignore newline from previous input
+            getline(cin, input);
+            editAnswer(input); // Automatically moves to the next question after editing
+            goToNextQuestion();
+        } else if (command == 'm') {
+            goToPreviousQuestion();
+        } else if (command == 'n') {
+            goToNextQuestion();
+        } else if (command == 'q') {
+            cout << "Exiting the exam." << endl;
+            break;
+        } else {
+            cout << "Invalid command. Please try again." << endl;
         }
+
     }
-    endExam();
+    
 }
 // Display the list of questions and their current state (answered or not)
 // Display the list of questions and their current state (answered or not)
@@ -91,6 +169,7 @@ int TestExam::handleEndOfExam() {
 
     switch (command) {
         case 's':
+            endExam();
             saveToCSV();
             cout << "Exam submitted. Thank you!" << endl;
             return 1;
@@ -195,16 +274,19 @@ int TestExam::getCurrentIndex() const {
 
 // Save the questions and answers to a CSV file
 void TestExam::saveToCSV() const {
-    string stream = datafolder+"/exam_results.csv";
-    ofstream outFile(stream);
+    string stream = datafolder+"/"+exam_title+"-"+this->getProfessorName()+"-"+"exam_results.csv";
+    ofstream outFile(stream, ios::app);
     if (outFile.is_open()) {
-        outFile << "Question,Answer\n";
+        outFile << "Student : " << object_user->getName() << ", ID : " << object_user->getId() << ", Score : " << total_score << "/" << max_score <<"\n";
         for (size_t i = 0; i < questions.size(); ++i) {
             outFile << "\"" << questions[i]->getQuestionText() << "\",\"" 
-                    << (answers[i].empty() ? "None" : answers[i]) << "\"\n";
+                    << "Student answer => " << (answers[i].empty() ? "None" : answers[i]) << "\",\""
+                    << "Correct answer => "<< questions[i]->getCurrectAnswer() << "\"\n";
         }
         outFile.close();
-        cout << "Results saved to 'exam_results.csv'." << endl;
+        clearConsole();
+        cout << "Your score is : " << total_score <<"/" << max_score << endl;
+        cout << "Results saved to " << stream <<"." << endl;
     } else {
         cerr << "Error: Could not open file for writing." << endl;
     }
@@ -222,11 +304,7 @@ void TestExam::goToNextQuestion() {
         cout << "Already at the end of the exam." << endl;
     }
 }
-
-
-
-
-TestExam::TestExam(const string &title, const string &datafolder) : Exam(title,datafolder) {}
+TestExam::TestExam(const string &title, const string &datafolder,const User* user, const string& prof_name) : Exam(title,datafolder,user), prof_name(prof_name) {}
 TestExam::~TestExam() {}
 void TestExam::setMaxScore(){
     
@@ -234,17 +312,17 @@ void TestExam::setMaxScore(){
 void TestExam::endExam() {
     int user_point = 0;
     for(size_t i = 0;i < answers.size();i++){
-        user_point+=questions[i]->grade(answers[i]);
+        total_score+=questions[i]->grade(answers[i]);
+        max_score+=questions[i]->getpoint();
     }
-    cout << user_point << endl;
-    cout << "Not done yet" << endl;
-    //recordScore();
+    
 } // will be called when exam is over and will update the test result file
 void TestExam::recordScore(const string &, int) {
     
 } // 
 void TestExam::printSummary() const {}
 void TestExam::timeIsOver() {}
+string TestExam::getProfessorName() const {return prof_name;}
 
 /*-------------------------------------------------------------------------------------------*/
 
