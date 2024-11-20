@@ -21,7 +21,7 @@ void TrueFalseQuestion::display() const{
 }
 int TrueFalseQuestion::grade(string user_ans){
     string converted_ans = "";
-    if (user_ans == "None"){
+    if (!user_ans.compare("None")){
         return 0;
     }
     if(!user_ans.compare("t") || !user_ans.compare("T") || !user_ans.compare("true") || !user_ans.compare("True")) converted_ans = "True";

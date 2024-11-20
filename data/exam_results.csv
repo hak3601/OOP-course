@@ -1,6 +1,6 @@
 Question,Answer
-"A binary search tree (BST) is always balanced.","None"
-"Which data structure is typically used to implement a queue?","None"
+"A binary search tree (BST) is always balanced.","f"
+"Which data structure is typically used to implement a queue?","b"
 "The time complexity of searching for an element in an unsorted array is O(__).","None"
 "In a stack the last element added is the first one to be removed.","None"
 "What is the maximum number of children a node can have in a binary tree?","None"
