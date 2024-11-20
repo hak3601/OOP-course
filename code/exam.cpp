@@ -43,6 +43,7 @@ void TestExam::startExam() { // the main function of test exam
                 cin.ignore(); // Ignore newline from previous input
                 getline(cin, input);
                 editAnswer(input); // Automatically moves to the next question after editing
+                goToNextQuestion();
                 break;
             case 'p':
                 goToPreviousQuestion();
@@ -63,18 +64,21 @@ void TestExam::startExam() { // the main function of test exam
     endExam();
 }
 // Display the list of questions and their current state (answered or not)
+// Display the list of questions and their current state (answered or not)
 void TestExam::displayQuestionList() const { // 
     cout << "Question List:\n";
     for (size_t i = 0; i < questions.size(); ++i) {
         if (static_cast<int>(i) == cur_idx) {
             // Highlight the current question using ANSI escape codes
-            cout << "\033[1;32m" << i + 1 << ". " 
-                << (answers[i].empty() ? "X" : answers[i]) 
-                << "\033[0m" << endl;
+            setTextColor(10,-1);
+            cout << i + 1 << ". " 
+                << (answers[i].empty() ? "X" : answers[i]);
+            resetTextColor();
+            cout << "\t";
         } else {
             cout << i + 1 << ". " 
                 << (answers[i].empty() ? "X" : answers[i]) 
-                << endl;
+                << "\t";
         }
     }
 }
