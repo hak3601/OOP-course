@@ -13,7 +13,7 @@ void printButton(const vector<string>&);
 void studentMainMenu(User*, string);
 void professorMainMenu(User*, string);
 int verifyUser(const string&, const string&, const string&);
-vector<string> showAvailableCourses(User* user, const string& datafolder, const string& filename);
+void showAvailableCourses(User* user, const string& datafolder, const string& filename);
 void updateAvailableState(User* user, const string& course, const string& datafolder, const string& filename);
 
 int main(int argc, char const *argv[])
@@ -100,11 +100,9 @@ void studentMainMenu(User* user, string datafolder){
             bring csv file according to course name, instructor
             create exam object ~
             */
-            vector<string> available_courses = showAvailableCourses(user, datafolder, "courses_available.csv");
-            for (string s: available_courses) {
-                cout << s << endl;
-            }
-            cout << "Select the course to take exam by entering the order: ";
+            showAvailableCourses(user, datafolder, "courses_available.csv");
+            
+            cout << "Select the course to take exam by entering the course name: ";
             getline(cin, course_name);
             exam = new TestExam(course_name, datafolder);
             exam->startExam();
@@ -222,7 +220,7 @@ int verifyUser(const string& user_name, const string& user_id, const string& dat
 }
 
 // Function to show available courses for a user
-vector<string> showAvailableCourses(User* user, const string& datafolder, const string& filename) {
+void showAvailableCourses(User* user, const string& datafolder, const string& filename) {
     vector<string> courses; // To store available course information
     bool is_new_record = true;
 
@@ -257,7 +255,9 @@ vector<string> showAvailableCourses(User* user, const string& datafolder, const 
         }
     }
     courses = fetchEnroledOrInstructing(user->getName(), user->getId(), datafolder, "courses_available.csv");
-    return courses;
+    for (string s: courses) {
+            cout << s << endl;
+    }
 }
 
 void updateAvailableState(User* user, const string& course, const string& datafolder, const string& filename) {
