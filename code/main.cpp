@@ -14,7 +14,7 @@ void studentMainMenu(User*, string);
 void professorMainMenu(User*, string);
 int verifyUser(const string&, const string&, const string&);
 void showAvailableCourses(User* user, const string& datafolder, const string& filename);
-void updateAvailableState(User* user, const string& course, const string& datafolder, const string& filename);
+bool updateAvailableState(User* user, const string& course, const string& datafolder, const string& filename);
 
 int main(int argc, char const *argv[])
 {
@@ -101,12 +101,17 @@ void studentMainMenu(User* user, string datafolder){
             create exam object ~
             */
             showAvailableCourses(user, datafolder, "courses_available.csv");
-            
+
             cout << "Select the course to take exam by entering the course name: ";
             getline(cin, course_name);
-            exam = new TestExam(course_name, datafolder);
-            exam->startExam();
-            updateAvailableState(user, course_name, datafolder, "courses_available.csv");
+            if (updateAvailableState(user, course_name, datafolder, "courses_available.csv")) {
+                exam = new TestExam(course_name, datafolder);
+                exam->startExam();
+            } else {
+                continue;
+            }
+            
+            
         } else if (user_command == 2){ // Train for test
 
         } else if (user_command == 3){ // Create train tests
@@ -260,7 +265,7 @@ void showAvailableCourses(User* user, const string& datafolder, const string& fi
     }
 }
 
-void updateAvailableState(User* user, const string& course, const string& datafolder, const string& filename) {
+bool updateAvailableState(User* user, const string& course, const string& datafolder, const string& filename) {
     // Read the CSV file into a 2D vector
     vector<vector<string>> available_courses = readCSV(datafolder, filename);
     string userId = user->getId();
@@ -286,8 +291,8 @@ void updateAvailableState(User* user, const string& course, const string& datafo
 
     // If the course was not found, exit
     if (target_pos == -1) {
-        cout << "Course not found for the user.\n";
-        return;
+        cout << "Course not found for the user. Try again.\n";
+        return false;
     }
 
     // Update the availability status
@@ -295,11 +300,8 @@ void updateAvailableState(User* user, const string& course, const string& datafo
         // Replace "[O]" with "[X]" but keep the course name
         available_courses[row][target_pos] = "[X] " + course;
     } else if (available_courses[row][target_pos].substr(0, 3) == "[X]") {
-        cout << "You've already marked this course as completed.\n";
-        return;
-    } else {
-        // If the course is not marked, assume it's available and mark it as completed
-        available_courses[row][target_pos] = "[X] " + course;
+        cout << "You've already taken this course as completed. Try again.\n";
+        return false;
     }
 
     // Open the file for writing (overwrite mode) to save updated data
@@ -315,7 +317,9 @@ void updateAvailableState(User* user, const string& course, const string& datafo
             out_file << "\n"; // new line for next row
         }
         out_file.close();
+        return true;
     } else {
-        cerr << "Failed to open the file for writing.\n";
+        cerr << "Failed to open the file for writing. Try again.\n";
+        return false;
     }
 }
