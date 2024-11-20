@@ -18,9 +18,48 @@ void TestExam::startExam() { // the main function of test exam
     vector<vector<string>> raw_questions = readCSV(datafolder, exam_file_name);
 
     questions = vec2Questions(raw_questions);
+    answers.resize(questions.size(), "");
+    cout << exam_title << " starts now.";
     
-    cout << exam_title << " starts now." << endl;
-    
+    char command;
+    string input;
+    while (true) {
+        clearConsole();
+        if (cur_idx == static_cast<int>(questions.size())) {
+            // Special handling if at the end of the exam
+            int buff = handleEndOfExam();
+            if(buff==1)break;
+            continue;
+        }
+
+        displayQuestionList();
+        cout << endl;
+        displayQuestions();
+        cout << "Commands: [e]dit answer, [m]ove to question, [n]ext question, [q]uit" << endl;
+        cout << "Enter command: ";
+        cin >> command;
+
+        switch (command) {
+            case 'e':
+                cout << "Enter new answer: ";
+                cin.ignore(); // Ignore newline from previous input
+                getline(cin, input);
+                editAnswer(input); // Automatically moves to the next question after editing
+                goToNextQuestion();
+                break;
+            case 'm':
+                goToPreviousQuestion();
+                break;
+            case 'n':
+                goToNextQuestion();
+                break;
+            case 'q':
+                cout << "Exiting the exam." << endl;
+                break;
+            default:
+                cout << "Invalid command. Please try again." << endl;
+        }
+    }
     endExam();
 }
 // Display the list of questions and their current state (answered or not)
@@ -43,7 +82,7 @@ void TestExam::displayQuestionList() const { //
     }
 }
 // Handle the end-of-exam options
-void TestExam::handleEndOfExam() {
+int TestExam::handleEndOfExam() {
     char command;
     displayQuestionList(); // Display the question list at the end of the exam
     cout << endl << "Options: [s]ubmit, [m]ove to questions" << endl;
@@ -54,10 +93,10 @@ void TestExam::handleEndOfExam() {
         case 's':
             saveToCSV();
             cout << "Exam submitted. Thank you!" << endl;
-            exit(0);
+            return 1;
         case 'm':
             goToPreviousQuestion();
-            break;
+            return 2;
         default:
             cout << "Invalid option. Please try again." << endl;
     }
@@ -67,6 +106,9 @@ void TestExam::displayQuestions() const {
     if (cur_idx >= 0 && cur_idx < static_cast<int>(questions.size())) {
         cout << "--- Portable Exam Menu ---" << endl;
         cout << "Question " << questions[cur_idx]->getIdx() << ": " << questions[cur_idx]->getQuestionText() << endl;
+        if(questions[cur_idx]->getQversion() == "MC"){
+            cout << questions[cur_idx]->getOptions() << endl;
+        }
         cout << "Current Answer: " << (answers[cur_idx].empty() ? "None" : answers[cur_idx]) << endl;
     } else if (cur_idx == static_cast<int>(questions.size())) {
         // At the end of the exam
@@ -120,7 +162,6 @@ void TestExam::handlePostNavigationOptions() {
         } else if (command == 's') {
             saveToCSV();
             cout << "Exam submitted. Thank you!" << endl;
-            exit(0);
         } else if (command == 'g') {
             goToAnotherQuestion(); // Ask user which question to go to
             break;
@@ -190,8 +231,18 @@ TestExam::~TestExam() {}
 void TestExam::setMaxScore(){
     
 }
-void TestExam::endExam() {} // will be called when exam is over and will update the test result file
-void TestExam::recordScore(const string &, int) {} // 
+void TestExam::endExam() {
+    int user_point = 0;
+    for(size_t i = 0;i < answers.size();i++){
+        user_point+=questions[i]->grade(answers[i]);
+    }
+    cout << user_point << endl;
+    cout << "Not done yet" << endl;
+    //recordScore();
+} // will be called when exam is over and will update the test result file
+void TestExam::recordScore(const string &, int) {
+    
+} // 
 void TestExam::printSummary() const {}
 void TestExam::timeIsOver() {}
 

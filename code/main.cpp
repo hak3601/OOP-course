@@ -122,6 +122,7 @@ void studentMainMenu(User* user, string datafolder){
         } else{
             cout << "Invalid input, please try again" << endl;
         }
+    
     }
 }
 
