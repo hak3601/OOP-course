@@ -94,3 +94,41 @@ vector<Question*> vec2Questions(vector<vector<string>> q_vec){
     }
     return ret_qvec;
 }
+
+#include <iostream>
+
+void setTextColor(int foreground, int background = -1) {
+    // Foreground color codes (ANSI escape codes)
+    std::string colors[] = {
+        "\033[30m", // Black
+        "\033[31m", // Red
+        "\033[32m", // Green
+        "\033[33m", // Yellow
+        "\033[34m", // Blue
+        "\033[35m", // Magenta
+        "\033[36m", // Cyan
+        "\033[37m", // White
+        "\033[90m", // Bright Black (Gray)
+        "\033[91m", // Bright Red
+        "\033[92m", // Bright Green
+        "\033[93m", // Bright Yellow
+        "\033[94m", // Bright Blue
+        "\033[95m", // Bright Magenta
+        "\033[96m", // Bright Cyan
+        "\033[97m"  // Bright White
+    };
+
+    if (foreground >= 0 && foreground < 16) {
+        std::cout << colors[foreground];
+    }
+
+    // Background color handling (optional)
+    if (background >= 0 && background < 16) {
+        std::cout << "\033[" << (background + 40) << "m"; // Background color codes start from 40
+    }
+}
+// 10, -1
+void resetTextColor() {
+    std::cout << "\033[0m"; // Reset to default color
+}
+
