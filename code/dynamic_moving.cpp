@@ -23,32 +23,19 @@
 //         enableANSIColors(); // Enable ANSI colors for Windows if needed
 //     }
 
-//     // Enable ANSI color support for Windows terminals
-//     void enableANSIColors() {
-//         #if defined(_WIN32)
-//         HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-//         if (hOut != INVALID_HANDLE_VALUE) {
-//             DWORD dwMode = 0;
-//             GetConsoleMode(hOut, &dwMode);
-//             dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-//             SetConsoleMode(hOut, dwMode);
-//         }
-//         #endif
-//     }
-
 //     // Display the list of questions and their current state (answered or not)
-//     void displayQuestionList() const {
+//     void displayQuestionList() const { // 
 //         cout << "Question List:\n";
 //         for (size_t i = 0; i < questions.size(); ++i) {
 //             if (static_cast<int>(i) == currentIndex) {
 //                 // Highlight the current question using ANSI escape codes
 //                 cout << "\033[1;32m" << i + 1 << ". " 
-//                      << (answers[i].empty() ? "X" : answers[i]) 
-//                      << "\033[0m" << endl;
+//                     << (answers[i].empty() ? "X" : answers[i]) 
+//                     << "\033[0m" << endl;
 //             } else {
 //                 cout << i + 1 << ". " 
-//                      << (answers[i].empty() ? "X" : answers[i]) 
-//                      << endl;
+//                     << (answers[i].empty() ? "X" : answers[i]) 
+//                     << endl;
 //             }
 //         }
 //     }
@@ -195,7 +182,7 @@
 //         return currentIndex;
 //     }
 // };
-// /*
+
 // int main() {
 //     // Example questions for demonstration
 //     vector<string> questionsList;
@@ -242,4 +229,3 @@
 //         }
 //     }
 // }
-// */

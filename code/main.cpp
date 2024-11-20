@@ -32,7 +32,7 @@ int main(int argc, char const *argv[])
     string user_name;
     string user_id;
     User* user;
-    
+    clearConsole();
     cout << "*** Welcome to Exam Management System ***";
     
     while(1){

@@ -17,7 +17,7 @@ string Question::getCurrectAnswer() {return correct_answer;}
 TrueFalseQuestion::TrueFalseQuestion(int idx, const string &text, int point, const string& correct_answer)
         : Question(idx, text, point, correct_answer) {}
 void TrueFalseQuestion::display() const{
-    printf("%d. %s (%s points)\nt/f? >> ", idx, question_text, point);
+    cout << idx << ". " << question_text << " (" << point << " points)\nt/f? >> ";
 }
 int TrueFalseQuestion::grade(string user_ans){
     string converted_ans = "";
@@ -30,7 +30,7 @@ int TrueFalseQuestion::grade(string user_ans){
 MultipleChoiceQuestion::MultipleChoiceQuestion(int idx, const string &text, int point, const string &opts, const string& correct_answer)
         : Question(idx, text, point, correct_answer), options(opts) {}
 void MultipleChoiceQuestion::display() const{
-    printf("%d. %s (%d points)", idx, question_text, point);
+    cout << idx << ". " << question_text << " (" << point << " points)";
     for(const auto& op : options){
         cout << op << endl;
     }
@@ -44,7 +44,7 @@ int MultipleChoiceQuestion::grade(string user_ans){
 CompletionQuestion::CompletionQuestion(int idx, const string &text, int point, const string& correct_answer)
         : Question(idx, text, point, correct_answer) {}
 void CompletionQuestion::display() const{
-    printf("%d. %s (%d points)\nFill in the blank >> ", idx, question_text, point);
+    cout << idx << ". " << question_text << " (" << point << " points)\nFill in the blank >> ";
 }
 int CompletionQuestion::grade(string user_ans){
     return !user_ans.compare(correct_answer);
