@@ -84,18 +84,17 @@ vector<Question*> vec2Questions(vector<vector<string>> q_vec){
         Question* q;
         string q_version = v[0];
         if (q_version == "TF"){
-            q = new TrueFalseQuestion(stoi(v[1]),v[2],stoi(v[4]),v[3]);
+            q = new TrueFalseQuestion(v[0],stoi(v[1]),v[2],stoi(v[4]),v[3]);
         } else if(q_version == "MC"){
-            q = new MultipleChoiceQuestion(stoi(v[1]),v[2],stoi(v[4]),v[5],v[3]);
+            q = new MultipleChoiceQuestion(v[0],stoi(v[1]),v[2],stoi(v[4]),v[5],v[3]);
         } else if(q_version == "CQ"){
-            q = new CompletionQuestion(stoi(v[1]),v[2],stoi(v[4]),v[3]);
+            q = new CompletionQuestion(v[0],stoi(v[1]),v[2],stoi(v[4]),v[3]);
         }
         ret_qvec.push_back(q);
     }
     return ret_qvec;
 }
 
-#include <iostream>
 
 void setTextColor(int foreground, int background = -1) {
     // Foreground color codes (ANSI escape codes)

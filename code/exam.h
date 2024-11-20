@@ -59,7 +59,7 @@ public:
     void displayQuestions() const; // ~
     void recordScore(const string &, int); // 
     void printSummary() const;
-    void handleEndOfExam();
+    int handleEndOfExam();
     void displayQuestionList() const ;
     void editAnswer(const string&);
     void goToPreviousQuestion();

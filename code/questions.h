@@ -24,38 +24,46 @@ public:
     virtual int getpoint();
     virtual string getCurrectAnswer();
     virtual int grade(string) = 0;
+    virtual string getQversion() = 0;
+    virtual string getOptions() = 0;
 };
 
 // Derived class for True/False Question
 class TrueFalseQuestion : public Question {
 private:
-
+    string q_ver;
 public:
-    TrueFalseQuestion(int, const string&, int, const string&);
+    TrueFalseQuestion(string, int, const string&, int, const string&);
     int grade(string);
     void display() const override;
+    string getQversion();
+    string getOptions();
 };
 
 // Derived class for Multiple Choice Question
 class MultipleChoiceQuestion : public Question {
 private:
     string options;
-    
+    string q_ver;
 
 public:
-    MultipleChoiceQuestion(int, const string&, int, const string&, const string&);
+    MultipleChoiceQuestion(string, int, const string&, int, const string&, const string&);
     int grade(string);
     void display() const override;
+    string getQversion();
+    string getOptions();
 };
 
 // Derived class for Completion (Fill in the Blank) Question
 class CompletionQuestion : public Question {
 private:
-
+    string q_ver;
 public:
-    CompletionQuestion(int, const string&, int, const string&);
+    CompletionQuestion(string, int, const string&, int, const string&);
     int grade(string);
     void display() const override;
+    string getQversion();
+    string getOptions();
 };
 
 #endif // QUESTIONS_H
