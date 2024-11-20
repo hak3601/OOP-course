@@ -104,6 +104,7 @@ void studentMainMenu(User* user, string datafolder){
 
             cout << "Select the course to take exam by entering the course name: ";
             getline(cin, course_name);
+            
             if (updateAvailableState(user, course_name, datafolder, "courses_available.csv")) {
                 exam = new TestExam(course_name, datafolder);
                 exam->startExam();
