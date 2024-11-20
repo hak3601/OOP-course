@@ -138,8 +138,6 @@ void TestExam::goToPreviousQuestion() {
     if (questionNumber >= 0 && questionNumber < static_cast<int>(questions.size())) {
         cur_idx = questionNumber;
         cout << "Moved to question " << cur_idx + 1 << "." << endl;
-        displayQuestions(); // Display the question after moving
-        handlePostNavigationOptions(); // Allow further actions
     } else {
         cout << "Invalid move. Please enter a valid question number." << endl;
     }
