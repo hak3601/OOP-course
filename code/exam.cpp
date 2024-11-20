@@ -24,6 +24,7 @@ void TestExam::startExam() { // the main function of test exam
         char command;
     string input;
     while (true) {
+        clearConsole();
         if (cur_idx == static_cast<int>(questions.size())) {
             // Special handling if at the end of the exam
             handleEndOfExam();
@@ -33,7 +34,7 @@ void TestExam::startExam() { // the main function of test exam
         displayQuestionList();
         cout << endl;
         displayQuestions();
-        cout << "Commands: [e]dit answer, [p]revious question, [n]ext question, [q]uit" << endl;
+        cout << "Commands: [e]dit answer, [m]ove to question, [n]ext question, [q]uit" << endl;
         cout << "Enter command: ";
         cin >> command;
 
@@ -45,7 +46,7 @@ void TestExam::startExam() { // the main function of test exam
                 editAnswer(input); // Automatically moves to the next question after editing
                 goToNextQuestion();
                 break;
-            case 'p':
+            case 'm':
                 goToPreviousQuestion();
                 break;
             case 'n':
@@ -86,7 +87,7 @@ void TestExam::displayQuestionList() const { //
 void TestExam::handleEndOfExam() {
     char command;
     displayQuestionList(); // Display the question list at the end of the exam
-    cout << "Options: [s]ubmit, [p]revious questions" << endl;
+    cout << endl << "Options: [s]ubmit, [m]ove to questions" << endl;
     cout << "Enter command: ";
     cin >> command;
 
@@ -95,7 +96,7 @@ void TestExam::handleEndOfExam() {
             saveToCSV();
             cout << "Exam submitted. Thank you!" << endl;
             exit(0);
-        case 'p':
+        case 'm':
             goToPreviousQuestion();
             break;
         default:
@@ -147,7 +148,7 @@ void TestExam::goToPreviousQuestion() {
 void TestExam::handlePostNavigationOptions() {
     char command;
     while (true) {
-        cout << "Options: [e]dit answer, [s]ubmit, [g]o back to another question" << endl;
+        cout << endl << "Options: [e]dit answer, [s]ubmit, [g]o back to another question" << endl;
         cout << "Enter command: ";
         cin >> command;
 
@@ -194,7 +195,8 @@ int TestExam::getCurrentIndex() const {
 
 // Save the questions and answers to a CSV file
 void TestExam::saveToCSV() const {
-    ofstream outFile("exam_results.csv");
+    string stream = datafolder+"/exam_results.csv";
+    ofstream outFile(stream);
     if (outFile.is_open()) {
         outFile << "Question,Answer\n";
         for (size_t i = 0; i < questions.size(); ++i) {

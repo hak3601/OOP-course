@@ -12,3 +12,4 @@ vector<vector<string>> readCSV(const string&, const string&);
 vector<Question*> vec2Questions(vector<vector<string>>);
 void setTextColor(int foreground, int background);
 void resetTextColor();
+void clearConsole();

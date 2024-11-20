@@ -132,3 +132,11 @@ void resetTextColor() {
     std::cout << "\033[0m"; // Reset to default color
 }
 
+// Clear the console screen
+void clearConsole() {
+    #if defined(_WIN32)
+    system("cls");
+    #else
+    cout << "\033[2J\033[1;1H"; // ANSI escape sequence for clearing screen
+    #endif
+}
