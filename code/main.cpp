@@ -8,7 +8,7 @@
 #include <fstream>
 using namespace std;
 
-void printButton(const vector<string>&);
+
 void studentMainMenu(User*, string);
 void professorMainMenu(User*, string);
 int verifyUser(const string&, const string&, const string&);
@@ -31,10 +31,11 @@ int main(int argc, char const *argv[])
     string user_name;
     string user_id;
     User* user;
-    clearConsole();
-    cout << "*** Welcome to Exam Management System ***";
+    
     
     while(1){
+        clearConsole();
+        cout << "*** Welcome to Exam Management System ***";
         cout << "\nVerify yourself with your name and ID" << endl;
         cout << "Name >> ";
         cin >> user_name;
@@ -82,6 +83,7 @@ void studentMainMenu(User* user, string datafolder){
     string course_prof_name;
     Exam* exam;
     while(1){
+        clearConsole();
         cout << "Student Main Menu" << endl;
         cout << "==========" << endl;
 
@@ -120,9 +122,7 @@ void studentMainMenu(User* user, string datafolder){
             cout << "Select the course to train by entering the course name: ";
             getline(cin, course_prof_name);
             vector<string> c_f_vector = splitString2CourseAndProf(course_prof_name);
-            cout << "here";
             exam = new TrainExam(c_f_vector[0], datafolder, user, c_f_vector[1]);
-            cout << "here";
             exam->startExam();
 
         } else if (user_command == 3){ // Create train tests
@@ -142,6 +142,7 @@ void professorMainMenu(User* user, string datafolder){
         cout << v;
     }
     while(1){
+        clearConsole();
         cout << "Professor Main Menu" << endl;
         cout << "==========" << endl;
 
@@ -163,23 +164,7 @@ void professorMainMenu(User* user, string datafolder){
     }
 }
 
-void printButton(const vector<string>& labels) {
-    string interval = "   ";
-    for (const string& label : labels){
-        string btarget_pos(label.size() + 2, '-');
-        cout << "+-" << btarget_pos << "-+" << interval;
-    }
-    cout<<"\n";
-    for (const string& label : labels){
-        cout << "|  " << label << "  |" << interval;
-    }
-    cout<<"\n";
-    for (const string& label : labels){
-        string btarget_pos(label.size() + 2, '-');
-        cout << "+-" << btarget_pos << "-+" << interval;
-    }
-    cout<<"\n";
-}
+
 
 int verifyUser(const string& user_name, const string& user_id, const string& datafolder){
     /*

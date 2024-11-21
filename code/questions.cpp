@@ -11,14 +11,16 @@ Question::Question(int idx, const string& text, int point, const string& correct
 int Question::getIdx() {return idx;}
 string Question::getQuestionText() {return question_text;}
 int Question::getpoint() {return point;}
-string Question::getCurrectAnswer() {return correct_answer;}
-
+string Question::getCorrectAnswer() {return correct_answer;}
+Question::~Question() {};
 
 TrueFalseQuestion::TrueFalseQuestion(string q_ver ,int idx, const string &text, int point, const string& correct_answer)
         : q_ver(q_ver), Question(idx, text, point, correct_answer) {}
-void TrueFalseQuestion::display() const{
-    cout << idx << ". " << question_text << " (" << point << " points)\nt/f? >> ";
+
+string TrueFalseQuestion::display() const{
+    return question_text + " (" + to_string(point) + " points)";
 }
+
 int TrueFalseQuestion::grade(string user_ans){
     string converted_ans = "";
     if (!user_ans.compare("None")){
@@ -36,13 +38,10 @@ int TrueFalseQuestion::grade(string user_ans){
 
 MultipleChoiceQuestion::MultipleChoiceQuestion(string q_ver,int idx, const string &text, int point, const string &opts, const string& correct_answer)
         : q_ver(q_ver),Question(idx, text, point, correct_answer), options(opts) {}
-void MultipleChoiceQuestion::display() const{
-    cout << idx << ". " << question_text << " (" << point << " points)";
-    for(const auto& op : options){
-        cout << op << endl;
-    }
-    cout << "Which is correct? >> ";
+string MultipleChoiceQuestion::display() const{
+    return question_text + " (" + to_string(point) + " points)\n" + options;
 }
+
 int MultipleChoiceQuestion::grade(string user_ans){
     if (user_ans == "None"){
         return 0;
@@ -60,8 +59,8 @@ string TrueFalseQuestion::getOptions(){return "";}
 string CompletionQuestion::getOptions(){return " ";}
 CompletionQuestion::CompletionQuestion(string q_ver,int idx, const string &text, int point, const string& correct_answer)
         : q_ver(q_ver),Question(idx, text, point, correct_answer) {}
-void CompletionQuestion::display() const{
-    cout << idx << ". " << question_text << " (" << point << " points)\nFill in the blank >> ";
+string CompletionQuestion::display() const{
+    return question_text + " (" + to_string(point) + " points)";
 }
 int CompletionQuestion::grade(string user_ans){
     if (user_ans == "None"){

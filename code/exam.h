@@ -29,7 +29,7 @@ public:
     ~Exam();
     virtual void startExam() = 0;
     virtual void endExam() = 0; // will be called when exam is over and will update the test result file
-    virtual void displayQuestions() const = 0; // ~
+    virtual void displayQuestions() = 0; // ~
     virtual void recordScore(const string &user_id, int score) = 0; // 
     virtual void printSummary() const = 0;
 };
@@ -41,14 +41,20 @@ private:
     int cur_total_score = 0;
     int cur_gained_score = 0;
     string prof_name;
+    vector<string> user_taken_questions;
+    vector<vector<string>> user_taken_answers;
 public:
     TrainExam(const string &,const string &, const User*, const string&);
+    ~TrainExam();
     void startExam(); // will be called in main
     void endExam(); // will be called when exam is over and will update the test result file
-    void displayQuestions() const; // ~
+    void displayQuestions(); // ~
     void recordScore(const string &, int); // 
     void printSummary() const;
     void displayQuestionList() const;
+    void editAnswer(string);
+    void updateQuestionList(string);
+    
 };
 
 class TestExam : public Exam{
@@ -63,7 +69,7 @@ public:
     void setMaxScore();
     void timeIsOver();
     void endExam(); // will be called when exam is over and will update the test result file
-    void displayQuestions() const; // ~
+    void displayQuestions() ; // ~
     void recordScore(const string &, int); // 
     void printSummary() const;
     int handleEndOfExam();

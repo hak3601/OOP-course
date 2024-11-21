@@ -25,20 +25,39 @@ TrainExam::TrainExam(const string &title, const string &datafolder,const User* u
     DDE = new DynamicDifficultyEngine(low, top);
 }
 
+
+void TrainExam::updateQuestionList(string user_ans){
+    int right_or_wrong = questions[DDE->getCurIdx()]->grade(user_ans);
+
+    user_taken_answers.push_back(vector<string>{user_ans, questions[DDE->getCurIdx()]->getCorrectAnswer(), to_string(questions[DDE->getCurIdx()]->grade(user_ans))});
+
+    cur_total_score += questions[DDE->getCurIdx()]->getpoint();
+    if(right_or_wrong){ // user got it right
+        individual_problem_RW_tracker.push_back("O");
+        cur_gained_score += questions[DDE->getCurIdx()]->getpoint();
+    } else{ // user got it wrong
+        individual_problem_RW_tracker.push_back("X");
+    }
+}
+
 void TrainExam::startExam(){
-    cur_idx = 0;
+    cur_idx = 1;
     string exam_file_name = exam_title+"-train-"+prof_name+".csv";
     vector<vector<string>> raw_questions = readCSV(datafolder, exam_file_name);
 
     questions = vec2Questions(raw_questions);
-    cout << exam_title << " starts now.";
     
     char command;
     string input;
     while (true) {
         clearConsole();
-
+        if(questions.empty()){
+            break;
+        }
+        
+        cout << endl;
         displayQuestionList();
+
         cout << endl;
         displayQuestions();
         cout << "Commands: [e]dit answer, [q]uit" << endl;
@@ -46,19 +65,27 @@ void TrainExam::startExam(){
         cin >> command;
 
         if (command == 'e') {
-            cout << "Enter new answer: ";
+            cout << "Enter answer: ";
             cin.ignore(); // Ignore newline from previous input
             getline(cin, input);
-            //editAnswer(input); // Automatically moves to the next question after editing
-            //goToNextQuestion();
+            editAnswer(input); // Automatically moves to the next question after editing
         } else if (command == 'q') {
             cout << "Exiting training." << endl;
             break;
         } else {
             cout << "Invalid command. Please try again." << endl;
         }
+        
+        delete questions[DDE->getCurIdx()];
+        questions.erase(questions.begin()+DDE->getCurIdx());
+        cur_idx++;
     }
+    
     printSummary();
+}
+
+void TrainExam::editAnswer(string input){
+    updateQuestionList(input);
 }
 
 void TrainExam::displayQuestionList() const {
@@ -80,17 +107,82 @@ void TrainExam::endExam(){
     cout << "end train" << endl;
 }
 
-void TrainExam::displayQuestions() const {
-    int recommended_level = DDE->recommendDifficulty(cur_idx, cur_total_score, cur_gained_score);
+void TrainExam::displayQuestions() {
+    int recommended_level = DDE->recommendDifficulty(cur_idx, cur_total_score, cur_gained_score, questions, individual_problem_RW_tracker);
+    int prob_idx = 0;
+    for (size_t i = 0; i < questions.size(); i++)
+    {
+        if(questions[i]->getpoint()==recommended_level){
+            prob_idx = i;
+            break;
+        }
+    }
+    
+    user_taken_questions.push_back(questions[prob_idx]->display());
+    
+    if (prob_idx >= 0 && prob_idx < static_cast<int>(questions.size())) {
+        cout << "--- Exam Training Menu ---\n" << endl;
+        cout << "Question " << cur_idx << ": " << questions[prob_idx]->getQuestionText() << "(" << questions[prob_idx]->getpoint() << " points)\n" << endl;
+        if(questions[prob_idx]->getQversion() == "MC"){
+            cout << questions[prob_idx]->getOptions() << endl;
+        }
+    } else{
+        cout << "question is empty" << endl;
+    }
+    DDE->setCurIdx(prob_idx);
+    cout << " current level : " << DDE->getCurrentDifficulty() << endl;
 }
 
 void TrainExam::recordScore(const string &, int) {
 
 }
 
-void TrainExam::printSummary() const {
-    cout << "print summary" << endl;
+void TrainExam::printSummary() const { // wrong questions, total score, accuracy, point distribution.
+    clearConsole();
+    if (user_taken_questions.empty()) {
+        cout << "No questions were taken." << endl;
+        return;
+    }
+    setTextColor(3, -1);
+    printButton(vector<string>({"    ***    Summary of your training    ***    "}));
+    resetTextColor();
+    setTextColor(12, -1);
+    cout << "\n[Questions that you got wrong]\n" << endl;
+    resetTextColor();
+    for (size_t i = 0; i < user_taken_questions.size() - 1; i++) {
+        if(stoi(user_taken_answers[i][2])==0){
+            cout << user_taken_questions[i] << " // Your answer : ";
+            setTextColor(1, -1);
+            cout << user_taken_answers[i][0];
+            resetTextColor();
+            cout << ", Correct answer : ";
+            setTextColor(10, -1);
+            cout << user_taken_answers[i][1] << endl;
+            resetTextColor();
+            cout << "" << endl;
+        }
+    }
+
+    setTextColor(3, -1);
+    cout << "--------------------------------------------------\n" << endl;
+    resetTextColor();
+    setTextColor(12, -1);
+    cout << "[Your score] ";
+    resetTextColor();
+    cout << cur_gained_score << "/" << cur_total_score << endl;
+    
+    while(true){
+        cout << "Press [y] to go back to student main >> ";
+        char command;
+        cin >> command;
+        break;
+    }
+    
+    
 }
+
+
+TrainExam::~TrainExam() {}
 
 
 /*-------------------------------------------------------------------------------------------*/
@@ -130,17 +222,33 @@ void TestExam::startExam() { // the main function of test exam
             goToPreviousQuestion();
         } else if (command == 'n') {
             goToNextQuestion();
-        } else if (command == 'q') {
-            cout << "Exiting the exam." << endl;
-            break;
         } else {
             cout << "Invalid command. Please try again." << endl;
         }
 
     }
-    
+    printSummary();
 }
-// Display the list of questions and their current state (answered or not)
+
+void TestExam::printSummary() const {
+    
+    clearConsole();
+
+    setTextColor(3, -1);
+    printButton(vector<string>({"    ***    Summary of exam    ***    "}));
+    resetTextColor();
+    setTextColor(12, -1);
+    cout << "[Your score] ";
+    resetTextColor();
+    cout << total_score << "/" << max_score << endl;
+
+    while(true){
+        cout << "Press [y] to go back to student main >> ";
+        char command;
+        cin >> command;
+        break;
+    }
+}
 // Display the list of questions and their current state (answered or not)
 void TestExam::displayQuestionList() const { // 
     cout << "Question List:\n";
@@ -181,7 +289,7 @@ int TestExam::handleEndOfExam() {
     }
 }
 
-void TestExam::displayQuestions() const {
+void TestExam::displayQuestions() {
     if (cur_idx >= 0 && cur_idx < static_cast<int>(questions.size())) {
         cout << "--- Portable Exam Menu ---" << endl;
         cout << "Question " << questions[cur_idx]->getIdx() << ": " << questions[cur_idx]->getQuestionText() << endl;
@@ -281,7 +389,7 @@ void TestExam::saveToCSV() const {
         for (size_t i = 0; i < questions.size(); ++i) {
             outFile << "\"" << questions[i]->getQuestionText() << "\",\"" 
                     << "Student answer => " << (answers[i].empty() ? "None" : answers[i]) << "\",\""
-                    << "Correct answer => "<< questions[i]->getCurrectAnswer() << "\"\n";
+                    << "Correct answer => "<< questions[i]->getCorrectAnswer() << "\"\n";
         }
         outFile.close();
         clearConsole();
@@ -310,7 +418,6 @@ void TestExam::setMaxScore(){
     
 }
 void TestExam::endExam() {
-    int user_point = 0;
     for(size_t i = 0;i < answers.size();i++){
         total_score+=questions[i]->grade(answers[i]);
         max_score+=questions[i]->getpoint();
@@ -320,7 +427,6 @@ void TestExam::endExam() {
 void TestExam::recordScore(const string &, int) {
     
 } // 
-void TestExam::printSummary() const {}
 void TestExam::timeIsOver() {}
 string TestExam::getProfessorName() const {return prof_name;}
 

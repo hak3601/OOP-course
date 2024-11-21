@@ -8,6 +8,24 @@ using namespace std;
 
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
 
+void printButton(const vector<string>& labels) {
+    string interval = "   ";
+    for (const string& label : labels){
+        string btarget_pos(label.size() + 2, '-');
+        cout << "+-" << btarget_pos << "-+" << interval;
+    }
+    cout<<"\n";
+    for (const string& label : labels){
+        cout << "|  " << label << "  |" << interval;
+    }
+    cout<<"\n";
+    for (const string& label : labels){
+        string btarget_pos(label.size() + 2, '-');
+        cout << "+-" << btarget_pos << "-+" << interval;
+    }
+    cout<<"\n";
+}
+
 vector<vector<string>> readCSV(const string& datafolder, const string& filename) {
     vector<vector<string>> data;
     string f_name = datafolder + "/" + filename;
@@ -95,23 +113,22 @@ vector<Question*> vec2Questions(vector<vector<string>> q_vec){
     return ret_qvec;
 }
 
-
 void setTextColor(int foreground, int background = -1) {
     // Foreground color codes (ANSI escape codes)
     std::string colors[] = {
         "\033[30m", // Black
         "\033[31m", // Red
         "\033[32m", // Green
-        "\033[33m", // Yellow
+        "\033[33m", // Yellow,3
         "\033[34m", // Blue
         "\033[35m", // Magenta
         "\033[36m", // Cyan
         "\033[37m", // White
         "\033[90m", // Bright Black (Gray)
         "\033[91m", // Bright Red
-        "\033[92m", // Bright Green
+        "\033[92m", // Bright Green/10
         "\033[93m", // Bright Yellow
-        "\033[94m", // Bright Blue
+        "\033[94m", // Bright Blue/12
         "\033[95m", // Bright Magenta
         "\033[96m", // Bright Cyan
         "\033[97m"  // Bright White

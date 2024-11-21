@@ -17,15 +17,16 @@ protected:
 public:
     Question(int, const string&, int, const string&);
 
-    virtual void display() const = 0;
+    virtual string display() const = 0;
 
     virtual int getIdx();
     virtual string getQuestionText();
     virtual int getpoint();
-    virtual string getCurrectAnswer();
+    string getCorrectAnswer();
     virtual int grade(string) = 0;
     virtual string getQversion() = 0;
     virtual string getOptions() = 0;
+    virtual ~Question();
 };
 
 // Derived class for True/False Question
@@ -35,7 +36,7 @@ private:
 public:
     TrueFalseQuestion(string, int, const string&, int, const string&);
     int grade(string);
-    void display() const override;
+    string display() const;
     string getQversion();
     string getOptions();
 };
@@ -49,7 +50,7 @@ private:
 public:
     MultipleChoiceQuestion(string, int, const string&, int, const string&, const string&);
     int grade(string);
-    void display() const override;
+    string display() const;
     string getQversion();
     string getOptions();
 };
@@ -61,7 +62,7 @@ private:
 public:
     CompletionQuestion(string, int, const string&, int, const string&);
     int grade(string);
-    void display() const override;
+    string display() const;
     string getQversion();
     string getOptions();
 };

@@ -6,6 +6,7 @@
 #include "questions.h"
 using namespace std;
 
+void printButton(const vector<string>&);
 vector<string> fetchEnroledOrInstructing(const string&, const string&, const string&, const string&);
 vector<string> parseString2Vec(string);
 vector<vector<string>> readCSV(const string&, const string&);
