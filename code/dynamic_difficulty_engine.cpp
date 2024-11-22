@@ -13,9 +13,6 @@ DynamicDifficultyEngine::DynamicDifficultyEngine(int low, int up) : difficulty_l
 int DynamicDifficultyEngine::getUpperbound(){return difficulty_upperbound;}
 int DynamicDifficultyEngine::getLowerbound(){return difficulty_lowerbound;}
 int DynamicDifficultyEngine::getCurrentDifficulty(){return cur_difficulty;}
-bool DynamicDifficultyEngine::checkPointExistsInQuestions(int target_point){
-    
-}
 int DynamicDifficultyEngine::setCurrentDifficulty(int dif){cur_difficulty = dif;}
 int DynamicDifficultyEngine::getCurIdx() {return cur_idx_in_questions;}
 void DynamicDifficultyEngine::setCurIdx(int s) {cur_idx_in_questions = s;}
