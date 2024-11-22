@@ -176,3 +176,27 @@ vector<string> splitString2CourseAndProf(string course_prof){
     }
     return ret_vec;
 }
+
+void copyCSV(const string& sourceFilePath, const string& destFilePath) {
+    ifstream inFile(sourceFilePath); // Open the source CSV file
+    if (!inFile.is_open()) {
+        cerr << "Error: Could not open the source file at " << sourceFilePath << endl;
+        return;
+    }
+
+    ofstream outFile(destFilePath); // Open the destination CSV file
+    if (!outFile.is_open()) {
+        cerr << "Error: Could not create the destination file at " << destFilePath << endl;
+        return;
+    }
+
+    string line;
+    while (getline(inFile, line)) {
+        outFile << line << endl; // Copy each line from the source to the destination
+    }
+
+    cout << "File copied successfully from " << sourceFilePath << " to " << destFilePath << endl;
+
+    inFile.close();
+    outFile.close();
+}
