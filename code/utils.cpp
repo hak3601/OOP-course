@@ -222,6 +222,25 @@ void setTextColor(int foreground, int background = -1) {
         "\033[96m", // Bright Cyan
         "\033[97m"  // Bright White
     };
+    // Background color codes (ANSI escape codes)
+    string backgroundColors[] = {
+        "\033[40m",  // Black
+        "\033[41m",  // Red
+        "\033[42m",  // Green
+        "\033[43m",  // Yellow
+        "\033[44m",  // Blue
+        "\033[45m",  // Magenta
+        "\033[46m",  // Cyan
+        "\033[47m",  // White
+        "\033[100m", // Bright Black (Gray)
+        "\033[101m", // Bright Red
+        "\033[102m", // Bright Green
+        "\033[103m", // Bright Yellow
+        "\033[104m", // Bright Blue
+        "\033[105m", // Bright Magenta
+        "\033[106m", // Bright Cyan
+        "\033[107m"  // Bright White
+    };
 
     if (foreground >= 0 && foreground < 16) {
         cout << colors[foreground];
@@ -229,7 +248,7 @@ void setTextColor(int foreground, int background = -1) {
 
     // Background color handling (optional)
     if (background >= 0 && background < 16) {
-        cout << "\033[" << (background + 40) << "m"; // Background color codes start from 40
+        cout << backgroundColors[background];
     }
 }
 // 10, -1

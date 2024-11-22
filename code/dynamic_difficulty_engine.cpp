@@ -16,7 +16,7 @@ int DynamicDifficultyEngine::getCurrentDifficulty(){return cur_difficulty;}
 int DynamicDifficultyEngine::setCurrentDifficulty(int dif){cur_difficulty = dif;}
 int DynamicDifficultyEngine::getCurIdx() {return cur_idx_in_questions;}
 void DynamicDifficultyEngine::setCurIdx(int s) {cur_idx_in_questions = s;}
-int DynamicDifficultyEngine::recommendDifficulty(int cur_idx, int cur_total_score, int cur_gained_score, vector<Question*> questions, vector<string> RW_tracker) {
+int DynamicDifficultyEngine::recommendDifficulty(int cur_idx, int cur_total_score, int cur_gained_score, vector<Question*> questions, vector<vector<string>> RW_tracker) {
     int recommended_level = 1;
     if(cur_idx > 1 && cur_gained_score != 0){
         float div = static_cast<float>(log2f(cur_gained_score)+1.0f) / (log2f(cur_total_score)+1.0f);
@@ -46,7 +46,7 @@ int DynamicDifficultyEngine::recommendDifficulty(int cur_idx, int cur_total_scor
 
     if(ret_level < 0){
         cout << "The training set ran out of recommended difficulty level " << recommended_level << "! ";
-        if(!RW_tracker.back().compare("O")){ // recommend higher level
+        if(!RW_tracker.back()[0].compare("O")){ // recommend higher level
             for (size_t i = recommended_level + 1; i <= difficulty_upperbound; i++)
             {
                 if(over.find(i) != over.end()){
@@ -76,7 +76,6 @@ int DynamicDifficultyEngine::recommendDifficulty(int cur_idx, int cur_total_scor
                 if(over_and_under.find(ret_level)!=over_and_under.end()){
                     break;
                 }
-                cout << ret_level << endl;
             }
         }
         

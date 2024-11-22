@@ -29,8 +29,10 @@ Student& Student::operator=(const Student& other) {
 
 vector<string> Student::getInternalContent() {return enroled_courses;}
 void Student::displayCourses(){
+    int idx = 1;
     for(const auto& c_name : enroled_courses){
-        cout << "- " << c_name << endl;
+        cout << idx << ". " << c_name << endl;
+        idx++;
     }
 }
 void Student::take_exam(){}
@@ -54,8 +56,10 @@ Professor& Professor::operator=(const Professor& other) {
     return *this;
 }
 void Professor::displayCourses(){
+    int idx = 1;
     for(const auto& c_name : instructing_courses){
-        cout << "- " << c_name << endl;
+        cout << idx << ". " << c_name << endl;
+        idx++;
     }
 }
 void Professor::create_exam(){}
