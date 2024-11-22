@@ -1,0 +1,18 @@
+Student : Moonsooho, ID : 20235124, Score : 2/40
+"Artificial Intelligence aims to create systems that can perform tasks requiring human intelligence.","Student answer => t","Correct answer => True"
+"Machine Learning is a subset of Artificial Intelligence.","Student answer => t","Correct answer => True"
+"Which type of AI can perform a specific task but lacks generalization?","Student answer => None","Correct answer => b"
+"What is the main goal of supervised learning?","Student answer => None","Correct answer => a"
+"The algorithm that learns by minimizing a cost function using backpropagation is called __.","Student answer => None","Correct answer => Neural Network"
+"In reinforcement learning agents learn by interacting with an environment.","Student answer => None","Correct answer => True"
+"A decision tree is a machine learning model used for classification and regression tasks.","Student answer => None","Correct answer => True"
+"Which of the following is a commonly used activation function in neural networks?","Student answer => None","Correct answer => c"
+"Which type of AI learns by mimicking the human brain’s neural structure?","Student answer => None","Correct answer => d"
+"The process of training a machine learning model by updating its parameters iteratively is called __.","Student answer => None","Correct answer => Gradient Descent"
+"Unsupervised learning uses labeled data for training.","Student answer => None","Correct answer => False"
+"Natural Language Processing (NLP) is a field of AI focused on enabling machines to understand human language.","Student answer => None","Correct answer => True"
+"What is the main characteristic of a convolutional neural network (CNN)?","Student answer => None","Correct answer => a"
+"Which of the following is an example of unsupervised learning?","Student answer => None","Correct answer => b"
+"The ability of an AI system to improve itself without explicit programming is called __.","Student answer => None","Correct answer => Machine Learning"
+Student : Moonsooho, ID : 20235124, Score : 0/0
+Student : Moonsooho, ID : 20235124, Score : 0/0

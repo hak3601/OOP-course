@@ -6,12 +6,14 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <limits>
 using namespace std;
 
 
 void studentMainMenu(User*, string);
 void professorMainMenu(User*, string);
 int verifyUser(const string&, const string&, const string&);
+void inspectResults(User*, int, string);
 void showAvailableCourses(User* user, const string& datafolder, const string& filename);
 bool updateAvailableState(User* user, const string& course, const string& datafolder, const string& filename);
 
@@ -107,42 +109,73 @@ void studentMainMenu(User* user, string datafolder){
             getline(cin, course_prof_name);
             vector<string> c_f_vector = splitString2CourseAndProf(course_prof_name);
             
-            if (updateAvailableState(user, course_prof_name, datafolder, "courses_available.csv")) {
+            if (!listFilesInDirectory(datafolder, c_f_vector, "test").empty() && updateAvailableState(user, course_prof_name, datafolder, "courses_available.csv")) {
                 
-                exam = new TestExam(c_f_vector[0], datafolder, user, c_f_vector[1]);
+                exam = new TestExam(c_f_vector[0], datafolder, user, c_f_vector[1], c_f_vector[0]+"-test-"+c_f_vector[1]+".csv");
                 exam->startExam();
                 
-            } else {
-                continue;
             }
             
             
         } else if (user_command == 2){ // Train for test
             user->displayCourses();
-            cout << "Select the course to train by entering the course name: ";
+            
+            cout << "Select the course to train by entering the course name / course_name(prof name) : ";
+
             getline(cin, course_prof_name);
             vector<string> c_f_vector = splitString2CourseAndProf(course_prof_name);
-            exam = new TrainExam(c_f_vector[0], datafolder, user, c_f_vector[1]);
+            
+            vector<string> available_train_lists = listFilesInDirectory(datafolder, c_f_vector, "train");
+            if(available_train_lists.empty()){
+                cout << "No training file according to your input ..." << endl;
+                while(true){
+                    cout << "Press [y] to go back to student main >> ";
+                    char command;
+                    cin >> command;
+                    break;
+                }
+                continue;
+            }
+            int train_idx = 1;
+            
+            for(const auto& vv : available_train_lists){
+                cout << train_idx << ". ";
+                cout << vv << endl;
+                ++train_idx;
+            }
+
+            cout << "Select the file to train by entering the idx : ";
+            int user_idx;
+            cin >> user_idx;
+
+            exam = new TrainExam(c_f_vector[0], datafolder, user, c_f_vector[1], available_train_lists[user_idx - 1]);
             exam->startExam();
 
         } else if (user_command == 3){ // Create train tests
             string outer_filepath;
+            string course_name;
+            string prof_name;
             cout << "Enter the FULL PATH of the csv file that you want to attach to our database >> ";
             cin >> outer_filepath;
-            string destination_filepath = "./"+datafolder+"/working.csv";
+            cout << "Enter the COURSE NAME that the csv file aims to train >> ";
+            cin >> course_name;
+            cout << "Enter the INSTRUCTOR NAME of the course that you are currently attending >> ";
+            cin >> prof_name;
+
+            string destination_filepath = "./"+datafolder+"/"+course_name+"-train-"+prof_name+"-"+generateRandomCode()+".csv"; // (course name)-train-(professor name)-(random code)
             copyCSV(outer_filepath, destination_filepath);
-            while(true){
-                cout << "Press [y] to go back to student main >> ";
-                char command;
-                cin >> command;
-                break;
-            }
+            
         } else if (user_command == 4){ // Exit
             break;
         } else{
             cout << "Invalid input, please try again" << endl;
         }
-    
+        while(true){
+            cout << "Press [y] to go back to student main >> ";
+            char command;
+            cin >> command;
+            break;
+        }
     }
 }
 
@@ -163,18 +196,59 @@ void professorMainMenu(User* user, string datafolder){
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
         if(user_command == 1){ // Create exam
+            string outer_filepath;
+            string course_name;
+            cout << "Enter the FULL PATH of the csv file that you want to attach to our database >> ";
+            cin >> outer_filepath;
+            cout << "Enter the COURSE NAME that the csv file aims to train >> ";
+            cin >> course_name;
+
+            string destination_filepath = "./"+datafolder+"/"+course_name+"-test-"+user->getName()+".csv"; // (course name)-train-(professor name)-(random code)
+            copyCSV(outer_filepath, destination_filepath);
 
         } else if (user_command == 2){ // Inspect results
+            user->displayCourses();
+            int num;
+            cout << "Select number to view test exam results >> ";
+            cin >> num;
+            inspectResults(user, num-1, datafolder);
+
 
         } else if (user_command == 3){ // Exit
             break;
         } else{
             cout << "Invalid input, please try again" << endl;
         }
+        while(true){
+            cout << "Press [y] to go back to professor main >> ";
+            char command;
+            cin >> command;
+            break;
+        }
     }
 }
 
-
+void inspectResults(User* user, int idx, string datafolder){
+    vector<string> instructings = user->getInternalContent();
+    string course = instructings[idx];
+    ifstream file(datafolder+"/"+course+"-"+user->getName()+"-exam_results.csv");
+    string line;
+    if(!file.is_open()){
+        cerr << "error opening file" << endl;
+        return;
+    }
+    while(getline(file, line)){
+        if(!line.substr(0, 7).compare("Student")){
+            cout << "\n";
+            setTextColor(10, -1);
+            cout << line << endl;
+            resetTextColor();
+        } else{
+            cout << line << endl;
+        }
+        
+    }
+}
 
 int verifyUser(const string& user_name, const string& user_id, const string& datafolder){
     /*
@@ -245,7 +319,7 @@ void showAvailableCourses(User* user, const string& datafolder, const string& fi
     }
     courses = fetchEnroledOrInstructing(user->getName(), user->getId(), datafolder, "courses_available.csv");
     for (string s: courses) {
-            cout << s << endl;
+        cout << s << endl;
     }
 }
 

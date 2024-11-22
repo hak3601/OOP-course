@@ -3,10 +3,100 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <random>
+#include <windows.h>
 #include "questions.h"
+/**/
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <dirent.h>
+#include <sys/types.h>
+#endif
+/**/
 using namespace std;
-
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
+
+vector<string> listFilesInDirectory(const string& folderPath, vector<string>& additional_info, const string& version) {
+    vector<string> lists;
+    string parse = additional_info[0] + "-"+version+"-" + additional_info[1];
+
+#ifdef _WIN32
+    // Windows-specific code using FindFirstFile and FindNextFile
+    WIN32_FIND_DATA fileData;
+    HANDLE hFind = FindFirstFile((folderPath + "\\*").c_str(), &fileData); // Add wildcard to find all files
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        cerr << "Error: Unable to open directory at " << folderPath << endl;
+        return lists;
+    }
+
+    do {
+        string fileName = fileData.cFileName;
+
+        // Skip "." and ".."
+        if (fileName == "." || fileName == "..") {
+            continue;
+        }
+
+        // Check if it's a file
+        if (!(fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+            if (fileName.length() >= parse.length() &&
+                fileName.substr(0, parse.length()).compare(parse) == 0) {
+                lists.push_back(fileName);
+            }
+        }
+    } while (FindNextFile(hFind, &fileData) != 0);
+
+    FindClose(hFind);
+
+#else
+    // Linux/Unix-specific code using opendir and readdir
+    DIR* dir = opendir(folderPath.c_str()); // Open the directory
+    if (!dir) {
+        cerr << "Error: Unable to open directory at " << folderPath << endl;
+        return lists;
+    }
+
+    struct dirent* entry;
+    while ((entry = readdir(dir)) != nullptr) {
+        string fileName = entry->d_name;
+
+        // Skip "." and ".."
+        if (fileName == "." || fileName == "..") {
+            continue;
+        }
+
+        // Check if it's a regular file (DT_REG)
+#ifdef DT_REG
+        if (entry->d_type == DT_REG) {
+#endif
+            if (fileName.length() >= parse.length() &&
+                fileName.substr(0, parse.length()).compare(parse) == 0) {
+                lists.push_back(fileName);
+            }
+#ifdef DT_REG
+        }
+#endif
+    }
+    closedir(dir); // Close the directory
+#endif
+    if(lists.empty()){
+        cerr << "No such file found" << endl;
+    }
+    return lists;
+}
+
+string generateRandomCode() {
+    // Create a random number generator
+    random_device rd;   // Seed
+    mt19937 gen(rd());  // Mersenne Twister random number generator
+
+    // Define the range [1000, 9999] for a 4-digit code
+    uniform_int_distribution<int> dist(1000, 9999);
+
+    return to_string(dist(gen)); // Generate the random number
+}
 
 void printButton(const vector<string>& labels) {
     string interval = "   ";
@@ -115,7 +205,7 @@ vector<Question*> vec2Questions(vector<vector<string>> q_vec){
 
 void setTextColor(int foreground, int background = -1) {
     // Foreground color codes (ANSI escape codes)
-    std::string colors[] = {
+    string colors[] = {
         "\033[30m", // Black
         "\033[31m", // Red
         "\033[32m", // Green
@@ -135,17 +225,17 @@ void setTextColor(int foreground, int background = -1) {
     };
 
     if (foreground >= 0 && foreground < 16) {
-        std::cout << colors[foreground];
+        cout << colors[foreground];
     }
 
     // Background color handling (optional)
     if (background >= 0 && background < 16) {
-        std::cout << "\033[" << (background + 40) << "m"; // Background color codes start from 40
+        cout << "\033[" << (background + 40) << "m"; // Background color codes start from 40
     }
 }
 // 10, -1
 void resetTextColor() {
-    std::cout << "\033[0m"; // Reset to default color
+    cout << "\033[0m"; // Reset to default color
 }
 
 // Clear the console screen
@@ -165,14 +255,14 @@ vector<string> splitString2CourseAndProf(string course_prof){
     size_t closeParenPos = course_prof.find(')');
     vector<string> ret_vec = {"",""};
     // Validate the input format
-    if (openParenPos != std::string::npos && closeParenPos != std::string::npos && closeParenPos > openParenPos) {
+    if (openParenPos != string::npos && closeParenPos != string::npos && closeParenPos > openParenPos) {
         // Extract the course part
         ret_vec[0] = course_prof.substr(0, openParenPos);
         // Extract the professor part
         ret_vec[1] = course_prof.substr(openParenPos + 1, closeParenPos - openParenPos - 1);
     } else {
         // Handle invalid format
-        throw std::invalid_argument("Invalid input format. Expected: course(professor)");
+        throw invalid_argument("Invalid input format. Expected: course(professor)");
     }
     return ret_vec;
 }
@@ -198,7 +288,8 @@ bool checkCSVLineFormat(const string& line){
             cerr << "Question index or point is not an integer type. " << "Got " << tokens[1] << ", " << tokens[4] << " instead." << endl;
         }
     } else{
-        cerr << "Question format should be one of TF, MC, CQ. " << "However " << tokens[0] << " was given." << endl;
+        cerr << "Question format(argument count) should be either TF(5), MC(6), CQ(5). " << "However " << tokens[0] << "(" << tokens.size() << ") was given." << endl;
+        cerr << "error raised from -> " << line << endl;
     }
     return false;
 }
@@ -210,21 +301,24 @@ void copyCSV(const string& sourceFilePath, const string& destFilePath) {
         return;
     }
 
+    string line;
+    while (getline(inFile, line)) {
+        if(!checkCSVLineFormat(line)){
+            inFile.close();
+            return;
+        }
+    }
+    inFile.clear();          // Clear EOF flag if end of file was reached
+    inFile.seekg(0, ios::beg);
+
     ofstream outFile(destFilePath); // Open the destination CSV file
     if (!outFile.is_open()) {
         cerr << "Error: Could not create the destination file at " << destFilePath << endl;
         return;
     }
 
-    string line;
     while (getline(inFile, line)) {
-        if(checkCSVLineFormat(line)){
-            outFile << line << endl; // Copy each line from the source to the destination
-        } else {
-            inFile.close();
-            outFile.close();
-            return;
-        }
+        outFile << line << endl;
     }
 
     cout << "File copied successfully from " << sourceFilePath << " to " << destFilePath << endl;

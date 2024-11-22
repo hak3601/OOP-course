@@ -1,0 +1,15 @@
+TF,1,A class in C++ is a blueprint for creating objects.,True,1,
+TF,2,In C++ private members of a class can be accessed directly by objects.,False,1,
+MC,3,Which keyword in C++ is used to define a class?,b,2,a) struct b) class c) object d) typedef
+MC,4,What does the concept of encapsulation in OOP mean?,a,3,a) Wrapping data and methods into a single unit b) Reusing code through inheritance c) Deriving new classes from existing ones d) Creating multiple functions with the same name
+CQ,5,In C++ the special member function that initializes an object is called the __.,Constructor,1,
+TF,6,A destructor in C++ has the same name as the class prefixed with a tilde (~).,True,2,
+TF,7,Polymorphism allows functions to have the same name but different implementations.,True,2,
+MC,8,Which type of inheritance allows a class to inherit from multiple base classes?,d,3,a) Single b) Multilevel c) Hierarchical d) Multiple
+MC,9,Which access specifier in C++ allows members to be accessible within the class and its derived classes?,b,3,a) private b) protected c) public d) static
+CQ,10,The __ keyword in C++ is used to allocate memory dynamically.,new,3,
+TF,11,Abstract classes cannot be instantiated in C++.,True,3,
+TF,12,Virtual functions in C++ allow achieving runtime polymorphism.,True,3,
+MC,13,What is the purpose of the 'this' pointer in C++?,a,4,a) Refers to the current object b) Stores the base class address c) Points to the derived class d) Allocates memory for the object
+MC,14,Which of the following is an example of compile-time polymorphism in C++?,b,4,a) Virtual functions b) Function overloading c) Dynamic type casting d) Operator new
+CQ,15,The process of defining multiple functions with the same name but different parameters is called __.,Function Overloading,5,
