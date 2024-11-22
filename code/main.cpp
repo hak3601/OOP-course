@@ -248,7 +248,20 @@ void inspectResults(User* user, int idx, string datafolder){
             cout << line << endl;
             resetTextColor();
         } else{
-            cout << line << endl;
+            vector<string> tokens;          // Vector to hold the split parts
+            stringstream ss(line);           // Create a stringstream from the string
+            string token;
+
+            while (getline(ss, token, ',')) { // Split by the delimiter
+                tokens.push_back(token);           // Add each token to the vector
+            }
+            cout << tokens[0] << " ";
+            setTextColor(13, -1);
+            cout << tokens[1] << " ";
+            resetTextColor();
+            setTextColor(14, -1);
+            cout << tokens[2] << " " << endl;
+            resetTextColor();
         }
         
     }
