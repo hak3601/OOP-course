@@ -9,12 +9,12 @@
 #include "dynamic_difficulty_engine.h"
 using namespace std;
 
-Exam::Exam(const string &title, const string &datafolder, const User* user) : exam_title(title), datafolder(datafolder), object_user(user) {}
+Exam::Exam(const string &title, const string &datafolder, const User* user, const string& examfile) : exam_title(title), datafolder(datafolder), object_user(user), examfile(examfile) {}
 Exam::~Exam() {}
 
 /*-------------------------------------------------------------------------------------------*/
-TrainExam::TrainExam(const string &title, const string &datafolder,const User* user, const string& prof_name) : Exam(title,datafolder,user), prof_name(prof_name) {
-    string exam_file_name = exam_title+"-train-"+prof_name+".csv";
+TrainExam::TrainExam(const string &title, const string &datafolder,const User* user, const string& prof_name, const string& examfile) : Exam(title,datafolder,user,examfile), prof_name(prof_name) {
+    string exam_file_name = examfile;
     vector<vector<string>> raw_questions = readCSV(datafolder, exam_file_name);
     int low = 100;
     int top = 0;
@@ -24,7 +24,6 @@ TrainExam::TrainExam(const string &title, const string &datafolder,const User* u
     }
     DDE = new DynamicDifficultyEngine(low, top);
 }
-
 
 void TrainExam::updateQuestionList(string user_ans){
     int right_or_wrong = questions[DDE->getCurIdx()]->grade(user_ans);
@@ -42,7 +41,7 @@ void TrainExam::updateQuestionList(string user_ans){
 
 void TrainExam::startExam(){
     cur_idx = 1;
-    string exam_file_name = exam_title+"-train-"+prof_name+".csv";
+    string exam_file_name = examfile;
     vector<vector<string>> raw_questions = readCSV(datafolder, exam_file_name);
 
     questions = vec2Questions(raw_questions);
@@ -133,10 +132,6 @@ void TrainExam::displayQuestions() {
     cout << " current level : " << DDE->getCurrentDifficulty() << endl;
 }
 
-void TrainExam::recordScore(const string &, int) {
-
-}
-
 void TrainExam::printSummary() const { // wrong questions, total score, accuracy, point distribution.
     clearConsole();
     if (user_taken_questions.empty()) {
@@ -171,13 +166,6 @@ void TrainExam::printSummary() const { // wrong questions, total score, accuracy
     resetTextColor();
     cout << cur_gained_score << "/" << cur_total_score << endl;
     
-    while(true){
-        cout << "Press [y] to go back to student main >> ";
-        char command;
-        cin >> command;
-        break;
-    }
-    
     
 }
 
@@ -208,7 +196,7 @@ void TestExam::startExam() { // the main function of test exam
         displayQuestionList();
         cout << endl;
         displayQuestions();
-        cout << "Commands: [e]dit answer, [m]ove to question, [n]ext question, [q]uit" << endl;
+        cout << "Commands: [e]dit answer, [m]ove to question, [n]ext question" << endl;
         cout << "Enter command: ";
         cin >> command;
 
@@ -242,12 +230,7 @@ void TestExam::printSummary() const {
     resetTextColor();
     cout << total_score << "/" << max_score << endl;
 
-    while(true){
-        cout << "Press [y] to go back to student main >> ";
-        char command;
-        cin >> command;
-        break;
-    }
+
 }
 // Display the list of questions and their current state (answered or not)
 void TestExam::displayQuestionList() const { // 
@@ -412,11 +395,8 @@ void TestExam::goToNextQuestion() {
         cout << "Already at the end of the exam." << endl;
     }
 }
-TestExam::TestExam(const string &title, const string &datafolder,const User* user, const string& prof_name) : Exam(title,datafolder,user), prof_name(prof_name) {}
+TestExam::TestExam(const string &title, const string &datafolder,const User* user, const string& prof_name, const string& examfile) : Exam(title,datafolder,user,examfile), prof_name(prof_name) {}
 TestExam::~TestExam() {}
-void TestExam::setMaxScore(){
-    
-}
 void TestExam::endExam() {
     for(size_t i = 0;i < answers.size();i++){
         total_score+=questions[i]->grade(answers[i]);
@@ -424,10 +404,6 @@ void TestExam::endExam() {
     }
     
 } // will be called when exam is over and will update the test result file
-void TestExam::recordScore(const string &, int) {
-    
-} // 
-void TestExam::timeIsOver() {}
 string TestExam::getProfessorName() const {return prof_name;}
 
 /*-------------------------------------------------------------------------------------------*/
