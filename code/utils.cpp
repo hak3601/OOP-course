@@ -4,7 +4,6 @@
 #include <fstream>
 #include <sstream>
 #include <random>
-#include <windows.h>
 #include "questions.h"
 /**/
 #ifdef _WIN32
