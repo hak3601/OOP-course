@@ -53,11 +53,7 @@ Professor& Professor::operator=(const Professor& other) {
     }
     return *this;
 }
-void Professor::displayCourses(){
-    for(const auto& c_name : instructing_courses){
-        cout << "- " << c_name << endl;
-    }
-}
+void Professor::displayCourses(){}
 void Professor::create_exam(){}
 void Professor::mark_exam(){}
 void Professor::comment_exam(){}

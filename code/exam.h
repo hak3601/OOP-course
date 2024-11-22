@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <chrono>
 #include "user.h"
 #include "questions.h" // Include the questions header
 #include "dynamic_difficulty_engine.h"
@@ -17,16 +18,19 @@ protected:
     const User* object_user;
     
     vector<Question*> questions;
+    int duration; // in minutes
+    chrono::system_clock::time_point start_time;
     int total_score = 0;
     int cur_idx = 0;
-    string examfile;
+    
 
 public:
-    Exam(const string &,const string &, const User*, const string&);
+    Exam(const string &,const string &, const User*);
     ~Exam();
     virtual void startExam() = 0;
     virtual void endExam() = 0; // will be called when exam is over and will update the test result file
     virtual void displayQuestions() = 0; // ~
+    virtual void recordScore(const string &user_id, int score) = 0; // 
     virtual void printSummary() const = 0;
 };
 
@@ -40,11 +44,12 @@ private:
     vector<string> user_taken_questions;
     vector<vector<string>> user_taken_answers;
 public:
-    TrainExam(const string &,const string &, const User*, const string&, const string&);
+    TrainExam(const string &,const string &, const User*, const string&);
     ~TrainExam();
     void startExam(); // will be called in main
     void endExam(); // will be called when exam is over and will update the test result file
     void displayQuestions(); // ~
+    void recordScore(const string &, int); // 
     void printSummary() const;
     void displayQuestionList() const;
     void editAnswer(string);
@@ -58,11 +63,14 @@ private:
     string prof_name;
     vector<string> answers;
 public:
-    TestExam(const string &,const string &, const User*, const string&, const string&);
+    TestExam(const string &,const string &, const User*, const string&);
     ~TestExam();
     void startExam(); // will be called in main
+    void setMaxScore();
+    void timeIsOver();
     void endExam(); // will be called when exam is over and will update the test result file
     void displayQuestions() ; // ~
+    void recordScore(const string &, int); // 
     void printSummary() const;
     int handleEndOfExam();
     void displayQuestionList() const ;

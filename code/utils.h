@@ -6,8 +6,6 @@
 #include "questions.h"
 using namespace std;
 
-vector<string> listFilesInDirectory(const string&, vector<string>&, const string&);
-string generateRandomCode();
 void printButton(const vector<string>&);
 vector<string> fetchEnroledOrInstructing(const string&, const string&, const string&, const string&);
 vector<string> parseString2Vec(string);
@@ -18,4 +16,3 @@ void resetTextColor();
 void clearConsole();
 vector<string> splitString2CourseAndProf(string);
 void copyCSV(const string&, const string&);
-bool checkCSVLineFormat(const string&);
