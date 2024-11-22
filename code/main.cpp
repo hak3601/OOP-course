@@ -126,7 +126,17 @@ void studentMainMenu(User* user, string datafolder){
             exam->startExam();
 
         } else if (user_command == 3){ // Create train tests
-            
+            string outer_filepath;
+            cout << "Enter the FULL PATH of the csv file that you want to attach to our database >> ";
+            cin >> outer_filepath;
+            string destination_filepath = "./"+datafolder+"/working.csv";
+            copyCSV(outer_filepath, destination_filepath);
+            while(true){
+                cout << "Press [y] to go back to student main >> ";
+                char command;
+                cin >> command;
+                break;
+            }
         } else if (user_command == 4){ // Exit
             break;
         } else{

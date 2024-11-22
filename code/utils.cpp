@@ -177,6 +177,32 @@ vector<string> splitString2CourseAndProf(string course_prof){
     return ret_vec;
 }
 
+
+
+bool checkCSVLineFormat(const string& line){
+    vector<string> tokens;
+    string token;
+    char delimiter = ',';
+    stringstream ss(line);
+
+    while (getline(ss, token, delimiter)) { // Split by the delimiter
+        tokens.push_back(token); // Add each token to the vector
+    } // question format(0), question index(1), question text(2), question answer(3), question point(4), //question choices(5) 
+    if((!tokens[0].compare("MC") && tokens.size() == 6) || ((!tokens[0].compare("TF") || !tokens[0].compare("CQ")) && tokens.size() == 5)){
+        try{
+            size_t is_integer;
+            stoi(tokens[1], &is_integer);
+            stoi(tokens[4], &is_integer);
+            return true;
+        } catch (invalid_argument&){
+            cerr << "Question index or point is not an integer type. " << "Got " << tokens[1] << ", " << tokens[4] << " instead." << endl;
+        }
+    } else{
+        cerr << "Question format should be one of TF, MC, CQ. " << "However " << tokens[0] << " was given." << endl;
+    }
+    return false;
+}
+
 void copyCSV(const string& sourceFilePath, const string& destFilePath) {
     ifstream inFile(sourceFilePath); // Open the source CSV file
     if (!inFile.is_open()) {
@@ -192,7 +218,13 @@ void copyCSV(const string& sourceFilePath, const string& destFilePath) {
 
     string line;
     while (getline(inFile, line)) {
-        outFile << line << endl; // Copy each line from the source to the destination
+        if(checkCSVLineFormat(line)){
+            outFile << line << endl; // Copy each line from the source to the destination
+        } else {
+            inFile.close();
+            outFile.close();
+            return;
+        }
     }
 
     cout << "File copied successfully from " << sourceFilePath << " to " << destFilePath << endl;
