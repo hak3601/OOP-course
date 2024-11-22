@@ -17,6 +17,7 @@ public:
     int setCurrentDifficulty(int);
     int getCurIdx();
     void setCurIdx(int);
+    bool checkPointExistsInQuestions(int);
     int recommendDifficulty(int, int, int, vector<Question*>, vector<string>);
 };
 #endif
