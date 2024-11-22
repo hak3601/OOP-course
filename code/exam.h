@@ -33,7 +33,7 @@ public:
 class TrainExam : public Exam{
 private:
     DynamicDifficultyEngine* DDE;
-    vector<string> individual_problem_RW_tracker;
+    vector<vector<string>> individual_problem_RW_tracker;
     int cur_total_score = 0;
     int cur_gained_score = 0;
     string prof_name;

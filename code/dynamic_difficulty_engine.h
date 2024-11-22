@@ -17,6 +17,6 @@ public:
     int setCurrentDifficulty(int);
     int getCurIdx();
     void setCurIdx(int);
-    int recommendDifficulty(int, int, int, vector<Question*>, vector<string>);
+    int recommendDifficulty(int, int, int, vector<Question*>, vector<vector<string>>);
 };
 #endif

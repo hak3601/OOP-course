@@ -2,10 +2,12 @@
 #include <vector>
 #include <map>
 #include <chrono>
+#include <time.h>
 #include <sstream>
 #include "utils.h"
 #include "exam.h"
 #include "questions.h"
+#include <thread> 
 #include "dynamic_difficulty_engine.h"
 using namespace std;
 
@@ -32,10 +34,10 @@ void TrainExam::updateQuestionList(string user_ans){
 
     cur_total_score += questions[DDE->getCurIdx()]->getpoint();
     if(right_or_wrong){ // user got it right
-        individual_problem_RW_tracker.push_back("O");
+        individual_problem_RW_tracker.push_back(vector<string>{"O", to_string(questions[DDE->getCurIdx()]->getpoint())});
         cur_gained_score += questions[DDE->getCurIdx()]->getpoint();
     } else{ // user got it wrong
-        individual_problem_RW_tracker.push_back("X");
+        individual_problem_RW_tracker.push_back(vector<string>{"X", to_string(questions[DDE->getCurIdx()]->getpoint())});
     }
 }
 
@@ -89,7 +91,7 @@ void TrainExam::editAnswer(string input){
 
 void TrainExam::displayQuestionList() const {
     for(size_t i = 0; i < individual_problem_RW_tracker.size(); i++){
-        if(!individual_problem_RW_tracker[i].compare("O")){
+        if(!individual_problem_RW_tracker[i][0].compare("O")){
             setTextColor(10, -1);
             cout<<i+1<<". O ";
             resetTextColor();
@@ -146,7 +148,7 @@ void TrainExam::printSummary() const { // wrong questions, total score, accuracy
     resetTextColor();
     for (size_t i = 0; i < user_taken_questions.size() - 1; i++) {
         if(stoi(user_taken_answers[i][2])==0){
-            cout << user_taken_questions[i] << " // Your answer : ";
+            cout << user_taken_questions[i] << " \nYour answer : ";
             setTextColor(1, -1);
             cout << user_taken_answers[i][0];
             resetTextColor();
@@ -164,8 +166,35 @@ void TrainExam::printSummary() const { // wrong questions, total score, accuracy
     setTextColor(12, -1);
     cout << "[Your score] ";
     resetTextColor();
-    cout << cur_gained_score << "/" << cur_total_score << endl;
+    cout << cur_gained_score << " points gained / " << cur_total_score << " total points\n" << endl;
+
+    vector<int> point_cnt_dict(DDE->getUpperbound() - DDE->getLowerbound() + 1);
     
+    for (const auto& vv : individual_problem_RW_tracker)
+    {
+        if(!vv[0].compare("O")){
+            point_cnt_dict[-DDE->getLowerbound() + stoi(vv[1])] += 1; 
+        }
+    }
+    
+    for (size_t i = 0; i < point_cnt_dict.size(); i++)
+    {
+        setTextColor(14,-1);
+        cout << DDE->getLowerbound() + i << " point : ";
+        resetTextColor();
+        for (size_t j = 0; j < point_cnt_dict[i]*2; j++)
+        {
+            this_thread::sleep_for(chrono::milliseconds(50));
+            if(j%2!=0){
+                setTextColor(10,i+1);
+                cout<<"  ";
+                resetTextColor();
+            } else {
+                cout<<" ";
+            }
+        }
+        cout<< "\n" <<endl;
+    }
     
 }
 
@@ -274,8 +303,8 @@ int TestExam::handleEndOfExam() {
 
 void TestExam::displayQuestions() {
     if (cur_idx >= 0 && cur_idx < static_cast<int>(questions.size())) {
-        cout << "--- Portable Exam Menu ---" << endl;
-        cout << "Question " << questions[cur_idx]->getIdx() << ": " << questions[cur_idx]->getQuestionText() << endl;
+        cout << "--- Exam Menu ---\n" << endl;
+        cout << "Question " << questions[cur_idx]->getIdx() << ": " << questions[cur_idx]->getQuestionText() << "\n" << endl;
         if(questions[cur_idx]->getQversion() == "MC"){
             cout << questions[cur_idx]->getOptions() << endl;
         }

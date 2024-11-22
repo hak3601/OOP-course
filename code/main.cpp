@@ -105,8 +105,11 @@ void studentMainMenu(User* user, string datafolder){
             */
             showAvailableCourses(user, datafolder, "courses_available.csv");
 
-            cout << "Select the course to take exam by entering the \"course name(professor name)\" >> ";
-            getline(cin, course_prof_name);
+            cout << "Select the corresponding number to the course >> ";
+            int num;
+            cin >> num;
+            course_prof_name = user->getInternalContent()[num - 1];
+
             vector<string> c_f_vector = splitString2CourseAndProf(course_prof_name);
             
             if (!listFilesInDirectory(datafolder, c_f_vector, "test").empty() && updateAvailableState(user, course_prof_name, datafolder, "courses_available.csv")) {
@@ -120,9 +123,10 @@ void studentMainMenu(User* user, string datafolder){
         } else if (user_command == 2){ // Train for test
             user->displayCourses();
             
-            cout << "Select the course to train by entering the course name / course_name(prof name) : ";
-
-            getline(cin, course_prof_name);
+            cout << "Select the corresponding number to the course to train >> ";
+            int num;
+            cin >> num;
+            course_prof_name = user->getInternalContent()[num - 1];
             vector<string> c_f_vector = splitString2CourseAndProf(course_prof_name);
             
             vector<string> available_train_lists = listFilesInDirectory(datafolder, c_f_vector, "train");
@@ -317,9 +321,11 @@ void showAvailableCourses(User* user, const string& datafolder, const string& fi
             cerr << "Unable to open the file!" << endl;
         }
     }
+    int idx = 1;
     courses = fetchEnroledOrInstructing(user->getName(), user->getId(), datafolder, "courses_available.csv");
     for (string s: courses) {
-        cout << s << endl;
+        cout << idx << ". " << s << endl;
+        idx++;
     }
 }
 
