@@ -287,12 +287,12 @@ vector<string> splitString2CourseAndProf(string course_prof){
 
 
 
-bool checkCSVLineFormat(const string& line){
+bool checkCSVLineFormat(const string& line, const int& line_cnt){
     vector<string> tokens;
     string token;
     char delimiter = ',';
     stringstream ss(line);
-
+    
     while (getline(ss, token, delimiter)) { // Split by the delimiter
         tokens.push_back(token); // Add each token to the vector
     } // question format(0), question index(1), question text(2), question answer(3), question point(4), //question choices(5) 
@@ -303,12 +303,19 @@ bool checkCSVLineFormat(const string& line){
             stoi(tokens[4], &is_integer);
             return true;
         } catch (invalid_argument&){
-            cerr << "Question index or point is not an integer type. " << "Got " << tokens[1] << ", " << tokens[4] << " instead." << endl;
+            setTextColor(1);
+            cerr << "Error on line " << line_cnt << ".";
+            resetTextColor();
+            cerr << "Question index or point is not an integer type. " << "Got " << tokens[1] << "(index), " << tokens[4] << "(point) instead." << endl;
         }
     } else{
+        setTextColor(1);
+        cerr << "Error on line " << line_cnt << ".";
+        resetTextColor();
         cerr << "Question format(argument count) should be either TF(5), MC(6), CQ(5). " << "However " << tokens[0] << "(" << tokens.size() << ") was given." << endl;
         cerr << "error raised from -> " << line << endl;
     }
+    cout << "\n";
     return false;
 }
 
@@ -320,27 +327,29 @@ void copyCSV(const string& sourceFilePath, const string& destFilePath) {
     }
 
     string line;
+    int err_num = 0;
+    int line_cnt = 1;
     while (getline(inFile, line)) {
-        if(!checkCSVLineFormat(line)){
-            inFile.close();
-            return;
+        if(!checkCSVLineFormat(line, line_cnt++)){
+            err_num = 1;
         }
     }
     inFile.clear();          // Clear EOF flag if end of file was reached
     inFile.seekg(0, ios::beg);
+    if(!err_num) {
+        ofstream outFile(destFilePath); // Open the destination CSV file
+        if (!outFile.is_open()) {
+            cerr << "Error: Could not create the destination file at " << destFilePath << endl;
+            return;
+        }
 
-    ofstream outFile(destFilePath); // Open the destination CSV file
-    if (!outFile.is_open()) {
-        cerr << "Error: Could not create the destination file at " << destFilePath << endl;
-        return;
+        while (getline(inFile, line)) {
+            outFile << line << endl;
+        }
+
+        cout << "File copied successfully from " << sourceFilePath << " to " << destFilePath << endl;
+
+        outFile.close();
     }
-
-    while (getline(inFile, line)) {
-        outFile << line << endl;
-    }
-
-    cout << "File copied successfully from " << sourceFilePath << " to " << destFilePath << endl;
-
     inFile.close();
-    outFile.close();
 }
