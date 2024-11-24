@@ -60,12 +60,14 @@ int main(int argc, char const *argv[])
         }
         else if (user_type == 3) { // user name, ID not found in database
             char command;
-            cout << "No matching found(type 1 to retry, type 2 to registrate) >> ";
-            cin >> command;
-            if(command == '2'){
-                //assignUserToDatabase(user_name, user_id, datafolder);
-                cout << "Now try verifying your self again." << endl;
+            while(true){
+                cout << "No matching found(type 1 to retry) >> ";
+                cin >> command;
+                if(command == '1'){
+                    break;
+                }
             }
+            
         }
     }
 
@@ -227,7 +229,8 @@ void professorMainMenu(User* user, string datafolder){
             cout << "Press [y] to go back to professor main >> ";
             char command;
             cin >> command;
-            break;
+            if(command=='y')
+                break;
         }
     }
 }
@@ -247,7 +250,7 @@ void inspectResults(User* user, int idx, string datafolder){
             setTextColor(10, -1);
             cout << line << endl;
             resetTextColor();
-        } else{
+        } else {
             vector<string> tokens;          // Vector to hold the split parts
             stringstream ss(line);           // Create a stringstream from the string
             string token;
