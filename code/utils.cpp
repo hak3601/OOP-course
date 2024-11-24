@@ -353,3 +353,12 @@ void copyCSV(const string& sourceFilePath, const string& destFilePath) {
     }
     inFile.close();
 }
+
+string transformString2Lower(const string& str){
+    string ret_str = str;
+    for (size_t i = 0; i < str.length(); i++)
+    {
+        ret_str[i] = tolower(str[i]);
+    }
+    return ret_str;
+}

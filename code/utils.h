@@ -19,3 +19,4 @@ void clearConsole();
 vector<string> splitString2CourseAndProf(string);
 void copyCSV(const string&, const string&);
 bool checkCSVLineFormat(const string&, const int&);
+string transformString2Lower(const string&);
