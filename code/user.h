@@ -52,7 +52,7 @@ public:
 
     Professor &operator=(const Professor &);
 
-    vector<string> getInternalContent() override;
+    vector<string> getInternalContent();
     void displayCourses();
     void create_exam();
     void mark_exam();
