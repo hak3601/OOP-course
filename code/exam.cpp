@@ -31,7 +31,6 @@ TrainExam::TrainExam(const string &title, const string &datafolder, const User *
 void TrainExam::updateQuestionList(string user_ans)
 {
     int right_or_wrong = questions[DDE->getCurIdx()]->grade(user_ans);
-
     user_taken_answers.push_back(vector<string>{user_ans, questions[DDE->getCurIdx()]->getCorrectAnswer(), to_string(questions[DDE->getCurIdx()]->grade(user_ans))});
 
     cur_total_score += questions[DDE->getCurIdx()]->getpoint();
@@ -145,12 +144,13 @@ void TrainExam::displayQuestions()
 
     if (prob_idx >= 0 && prob_idx < static_cast<int>(questions.size()))
     {
-        cout << "--- Exam Training Menu ---\n"
-             << endl;
+        setTextColor(3, -1);
+        menuPrintButton(vector<string>{"Training Exam"});
+        resetTextColor();
         setTextColor(3, -1);
         cout << "Question " << cur_idx << ": ";
         resetTextColor();
-        cout << questions[prob_idx]->getQuestionText() << "(" << questions[prob_idx]->getpoint() << " points)\n"
+        cout << questions[prob_idx]->getQuestionText() << transformQuestionVersion2string(questions[prob_idx]->getQversion()) << "   (" << questions[prob_idx]->getpoint() << " points)\n"
              << endl;
         if (questions[prob_idx]->getQversion() == "MC")
         {
@@ -205,7 +205,7 @@ void TrainExam::printSummary() const
     setTextColor(12, -1);
     cout << "[Your score] ";
     resetTextColor();
-    cout << cur_gained_score << " points gained / " << cur_total_score << " total points\n"
+    cout << cur_gained_score << " (point gained) / " << cur_total_score << " (total point)\n"
          << endl;
 
     vector<int> point_cnt_dict(DDE->getUpperbound() - DDE->getLowerbound() + 1);

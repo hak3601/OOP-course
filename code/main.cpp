@@ -11,7 +11,7 @@ using namespace std;
 
 void studentMainMenu(User *, string);
 void professorMainMenu(User *, string);
-int verifyUser(const string &, const string &, const string &);
+int verifyUser(string &, const string &, const string &);
 void inspectResults(User *, int, string);
 void showAvailableCourses(User *user, const string &datafolder, const string &filename);
 bool updateAvailableState(User *user, const string &course, const string &datafolder, const string &filename);
@@ -95,8 +95,10 @@ void studentMainMenu(User *user, string datafolder)
     while (1)
     {
         clearConsole();
-        cout << "Student Main Menu" << endl;
-        cout << "==========" << endl;
+        setTextColor(3, -1);
+        menuPrintButton(vector<string>{"Student Main Menu", user->getName(), user->getId()});
+        resetTextColor();
+        cout << "\n" << endl;
 
         vector<string> ls = {"1. Take Exam", "2. Train for Test", "3. Create Train Test", "4. Exit"};
         printButton(ls);
@@ -124,7 +126,6 @@ void studentMainMenu(User *user, string datafolder)
 
             if (!listFilesInDirectory(datafolder, c_f_vector, "test").empty() && updateAvailableState(user, course_prof_name, datafolder, "courses_available.csv"))
             {
-
                 exam = new TestExam(c_f_vector[0], datafolder, user, c_f_vector[1], c_f_vector[0] + "-test-" + c_f_vector[1] + ".csv");
                 exam->startExam();
             }
@@ -206,15 +207,12 @@ void studentMainMenu(User *user, string datafolder)
 void professorMainMenu(User *user, string datafolder)
 {
     int user_command;
-    for (const auto &v : user->getInternalContent())
-    {
-        cout << v;
-    }
     while (1)
     {
         clearConsole();
-        cout << "Professor Main Menu" << endl;
-        cout << "==========" << endl;
+        setTextColor(3, -1);
+        menuPrintButton(vector<string>{"Professor Main Menu", user->getName(), user->getId()});
+        resetTextColor();
 
         vector<string> ls = {"1. Create Exam", "2. Inspect results", "3. Exit"};
         printButton(ls);
@@ -302,7 +300,7 @@ void inspectResults(User *user, int idx, string datafolder)
     }
 }
 
-int verifyUser(const string &user_name, const string &user_id, const string &datafolder)
+int verifyUser(string &user_name, const string &user_id, const string &datafolder)
 {
     /*
     return types -> 0 = file open error or empty file
@@ -323,6 +321,7 @@ int verifyUser(const string &user_name, const string &user_id, const string &dat
     {
         if (!transformString2Lower(user_name).compare(transformString2Lower(vec[0])) && !user_id.compare(vec[1]))
         {
+            user_name = vec[0];
             return_value = 1;
             return return_value;
         }
@@ -333,6 +332,7 @@ int verifyUser(const string &user_name, const string &user_id, const string &dat
     {
         if (!transformString2Lower(user_name).compare(transformString2Lower(vec[0])) && !user_id.compare(vec[1]))
         {
+            user_name = vec[0];
             return_value = 2;
             return return_value;
         }
@@ -364,7 +364,6 @@ void showAvailableCourses(User *user, const string &datafolder, const string &fi
             break;
         }
     }
-
     if (is_new_record)
     {
         // Open the file for appending (datafolder/filename)

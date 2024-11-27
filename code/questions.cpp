@@ -56,7 +56,7 @@ int MultipleChoiceQuestion::grade(string user_ans)
     {
         return 0;
     }
-    else if (!!transformString2Lower(user_ans).compare(transformString2Lower(correct_answer)))
+    else if (!transformString2Lower(user_ans).compare(transformString2Lower(correct_answer)))
     {
         return point;
     }

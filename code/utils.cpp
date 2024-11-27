@@ -16,32 +16,38 @@
 using namespace std;
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
 
-vector<string> listFilesInDirectory(const string& folderPath, vector<string>& additional_info, const string& version) {
+vector<string> listFilesInDirectory(const string &folderPath, vector<string> &additional_info, const string &version)
+{
     vector<string> lists;
-    string parse = additional_info[0] + "-"+version+"-" + additional_info[1];
+    string parse = additional_info[0] + "-" + version + "-" + additional_info[1];
 
 #ifdef _WIN32
     // Windows-specific code using FindFirstFile and FindNextFile
     WIN32_FIND_DATA fileData;
     HANDLE hFind = FindFirstFile((folderPath + "\\*").c_str(), &fileData); // Add wildcard to find all files
 
-    if (hFind == INVALID_HANDLE_VALUE) {
+    if (hFind == INVALID_HANDLE_VALUE)
+    {
         cerr << "Error: Unable to open directory at " << folderPath << endl;
         return lists;
     }
 
-    do {
+    do
+    {
         string fileName = fileData.cFileName;
 
         // Skip "." and ".."
-        if (fileName == "." || fileName == "..") {
+        if (fileName == "." || fileName == "..")
+        {
             continue;
         }
 
         // Check if it's a file
-        if (!(fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+        if (!(fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+        {
             if (fileName.length() >= parse.length() &&
-                fileName.substr(0, parse.length()).compare(parse) == 0) {
+                fileName.substr(0, parse.length()).compare(parse) == 0)
+            {
                 lists.push_back(fileName);
             }
         }
@@ -51,27 +57,32 @@ vector<string> listFilesInDirectory(const string& folderPath, vector<string>& ad
 
 #else
     // Linux/Unix-specific code using opendir and readdir
-    DIR* dir = opendir(folderPath.c_str()); // Open the directory
-    if (!dir) {
+    DIR *dir = opendir(folderPath.c_str()); // Open the directory
+    if (!dir)
+    {
         cerr << "Error: Unable to open directory at " << folderPath << endl;
         return lists;
     }
 
-    struct dirent* entry;
-    while ((entry = readdir(dir)) != nullptr) {
+    struct dirent *entry;
+    while ((entry = readdir(dir)) != nullptr)
+    {
         string fileName = entry->d_name;
 
         // Skip "." and ".."
-        if (fileName == "." || fileName == "..") {
+        if (fileName == "." || fileName == "..")
+        {
             continue;
         }
 
         // Check if it's a regular file (DT_REG)
 #ifdef DT_REG
-        if (entry->d_type == DT_REG) {
+        if (entry->d_type == DT_REG)
+        {
 #endif
             if (fileName.length() >= parse.length() &&
-                fileName.substr(0, parse.length()).compare(parse) == 0) {
+                fileName.substr(0, parse.length()).compare(parse) == 0)
+            {
                 lists.push_back(fileName);
             }
 #ifdef DT_REG
@@ -80,16 +91,18 @@ vector<string> listFilesInDirectory(const string& folderPath, vector<string>& ad
     }
     closedir(dir); // Close the directory
 #endif
-    if(lists.empty()){
+    if (lists.empty())
+    {
         cerr << "No such file found" << endl;
     }
     return lists;
 }
 
-string generateRandomCode() {
+string generateRandomCode()
+{
     // Create a random number generator
-    random_device rd;   // Seed
-    mt19937 gen(rd());  // Mersenne Twister random number generator
+    random_device rd;  // Seed
+    mt19937 gen(rd()); // Mersenne Twister random number generator
 
     // Define the range [1000, 9999] for a 4-digit code
     uniform_int_distribution<int> dist(1000, 9999);
@@ -97,42 +110,72 @@ string generateRandomCode() {
     return to_string(dist(gen)); // Generate the random number
 }
 
-void printButton(const vector<string>& labels) {
-    string interval = "   ";
-    for (const string& label : labels){
-        string btarget_pos(label.size() + 2, '-');
-        cout << "+-" << btarget_pos << "-+" << interval;
+void menuPrintButton(const vector<string> &labels)
+{
+    string interval = "\b";
+    for (const string &label : labels)
+    {
+        string btarget_pos(label.size() + 2, '=');
+        cout << "+=" << btarget_pos << "=+" << interval;
     }
-    cout<<"\n";
-    for (const string& label : labels){
+    cout << "\n";
+    for (const string &label : labels)
+    {
         cout << "|  " << label << "  |" << interval;
     }
-    cout<<"\n";
-    for (const string& label : labels){
+    cout << "\n";
+    for (const string &label : labels)
+    {
+        string btarget_pos(label.size() + 2, '=');
+        cout << "+=" << btarget_pos << "=+" << interval;
+    }
+    cout << "\n";
+}
+
+void printButton(const vector<string> &labels)
+{
+    string interval = "   ";
+    for (const string &label : labels)
+    {
         string btarget_pos(label.size() + 2, '-');
         cout << "+-" << btarget_pos << "-+" << interval;
     }
-    cout<<"\n";
+    cout << "\n";
+    for (const string &label : labels)
+    {
+        cout << "|  " << label << "  |" << interval;
+    }
+    cout << "\n";
+    for (const string &label : labels)
+    {
+        string btarget_pos(label.size() + 2, '-');
+        cout << "+-" << btarget_pos << "-+" << interval;
+    }
+    cout << "\n";
 }
 
-vector<vector<string>> readCSV(const string& datafolder, const string& filename) {
+vector<vector<string>> readCSV(const string &datafolder, const string &filename)
+{
     vector<vector<string>> data;
     string f_name = datafolder + "/" + filename;
     ifstream file(f_name);
 
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cerr << "Error opening file: " << filename << endl;
         return data;
     }
 
     string line;
-    while (getline(file, line)) {
+    while (getline(file, line))
+    {
         vector<string> row;
         stringstream ss(line);
         string value;
 
         // Split by comma
-        while (getline(ss, value, ',')) {
+        while (getline(ss, value, ','))
+        {
             row.push_back(value);
         }
 
@@ -143,38 +186,44 @@ vector<vector<string>> readCSV(const string& datafolder, const string& filename)
     return data;
 }
 
-vector<string> parseString2Vec(string input){
+vector<string> parseString2Vec(string input)
+{
     /*
     return type -> a vector that parsed input string
 
     The input is either string of enroled_courses or instructing_courses.
     Thus this function converts the input string to a vector.
-    user's course (csv_data) to vector (string)? readCSV already has done 
+    user's course (csv_data) to vector (string)? readCSV already has done
     */
     vector<string> tokens;
     size_t start = 0;
     size_t end = input.find(",");
-    
-    while (end != string::npos) {
+
+    while (end != string::npos)
+    {
         tokens.push_back(input.substr(start, end - start)); // Extract substring
-        start = end + 1; // Move start position past the delimiter
-        end = input.find(",", start); // Find next occurrence of the delimiter
+        start = end + 1;                                    // Move start position past the delimiter
+        end = input.find(",", start);                       // Find next occurrence of the delimiter
     }
-    
+
     // Add the last token (or the entire string if no delimiter was found)
     tokens.push_back(input.substr(start));
     return tokens;
 }
 
-vector<string> fetchEnroledOrInstructing(const string& user_name, const string& user_id, const string& datafolder, const string& filename){
+vector<string> fetchEnroledOrInstructing(const string &user_name, const string &user_id, const string &datafolder, const string &filename)
+{
     /*
-    return type -> a vector that contains 'enroled course' informations about a particular student
+    return type -> a vector that contains 'enroled course' informations about a particular user
     */
     vector<string> ret_vec;
     vector<vector<string>> csv_data = readCSV(datafolder, filename);
-    for(const vector<string> vec : csv_data){
-        if(!user_name.compare(vec[0]) && !user_id.compare(vec[1])){
-            for (size_t i = 2; i < vec.size(); i++){
+    for (const vector<string> vec : csv_data)
+    {
+        if (!user_name.compare(vec[0]) && !user_id.compare(vec[1]))
+        {
+            for (size_t i = 2; i < vec.size(); i++)
+            {
                 ret_vec.push_back(vec[i]);
             }
             break;
@@ -183,26 +232,34 @@ vector<string> fetchEnroledOrInstructing(const string& user_name, const string& 
     return ret_vec;
 }
 
-vector<Question*> vec2Questions(vector<vector<string>> q_vec){
+vector<Question *> vec2Questions(vector<vector<string>> q_vec)
+{
     // just to show whether the questions are read properly
-    vector<Question*> ret_qvec;
+    vector<Question *> ret_qvec;
 
-    for(const auto& v : q_vec){
-        Question* q;
+    for (const auto &v : q_vec)
+    {
+        Question *q;
         string q_version = v[0];
-        if (q_version == "TF"){
-            q = new TrueFalseQuestion((v[0]),stoi(v[1]),v[2],stoi(v[4]),v[3]); //string q_ver ,int idx, const string &text, int point, const string& correct_answer
-        } else if(q_version == "MC"){
-            q = new MultipleChoiceQuestion(v[0],stoi(v[1]),v[2],stoi(v[4]),v[5],v[3]);
-        } else if(q_version == "CQ"){
-            q = new CompletionQuestion(v[0],stoi(v[1]),v[2],stoi(v[4]),v[3]);
+        if (q_version == "TF")
+        {
+            q = new TrueFalseQuestion((v[0]), stoi(v[1]), v[2], stoi(v[4]), v[3]); // string q_ver ,int idx, const string &text, int point, const string& correct_answer
+        }
+        else if (q_version == "MC")
+        {
+            q = new MultipleChoiceQuestion(v[0], stoi(v[1]), v[2], stoi(v[4]), v[5], v[3]);
+        }
+        else if (q_version == "CQ")
+        {
+            q = new CompletionQuestion(v[0], stoi(v[1]), v[2], stoi(v[4]), v[3]);
         }
         ret_qvec.push_back(q);
     }
     return ret_qvec;
 }
 
-void setTextColor(int foreground, int background = -1) {
+void setTextColor(int foreground, int background = -1)
+{
     // Foreground color codes (ANSI escape codes)
     string colors[] = {
         "\033[30m", // Black
@@ -242,73 +299,86 @@ void setTextColor(int foreground, int background = -1) {
         "\033[107m"  // Bright White
     };
 
-    if (foreground >= 0 && foreground < 16) {
+    if (foreground >= 0 && foreground < 16)
+    {
         cout << colors[foreground];
     }
 
     // Background color handling (optional)
-    if (background >= 0 && background < 16) {
+    if (background >= 0 && background < 16)
+    {
         cout << backgroundColors[background];
     }
 }
 // 10, -1
-void resetTextColor() {
+void resetTextColor()
+{
     cout << "\033[0m"; // Reset to default color
 }
 
 // Clear the console screen
-void clearConsole() {
+void clearConsole()
+{
 
-
-    #if defined(_WIN32)
+#if defined(_WIN32)
     system("cls");
-    #else
+#else
     cout << "\033[2J\033[1;1H"; // ANSI escape sequence for clearing screen
-    #endif
+#endif
 }
 
-vector<string> splitString2CourseAndProf(string course_prof){
+vector<string> splitString2CourseAndProf(string course_prof)
+{
     size_t openParenPos = course_prof.find('(');
     // Find the position of the closing parenthesis
     size_t closeParenPos = course_prof.find(')');
-    vector<string> ret_vec = {"",""};
+    vector<string> ret_vec = {"", ""};
     // Validate the input format
-    if (openParenPos != string::npos && closeParenPos != string::npos && closeParenPos > openParenPos) {
+    if (openParenPos != string::npos && closeParenPos != string::npos && closeParenPos > openParenPos)
+    {
         // Extract the course part
         ret_vec[0] = course_prof.substr(0, openParenPos);
         // Extract the professor part
         ret_vec[1] = course_prof.substr(openParenPos + 1, closeParenPos - openParenPos - 1);
-    } else {
+    }
+    else
+    {
         // Handle invalid format
         throw invalid_argument("Invalid input format. Expected: course(professor)");
     }
     return ret_vec;
 }
 
-
-
-bool checkCSVLineFormat(const string& line, const int& line_cnt){
+bool checkCSVLineFormat(const string &line, const int &line_cnt)
+{
     vector<string> tokens;
     string token;
     char delimiter = ',';
     stringstream ss(line);
-    
-    while (getline(ss, token, delimiter)) { // Split by the delimiter
+
+    while (getline(ss, token, delimiter))
+    {                            // Split by the delimiter
         tokens.push_back(token); // Add each token to the vector
-    } // question format(0), question index(1), question text(2), question answer(3), question point(4), //question choices(5) 
-    if((!tokens[0].compare("MC") && tokens.size() == 6) || ((!tokens[0].compare("TF") || !tokens[0].compare("CQ")) && tokens.size() == 5)){
-        try{
+    } // question format(0), question index(1), question text(2), question answer(3), question point(4), //question choices(5)
+    if ((!tokens[0].compare("MC") && tokens.size() == 6) || ((!tokens[0].compare("TF") || !tokens[0].compare("CQ")) && tokens.size() == 5))
+    {
+        try
+        {
             size_t is_integer;
             stoi(tokens[1], &is_integer);
             stoi(tokens[4], &is_integer);
             return true;
-        } catch (invalid_argument&){
+        }
+        catch (invalid_argument &)
+        {
             setTextColor(1);
             cerr << "Error on line " << line_cnt << ".";
             resetTextColor();
             cerr << "Question index or point is not an integer type. " << "Got " << tokens[1] << "(index), " << tokens[4] << "(point) instead." << endl;
         }
-    } else{
+    }
+    else
+    {
         setTextColor(1);
         cerr << "Error on line " << line_cnt << ".";
         resetTextColor();
@@ -319,9 +389,11 @@ bool checkCSVLineFormat(const string& line, const int& line_cnt){
     return false;
 }
 
-void copyCSV(const string& sourceFilePath, const string& destFilePath) {
+void copyCSV(const string &sourceFilePath, const string &destFilePath)
+{
     ifstream inFile(sourceFilePath); // Open the source CSV file
-    if (!inFile.is_open()) {
+    if (!inFile.is_open())
+    {
         cerr << "Error: Could not open the source file at " << sourceFilePath << endl;
         return;
     }
@@ -329,21 +401,26 @@ void copyCSV(const string& sourceFilePath, const string& destFilePath) {
     string line;
     int err_num = 0;
     int line_cnt = 1;
-    while (getline(inFile, line)) {
-        if(!checkCSVLineFormat(line, line_cnt++)){
+    while (getline(inFile, line))
+    {
+        if (!checkCSVLineFormat(line, line_cnt++))
+        {
             err_num = 1;
         }
     }
-    inFile.clear();          // Clear EOF flag if end of file was reached
+    inFile.clear(); // Clear EOF flag if end of file was reached
     inFile.seekg(0, ios::beg);
-    if(!err_num) {
+    if (!err_num)
+    {
         ofstream outFile(destFilePath); // Open the destination CSV file
-        if (!outFile.is_open()) {
+        if (!outFile.is_open())
+        {
             cerr << "Error: Could not create the destination file at " << destFilePath << endl;
             return;
         }
 
-        while (getline(inFile, line)) {
+        while (getline(inFile, line))
+        {
             outFile << line << endl;
         }
 
@@ -354,11 +431,28 @@ void copyCSV(const string& sourceFilePath, const string& destFilePath) {
     inFile.close();
 }
 
-string transformString2Lower(const string& str){
+string transformString2Lower(const string &str)
+{
     string ret_str = str;
     for (size_t i = 0; i < str.length(); i++)
     {
         ret_str[i] = tolower(str[i]);
     }
     return ret_str;
+}
+
+string transformQuestionVersion2string(const string &str)
+{
+    if (!str.compare("TF"))
+    {
+        return "(True/False)";
+    }
+    else if (!str.compare("MC"))
+    {
+        return "(Multiple choice)";
+    }
+    else if (!str.compare("CQ"))
+    {
+        return "(Fill in the blank)";
+    }
 }
