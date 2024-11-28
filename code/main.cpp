@@ -119,10 +119,14 @@ void studentMainMenu(User *user, string datafolder)
             create exam object ~
             */
             showAvailableCourses(user, datafolder, "courses_available.csv");
-
-            cout << "Select the corresponding number to the course >> ";
             int num;
-            cin >> num;
+            while(true){
+                cout << "Select the corresponding number to the course >> ";
+                cin >> num;
+                if(num <= user->getInternalContent().size()){break;}
+                cout << "Invalid input, please try again" << endl;
+            }
+            
             course_prof_name = user->getInternalContent()[num - 1];
 
             vector<string> c_f_vector = splitString2CourseAndProf(course_prof_name);
@@ -239,8 +243,13 @@ void professorMainMenu(User *user, string datafolder)
         { // Inspect results
             user->displayCourses();
             int num;
-            cout << "Select number to view test exam results >> ";
-            cin >> num;
+            while(true){
+                cout << "Select number to view test exam results >> ";
+                cin >> num;
+                if(num <= user->getInternalContent().size()){ break; }
+                cout << "Invalid input, please try again" << endl;
+            }
+           
             inspectResults(user, num - 1, datafolder);
         }
         else if (user_command == 3)
