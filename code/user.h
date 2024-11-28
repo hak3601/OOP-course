@@ -13,7 +13,6 @@ protected:
 
 public:
     User(string, string);
-    User(const User &);
 
     virtual string getName() const = 0;
     virtual string getId() const = 0;
@@ -27,15 +26,10 @@ private:
     vector<string> enroled_courses;
 
 public:
-    Student();
     Student(string, string, vector<string>);
-    Student(const Student &);
-
-    Student &operator=(const Student &);
 
     vector<string> getInternalContent();
     void displayCourses();
-    void take_exam();
     string getName() const;
     string getId() const;
 };
@@ -46,17 +40,10 @@ private:
     vector<string> instructing_courses;
 
 public:
-    Professor();
     Professor(string, string, vector<string>);
-    Professor(const Professor &);
-
-    Professor &operator=(const Professor &);
 
     vector<string> getInternalContent();
     void displayCourses();
-    void create_exam();
-    void mark_exam();
-    void comment_exam();
     string getName() const;
     string getId() const;
 };

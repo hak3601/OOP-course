@@ -36,7 +36,10 @@ int main(int argc, char const *argv[])
     while (1)
     {
         clearConsole();
-        cout << "*** Welcome to Exam Management System ***";
+        setTextColor(3, -1);
+        menuPrintButton(vector<string>{"*** Welcome to University Exam Management System ***"});
+        resetTextColor();
+
         cout << "\nVerify yourself with your name and ID" << endl;
         cout << "Name >> ";
         cin >> user_name;

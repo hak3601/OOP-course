@@ -28,22 +28,6 @@ TrainExam::TrainExam(const string &title, const string &datafolder, const User *
     DDE = new DynamicDifficultyEngine(low, top);
 }
 
-void TrainExam::updateQuestionList(string user_ans)
-{
-    int right_or_wrong = questions[DDE->getCurIdx()]->grade(user_ans);
-    user_taken_answers.push_back(vector<string>{user_ans, questions[DDE->getCurIdx()]->getCorrectAnswer(), to_string(questions[DDE->getCurIdx()]->grade(user_ans))});
-
-    cur_total_score += questions[DDE->getCurIdx()]->getpoint();
-    if (right_or_wrong)
-    { // user got it right
-        individual_problem_RW_tracker.push_back(vector<string>{"O", to_string(questions[DDE->getCurIdx()]->getpoint())});
-        cur_gained_score += questions[DDE->getCurIdx()]->getpoint();
-    }
-    else
-    { // user got it wrong
-        individual_problem_RW_tracker.push_back(vector<string>{"X", to_string(questions[DDE->getCurIdx()]->getpoint())});
-    }
-}
 
 void TrainExam::startExam()
 {
@@ -64,6 +48,9 @@ void TrainExam::startExam()
         }
 
         cout << endl;
+        setTextColor(3, -1);
+        menuPrintButton(vector<string>{"Training Exam"});
+        resetTextColor();
         displayQuestionList();
 
         cout << endl;
@@ -97,9 +84,21 @@ void TrainExam::startExam()
     printSummary();
 }
 
-void TrainExam::editAnswer(string input)
+void TrainExam::editAnswer(string user_ans)
 {
-    updateQuestionList(input);
+    int right_or_wrong = questions[DDE->getCurIdx()]->grade(user_ans);
+    user_taken_answers.push_back(vector<string>{user_ans, questions[DDE->getCurIdx()]->getCorrectAnswer(), to_string(questions[DDE->getCurIdx()]->grade(user_ans))});
+
+    cur_total_score += questions[DDE->getCurIdx()]->getpoint();
+    if (right_or_wrong)
+    { // user got it right
+        individual_problem_RW_tracker.push_back(vector<string>{"O", to_string(questions[DDE->getCurIdx()]->getpoint())});
+        cur_gained_score += questions[DDE->getCurIdx()]->getpoint();
+    }
+    else
+    { // user got it wrong
+        individual_problem_RW_tracker.push_back(vector<string>{"X", to_string(questions[DDE->getCurIdx()]->getpoint())});
+    }
 }
 
 void TrainExam::displayQuestionList() const
@@ -145,17 +144,12 @@ void TrainExam::displayQuestions()
     if (prob_idx >= 0 && prob_idx < static_cast<int>(questions.size()))
     {
         setTextColor(3, -1);
-        menuPrintButton(vector<string>{"Training Exam"});
-        resetTextColor();
-        setTextColor(3, -1);
         cout << "Question " << cur_idx << ": ";
         resetTextColor();
-        cout << questions[prob_idx]->getQuestionText() << transformQuestionVersion2string(questions[prob_idx]->getQversion()) << "   (" << questions[prob_idx]->getpoint() << " points)\n"
-             << endl;
+        cout << questions[prob_idx]->getQuestionText() << transformQuestionVersion2string(questions[prob_idx]->getQversion()) << "   (" << questions[prob_idx]->getpoint() << " points)\n" << endl;
         if (questions[prob_idx]->getQversion() == "MC")
         {
-            cout << questions[prob_idx]->getOptions() << "\n"
-                 << endl;
+            cout << questions[prob_idx]->getOptions() << "\n" << endl;
         }
     }
     else
@@ -367,14 +361,15 @@ void TestExam::displayQuestions()
         cout << "--- Exam Menu ---\n"
              << endl;
         setTextColor(3, -1);
-        cout << "Question " << questions[cur_idx]->getIdx() << ": ";
+        setTextColor(3, -1);
+        cout << "Question " << cur_idx << ": ";
         resetTextColor();
-        cout << questions[cur_idx]->getQuestionText() << "\n"
-             << endl;
+        cout << questions[cur_idx]->getQuestionText() << transformQuestionVersion2string(questions[cur_idx]->getQversion()) << "   (" << questions[cur_idx]->getpoint() << " points)\n" << endl;
         if (questions[cur_idx]->getQversion() == "MC")
         {
-            cout << questions[cur_idx]->getOptions() << endl;
+            cout << questions[cur_idx]->getOptions() << "\n" << endl;
         }
+
         cout << "Current Answer: " << (answers[cur_idx].empty() ? "None" : answers[cur_idx]) << endl;
     }
     else if (cur_idx == static_cast<int>(questions.size()))
