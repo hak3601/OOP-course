@@ -31,6 +31,10 @@ WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 
 all: $(APPNAME)
 
+# Ensure the obj directory exists
+$(OBJDIR):
+	@mkdir -p $(OBJDIR)
+
 # Builds the app
 $(APPNAME): $(OBJ)
 	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
@@ -43,7 +47,7 @@ $(APPNAME): $(OBJ)
 -include $(DEP)
 
 # Building rule for .o files and its .c/.cpp in combination with all .h
-$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT)
+$(OBJDIR)/%.o: $(SRCDIR)/%$(EXT) | $(OBJDIR)
 	$(CC) $(CXXFLAGS) -o $@ -c $<
 
 ################### Cleaning rules for Unix-based OS ###################
