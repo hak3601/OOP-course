@@ -103,7 +103,7 @@ void studentMainMenu(User *user, string datafolder)
         resetTextColor();
         cout << "\n" << endl;
 
-        vector<string> ls = {"1. Take Exam", "2. Train for Test", "3. Create Train Test", "4. Exit"};
+        vector<string> ls = {"1. Take Test", "2. Train for Test", "3. Create Train Test", "4. Exit"};
         printButton(ls);
         cout << "Enter your command >> ";
         cin >> user_command;
@@ -217,7 +217,7 @@ void professorMainMenu(User *user, string datafolder)
         menuPrintButton(vector<string>{"Professor Main Menu", user->getName(), user->getId()});
         resetTextColor();
 
-        vector<string> ls = {"1. Create Exam", "2. Inspect results", "3. Exit"};
+        vector<string> ls = {"1. Create Test", "2. Inspect Results", "3. Exit"};
         printButton(ls);
         cout << "Enter your command >> ";
         cin >> user_command;
