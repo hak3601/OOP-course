@@ -19,7 +19,6 @@ public:
     Question(int, const string &, int, const string &);
 
     virtual string display() const = 0;
-
     virtual int getIdx();
     virtual string getQuestionText();
     virtual int getpoint();

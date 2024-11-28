@@ -49,7 +49,6 @@ public:
     void printSummary() const;
     void displayQuestionList() const;
     void editAnswer(string);
-    void updateQuestionList(string);
 };
 
 class TestExam : public Exam
