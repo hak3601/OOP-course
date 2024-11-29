@@ -17,7 +17,7 @@ int DynamicDifficultyEngine::setCurrentDifficulty(int dif){cur_difficulty = dif;
 int DynamicDifficultyEngine::getCurIdx() {return cur_idx_in_questions;}
 void DynamicDifficultyEngine::setCurIdx(int s) {cur_idx_in_questions = s;}
 int DynamicDifficultyEngine::recommendDifficulty(int cur_idx, int cur_total_score, int cur_gained_score, vector<Question*> questions, vector<vector<string>> RW_tracker) {
-    int recommended_level = 1;
+    int recommended_level = difficulty_lowerbound;
     if(cur_idx > 1 && cur_gained_score != 0){
         float div = static_cast<float>(log2f(cur_gained_score)+1.0f) / (log2f(cur_total_score)+1.0f);
         recommended_level = (div * difficulty_upperbound);

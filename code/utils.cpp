@@ -375,6 +375,7 @@ bool checkCSVLineFormat(const string &line, const int &line_cnt)
             cerr << "Error on line " << line_cnt << ".";
             resetTextColor();
             cerr << "Question index or point is not an integer type. " << "Got " << tokens[1] << "(index), " << tokens[4] << "(point) instead." << endl;
+            cerr << "error raised from -> " << line << endl;
         }
     }
     else

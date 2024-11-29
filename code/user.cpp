@@ -13,8 +13,8 @@ Student::Student(string student_name, string student_id, vector<string> student_
 string Student::getName() const { return name; }
 string Student::getId() const { return id; }
 
-vector<string> Student::getInternalContent() { return enroled_courses; }
-void Student::displayCourses()
+vector<string> Student::getInternalContent()const { return enroled_courses; }
+void Student::displayCourses()const
 {
     int idx = 1;
     for (const auto &c_name : enroled_courses)
@@ -25,14 +25,14 @@ void Student::displayCourses()
 }
 
 /*-------------------------------------------------------------------------------------------*/
-vector<string> Professor::getInternalContent() { return instructing_courses; }
+vector<string> Professor::getInternalContent()const { return instructing_courses; }
 
 Professor::Professor(string prof_name, string prof_id, vector<string> prof_instructing_courses)
     : User(prof_name, prof_id), instructing_courses(prof_instructing_courses) {}
 string Professor::getName() const { return name; }
 string Professor::getId() const { return id; }
 
-void Professor::displayCourses()
+void Professor::displayCourses()const
 {
     int idx = 1;
     for (const auto &c_name : instructing_courses)

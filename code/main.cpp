@@ -32,6 +32,7 @@ int main(int argc, char const *argv[])
     string user_name;
     string user_id;
     User *user;
+    int user_type = 0;
 
     while (1)
     {
@@ -45,11 +46,10 @@ int main(int argc, char const *argv[])
         cin >> user_name;
         cout << "ID >> ";
         cin >> user_id;
-        int user_type = verifyUser(user_name, user_id, datafolder);
+        user_type = verifyUser(user_name, user_id, datafolder);
         cout << "Checking if your information is already in the database..." << endl;
         if (user_type == 0)
-        { // can't open file
-            return 0;
+        { // can't open file            return 0;
         }
         else if (user_type == 1)
         { // student
@@ -77,11 +77,11 @@ int main(int argc, char const *argv[])
             }
         }
     }
-    if (!string("7Student").compare(typeid(*user).name()))
+    if (user_type == 1)
     {
         studentMainMenu(user, datafolder);
     }
-    else if (!string("9Professor").compare(typeid(*user).name()))
+    else if (user_type == 2)
     {
         professorMainMenu(user, datafolder);
     }
@@ -162,7 +162,6 @@ void studentMainMenu(User *user, string datafolder)
                 continue;
             }
             int train_idx = 1;
-
             for (const auto &vv : available_train_lists)
             {
                 cout << train_idx << ". ";
@@ -170,12 +169,20 @@ void studentMainMenu(User *user, string datafolder)
                 ++train_idx;
             }
 
-            cout << "Select the file to train by entering the idx : ";
-            int user_idx;
-            cin >> user_idx;
+            while(true){
+                cout << "Select the file to train by entering the idx : ";
+                int user_idx;
+                cin >> user_idx;
+                if(user_idx <= available_train_lists.size()){
+                    exam = new TrainExam(c_f_vector[0], datafolder, user, c_f_vector[1], available_train_lists[user_idx - 1]);
+                    exam->startExam();
+                    break;
+                }
+                cout << "Invalid input, please try again" << endl;
+            }
+            
 
-            exam = new TrainExam(c_f_vector[0], datafolder, user, c_f_vector[1], available_train_lists[user_idx - 1]);
-            exam->startExam();
+            
         }
         else if (user_command == 3)
         { // Create train tests
@@ -220,7 +227,7 @@ void professorMainMenu(User *user, string datafolder)
         setTextColor(3, -1);
         menuPrintButton(vector<string>{"Professor Main Menu", user->getName(), user->getId()});
         resetTextColor();
-
+        cout << "\n" << endl;
         vector<string> ls = {"1. Create Test", "2. Inspect Results", "3. Exit"};
         printButton(ls);
         cout << "Enter your command >> ";

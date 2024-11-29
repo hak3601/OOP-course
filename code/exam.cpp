@@ -259,6 +259,9 @@ void TestExam::startExam()
                 break;
             continue;
         }
+        setTextColor(3,-1);
+        menuPrintButton(vector<string>{"Testing Exam"});
+        resetTextColor();
 
         displayQuestionList();
         cout << endl;
@@ -362,7 +365,7 @@ void TestExam::displayQuestions()
              << endl;
         setTextColor(3, -1);
         setTextColor(3, -1);
-        cout << "Question " << cur_idx << ": ";
+        cout << "Question " << cur_idx + 1 << ": ";
         resetTextColor();
         cout << questions[cur_idx]->getQuestionText() << transformQuestionVersion2string(questions[cur_idx]->getQversion()) << "   (" << questions[cur_idx]->getpoint() << " points)\n" << endl;
         if (questions[cur_idx]->getQversion() == "MC")

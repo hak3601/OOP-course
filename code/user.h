@@ -16,8 +16,8 @@ public:
 
     virtual string getName() const = 0;
     virtual string getId() const = 0;
-    virtual vector<string> getInternalContent() = 0;
-    virtual void displayCourses() = 0;
+    virtual vector<string> getInternalContent() const = 0;
+    virtual void displayCourses() const = 0;
 };
 
 class Student : public User
@@ -28,8 +28,8 @@ private:
 public:
     Student(string, string, vector<string>);
 
-    vector<string> getInternalContent();
-    void displayCourses();
+    vector<string> getInternalContent() const;
+    void displayCourses() const;
     string getName() const;
     string getId() const;
 };
@@ -42,8 +42,8 @@ private:
 public:
     Professor(string, string, vector<string>);
 
-    vector<string> getInternalContent();
-    void displayCourses();
+    vector<string> getInternalContent()const;
+    void displayCourses()const;
     string getName() const;
     string getId() const;
 };
