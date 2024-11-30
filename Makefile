@@ -10,20 +10,27 @@ LDFLAGS =
 # Makefile settings - Can be customized.
 APPNAME = program
 EXT = .cpp
-SRCDIR = C:\Users\User\Desktop\OOP-course\code
+SRCDIR = code
 OBJDIR = obj
 
 ############## Do not change anything from here downwards! #############
+
+# Sources, objects, and dependencies
 SRC = $(wildcard $(SRCDIR)/*$(EXT))
 OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
 DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
-# UNIX-based OS variables & settings
-RM = rm
-DELOBJ = $(OBJ)
-# Windows OS variables & settings
-DEL = del
-EXE = .exe
-WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
+
+# Platform-specific commands
+OS := $(shell uname)
+ifeq ($(OS), Windows_NT)
+    RM = del
+    MKDIR = mkdir
+    EXE = .exe
+else
+    RM = rm -f
+    MKDIR = mkdir -p
+    EXE =
+endif
 
 ########################################################################
 ####################### Targets beginning here #########################
@@ -33,41 +40,28 @@ all: $(APPNAME)
 
 # Ensure the obj directory exists
 $(OBJDIR):
-	@mkdir -p $(OBJDIR)
+	@$(MKDIR) $(OBJDIR)
 
 # Builds the app
 $(APPNAME): $(OBJ)
-	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CC) $(CXXFLAGS) -o $@$(EXE) $^ $(LDFLAGS)
 
-# Creates the dependecy rules
+# Creates the dependency rules
 %.d: $(SRCDIR)/%$(EXT)
-	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
+	@$(CC) $(CXXFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) > $@
 
-# Includes all .h files
+# Includes all dependency files
 -include $(DEP)
 
-# Building rule for .o files and its .c/.cpp in combination with all .h
+# Compiling source files to object files
 $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT) | $(OBJDIR)
 	$(CC) $(CXXFLAGS) -o $@ -c $<
 
-################### Cleaning rules for Unix-based OS ###################
-# Cleans complete project
+# Cleaning rules
 .PHONY: clean
 clean:
-	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
+	$(RM) $(OBJ) $(DEP) $(APPNAME)$(EXE)
 
-# Cleans only all files with the extension .d
 .PHONY: cleandep
 cleandep:
 	$(RM) $(DEP)
-
-#################### Cleaning rules for Windows OS #####################
-# Cleans complete project
-.PHONY: cleanw
-cleanw:
-	$(DEL) $(WDELOBJ) $(DEP) $(APPNAME)$(EXE)
-
-# Cleans only all files with the extension .d
-.PHONY: cleandepw
-cleandepw:
-	$(DEL) $(DEP)
