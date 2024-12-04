@@ -1,8 +1,8 @@
-Student : Moonsooho, ID : 20235124, Score : 1/24
-"Relational databases store data in tables.","Student answer => t","Correct answer => True"
-"SQL is a programming language used to create and manage databases.","Student answer => None","Correct answer => True"
-"Which of the following is a type of database?","Student answer => None","Correct answer => b"
-"Which SQL statement is used to retrieve data from a database?","Student answer => None","Correct answer => a"
+Student : TaeArkar, ID : 20234483, Score : 3/24
+"Relational databases store data in tables.","Student answer => None","Correct answer => True"
+"SQL is a programming language used to create and manage databases.","Student answer => t","Correct answer => True"
+"Which of the following is a type of database?","Student answer => a","Correct answer => b"
+"Which SQL statement is used to retrieve data from a database?","Student answer => a","Correct answer => a"
 "The unique identifier for a record in a database table is called the __.","Student answer => None","Correct answer => Primary Key"
 "Foreign keys are used to enforce relationships between tables.","Student answer => None","Correct answer => True"
 "A database index speeds up the retrieval of rows by using a data structure.","Student answer => None","Correct answer => True"

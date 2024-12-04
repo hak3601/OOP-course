@@ -12,25 +12,18 @@ APPNAME = program
 EXT = .cpp
 SRCDIR = code
 OBJDIR = obj
+DEPDIR = others
 
 ############## Do not change anything from here downwards! #############
 
 # Sources, objects, and dependencies
 SRC = $(wildcard $(SRCDIR)/*$(EXT))
 OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
-DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
+DEP = $(SRC:$(SRCDIR)/%$(EXT)=$(DEPDIR)/%.d)
 
-# Platform-specific commands
-OS := $(shell uname)
-ifeq ($(OS), Windows_NT)
-    RM = del
-    MKDIR = mkdir
-    EXE = .exe
-else
-    RM = rm -f
-    MKDIR = mkdir -p
-    EXE =
-endif
+# UNIX-based OS variables & settings
+RM = rm -f
+MKDIR = mkdir -p
 
 ########################################################################
 ####################### Targets beginning here #########################
@@ -38,17 +31,20 @@ endif
 
 all: $(APPNAME)
 
-# Ensure the obj directory exists
+# Ensure the obj and dep directories exist
 $(OBJDIR):
 	@$(MKDIR) $(OBJDIR)
 
+$(DEPDIR):
+	@$(MKDIR) $(DEPDIR)
+
 # Builds the app
 $(APPNAME): $(OBJ)
-	$(CC) $(CXXFLAGS) -o $@$(EXE) $^ $(LDFLAGS)
+	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 # Creates the dependency rules
-%.d: $(SRCDIR)/%$(EXT)
-	@$(CC) $(CXXFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) > $@
+$(DEPDIR)/%.d: $(SRCDIR)/%$(EXT) | $(DEPDIR)
+	@$(CC) $(CXXFLAGS) $< -MM -MT $(OBJDIR)/$*.o > $@
 
 # Includes all dependency files
 -include $(DEP)
@@ -60,7 +56,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT) | $(OBJDIR)
 # Cleaning rules
 .PHONY: clean
 clean:
-	$(RM) $(OBJ) $(DEP) $(APPNAME)$(EXE)
+	$(RM) $(OBJ) $(DEP) $(APPNAME)
 
 .PHONY: cleandep
 cleandep:
