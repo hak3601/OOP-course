@@ -61,3 +61,8 @@ clean:
 .PHONY: cleandep
 cleandep:
 	$(RM) $(DEP)
+
+# Run the program with "data" argument
+.PHONY: run
+run: $(APPNAME)
+	./$(APPNAME) data
