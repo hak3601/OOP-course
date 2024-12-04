@@ -1,0 +1,15 @@
+TF,1,A primary key in a table cannot have duplicate values.,True,1,
+TF,2,SQL stands for Structured Query Language.,True,1,
+MC,3,Which keyword is used in SQL to sort the result set?,c,2,a) GROUP BY b) FILTER c) ORDER BY d) HAVING
+MC,4,Which of the following is not a database model?,d,2,a) Relational b) Hierarchical c) Network d) Object-Oriented Programming
+CQ,5,A relationship where one table references another table multiple times is called a __ relationship.,Self-Referencing,2,
+TF,6,A view in a database is a virtual table that does not store data physically.,True,1,
+TF,7,In SQL, the DISTINCT keyword is used to return unique values.,True,1,
+MC,8,Which type of database does not require a predefined schema?,a,2,a) NoSQL b) Relational c) Flat File d) Hierarchical
+MC,9,Which clause in SQL is used to group rows sharing a property?,b,2,a) WHERE b) GROUP BY c) ORDER BY d) HAVING
+CQ,10,A foreign key in a table must reference a primary key in __.,another table,2,
+TF,11,Indexes can improve the performance of SELECT queries.,True,1,
+TF,12,Triggers are automatically executed in response to specific events in a database.,True,1,
+MC,13,What does the JOIN operation in SQL do?,d,2,a) Deletes rows b) Adds new rows c) Updates columns d) Combines rows from two or more tables
+MC,14,Which of these is a key feature of a relational database?,a,2,a) Data stored in rows and columns b) Hierarchical data c) Unstructured data d) Flat file storage
+CQ,15,The process of combining data from multiple sources into one database is called __.,Data Integration,2,

@@ -1,0 +1,15 @@
+TF,1,The user experience (UX) design primarily focuses on the aesthetics of the product.,False,1,
+TF,2,Fitts' Law predicts the time required to move to a target area is a function of the distance to and size of the target.,True,1,
+MC,3,Which device is an example of an input device in HCI?,c,2,a) Printer b) Monitor c) Keyboard d) Hard Disk
+MC,4,What does the term 'affordance' refer to in HCI?,a,2,a) The perceived and actual properties of an object that determine how it can be used b) The cost-effectiveness of a design c) The accessibility of a design d) The speed of a design
+CQ,5,The study of how humans interact with computers is known as __.,Human-Computer Interaction,2,
+TF,6,Heuristic evaluation involves a group of evaluators examining a user interface to identify usability problems.,True,1,
+TF,7,Feedback in HCI refers to the system's response to user actions.,True,1,
+MC,8,Which type of interface allows users to interact with the computer by typing commands?,b,2,a) Graphical User Interface (GUI) b) Command-Line Interface (CLI) c) Touch Interface d) Voice Interface
+MC,9,Which principle of HCI aims to reduce the memory load on users?,d,2,a) Consistency b) Feedback c) Flexibility d) Recognition over Recall
+CQ,10,The model that describes human-computer interaction as a sequence of actions performed by the user is called the __.,GOMS Model,2,
+TF,11,A persona in HCI is a fictional representation of an ideal user.,True,1,
+TF,12,Prototyping is not an important stage in the design process of HCI.,False,1,
+MC,13,Which of the following is a principle of direct manipulation in HCI?,a,2,a) Continuous representation of objects b) Limited control c) Complex syntax d) Delayed feedback
+MC,14,Which evaluation method involves observing users as they interact with a system?,d,2,a) Heuristic Evaluation b) Expert Review c) Cognitive Walkthrough d) Usability Testing
+CQ,15,The process of designing a system that is easy to learn and efficient to use is called __.,Usability Engineering,2,

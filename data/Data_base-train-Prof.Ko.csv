@@ -1,0 +1,15 @@
+TF,1,In a relational database every table must have at least one primary key.,True,1,
+TF,2,A NULL value in a database means that the field is empty or undefined.,True,1,
+MC,3,Which SQL statement is used to remove rows from a table?,c,2,a) UPDATE b) INSERT c) DELETE d) ALTER
+MC,4,Which type of database is best suited for handling large volumes of unstructured data?,a,3,a) NoSQL b) Relational c) Hierarchical d) Flat File
+CQ,5,A __ is used to uniquely identify a row in a table.,Primary Key,1,
+TF,6,Indexes in a database can also slow down write operations.,True,2,
+TF,7,Data normalization is used to eliminate redundancy in databases.,True,2,
+MC,8,Which of the following SQL commands is used to modify the structure of a table?,b,3,a) UPDATE b) ALTER c) SELECT d) DELETE
+MC,9,What is the purpose of the HAVING clause in SQL?,d,4,a) Filter data by conditions b) Sort data in descending order c) Combine rows from multiple tables d) Apply conditions to grouped data
+CQ,10,The __ clause in SQL is used to combine the results of two SELECT queries.,UNION,3,
+TF,11,A composite key is made up of two or more columns.,True,2,
+TF,12,Every database transaction must be atomic to ensure reliability.,True,3,
+MC,13,Which SQL operation combines data from two tables by matching rows based on a condition?,d,4,a) UNION b) GROUP BY c) FILTER d) JOIN
+MC,14,What is a data warehouse primarily used for?,a,5,a) Analytical queries b) Transactional queries c) File storage d) Network operations
+CQ,15,The process of recovering a database to a previous state is known as __.,Database Recovery,5,

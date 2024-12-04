@@ -1,6 +1,6 @@
 /.vscode
-/makefile
 /*.exe
 code/*.exe
 code/program
+/*.d
 *.o
