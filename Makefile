@@ -15,15 +15,16 @@ OBJDIR = obj
 DEPDIR = others
 
 ############## Do not change anything from here downwards! #############
-
-# Sources, objects, and dependencies
 SRC = $(wildcard $(SRCDIR)/*$(EXT))
 OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
-DEP = $(SRC:$(SRCDIR)/%$(EXT)=$(DEPDIR)/%.d)
-
+DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
 # UNIX-based OS variables & settings
-RM = rm -f
-MKDIR = mkdir -p
+RM = rm
+DELOBJ = $(OBJ)
+# Windows OS variables & settings
+DEL = del
+EXE = .exe
+WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
 
 ########################################################################
 ####################### Targets beginning here #########################
@@ -33,7 +34,7 @@ all: $(APPNAME)
 
 # Ensure the obj and dep directories exist
 $(OBJDIR):
-	@$(MKDIR) $(OBJDIR)
+	@mkdir -p $(OBJDIR)
 
 $(DEPDIR):
 	@$(MKDIR) $(DEPDIR)
@@ -42,22 +43,35 @@ $(DEPDIR):
 $(APPNAME): $(OBJ)
 	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-# Creates the dependency rules
-$(DEPDIR)/%.d: $(SRCDIR)/%$(EXT) | $(DEPDIR)
-	@$(CC) $(CXXFLAGS) $< -MM -MT $(OBJDIR)/$*.o > $@
+# Creates the dependecy rules
+%.d: $(SRCDIR)/%$(EXT)
+	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
 
-# Includes all dependency files
+# Includes all .h files
 -include $(DEP)
 
-# Compiling source files to object files
+# Building rule for .o files and its .c/.cpp in combination with all .h
 $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT) | $(OBJDIR)
 	$(CC) $(CXXFLAGS) -o $@ -c $<
 
-# Cleaning rules
+################### Cleaning rules for Unix-based OS ###################
+# Cleans complete project
 .PHONY: clean
 clean:
-	$(RM) $(OBJ) $(DEP) $(APPNAME)
+	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
 
+# Cleans only all files with the extension .d
 .PHONY: cleandep
 cleandep:
 	$(RM) $(DEP)
+
+#################### Cleaning rules for Windows OS #####################
+# Cleans complete project
+.PHONY: cleanw
+cleanw:
+	$(DEL) $(WDELOBJ) $(DEP) $(APPNAME)$(EXE)
+
+# Cleans only all files with the extension .d
+.PHONY: cleandepw
+cleandepw:
+	$(DEL) $(DEP)
