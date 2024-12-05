@@ -4,6 +4,9 @@
 #include <fstream>
 #include <sstream>
 #include <random>
+#include <iomanip>
+#include <chrono>
+#include <ctime>
 #include "questions.h"
 /**/
 #ifdef _WIN32
@@ -15,7 +18,9 @@
 /**/
 using namespace std;
 /*---------------------------------------------------------------------------------------------------------------------------------------*/
-
+random_device rd;
+mt19937 gen(rd());
+uniform_int_distribution<int> dis(1000, 9999);
 vector<string> listFilesInDirectory(const string &folderPath, vector<string> &additional_info, const string &version)
 {
     vector<string> lists;
@@ -98,16 +103,19 @@ vector<string> listFilesInDirectory(const string &folderPath, vector<string> &ad
     return lists;
 }
 
-string generateRandomCode()
-{
-    // Create a random number generator
-    random_device rd;  // Seed
-    mt19937 gen(rd()); // Mersenne Twister random number generator
+string generateRandomCode() {
+    // Get the current time
+    auto now = chrono::system_clock::now();
+    time_t currentTime = chrono::system_clock::to_time_t(now);
 
-    // Define the range [1000, 9999] for a 4-digit code
-    uniform_int_distribution<int> dist(1000, 9999);
+    // Convert to a tm structure
+    tm localTime = *localtime(&currentTime);
 
-    return to_string(dist(gen)); // Generate the random number
+    // Format the date and time
+    ostringstream oss;
+    oss << put_time(&localTime, "%Y%m%d%H%M%S");
+
+    return oss.str();
 }
 
 void menuPrintButton(const vector<string> &labels)
