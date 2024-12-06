@@ -49,6 +49,7 @@ public:
     void printSummary() const;
     void displayQuestionList() const;
     void editAnswer(string);
+    ~TrainExam();
 };
 
 class TestExam : public Exam
