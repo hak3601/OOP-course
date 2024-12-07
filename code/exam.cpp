@@ -76,7 +76,6 @@ void TrainExam::startExam()
             cout << "Invalid command. Please try again." << endl;
         }
 
-        delete questions[DDE->getCurIdx()];
         questions.erase(questions.begin() + DDE->getCurIdx());
         cur_idx++;
     }
@@ -232,7 +231,7 @@ void TrainExam::printSummary() const
             }
         }
         cout << "\n"
-             << endl;
+            << endl;
     }
 }
 
