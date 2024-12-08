@@ -65,6 +65,8 @@ void TrainExam::startExam()
             cin.ignore(); // Ignore newline from previous input
             getline(cin, input);
             editAnswer(input); // Automatically moves to the next question after editing
+            questions.erase(questions.begin() + DDE->getCurIdx());
+            cur_idx++;
         }
         else if (command == 'q')
         {
@@ -75,9 +77,6 @@ void TrainExam::startExam()
         {
             cout << "Invalid command. Please try again." << endl;
         }
-
-        questions.erase(questions.begin() + DDE->getCurIdx());
-        cur_idx++;
     }
 
     printSummary();
