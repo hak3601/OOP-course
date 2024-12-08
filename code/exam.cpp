@@ -217,7 +217,7 @@ void TrainExam::printSummary() const
         setTextColor(14, -1);
         cout << DDE->getLowerbound() + i << " point : ";
         resetTextColor();
-        for (size_t j = 0; j < point_cnt_dict[i] * 2; j++)
+        for (int j = 0; j < point_cnt_dict[i] * 2; j++)
         {
             this_thread::sleep_for(chrono::milliseconds(50));
             if (j % 2 != 0)
@@ -355,6 +355,7 @@ int TestExam::handleEndOfExam()
     default:
         cout << "Invalid option. Please try again." << endl;
     }
+    return 0;
 }
 
 void TestExam::displayQuestions()
