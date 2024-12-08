@@ -15,16 +15,15 @@ OBJDIR = obj
 DEPDIR = others
 
 ############## Do not change anything from here downwards! #############
+
+# Sources, objects, and dependencies
 SRC = $(wildcard $(SRCDIR)/*$(EXT))
 OBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)/%.o)
-DEP = $(OBJ:$(OBJDIR)/%.o=%.d)
+DEP = $(SRC:$(SRCDIR)/%$(EXT)=$(DEPDIR)/%.d)
+
 # UNIX-based OS variables & settings
-RM = rm
-DELOBJ = $(OBJ)
-# Windows OS variables & settings
-DEL = del
-EXE = .exe
-WDELOBJ = $(SRC:$(SRCDIR)/%$(EXT)=$(OBJDIR)\\%.o)
+RM = rm -f
+MKDIR = mkdir -p
 
 ########################################################################
 ####################### Targets beginning here #########################
@@ -34,7 +33,7 @@ all: $(APPNAME)
 
 # Ensure the obj and dep directories exist
 $(OBJDIR):
-	@mkdir -p $(OBJDIR)
+	@$(MKDIR) $(OBJDIR)
 
 $(DEPDIR):
 	@$(MKDIR) $(DEPDIR)
@@ -43,35 +42,27 @@ $(DEPDIR):
 $(APPNAME): $(OBJ)
 	$(CC) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-# Creates the dependecy rules
-%.d: $(SRCDIR)/%$(EXT)
-	@$(CPP) $(CFLAGS) $< -MM -MT $(@:%.d=$(OBJDIR)/%.o) >$@
+# Creates the dependency rules
+$(DEPDIR)/%.d: $(SRCDIR)/%$(EXT) | $(DEPDIR)
+	@$(CC) $(CXXFLAGS) $< -MM -MT $(OBJDIR)/$*.o > $@
 
-# Includes all .h files
+# Includes all dependency files
 -include $(DEP)
 
-# Building rule for .o files and its .c/.cpp in combination with all .h
+# Compiling source files to object files
 $(OBJDIR)/%.o: $(SRCDIR)/%$(EXT) | $(OBJDIR)
 	$(CC) $(CXXFLAGS) -o $@ -c $<
 
-################### Cleaning rules for Unix-based OS ###################
-# Cleans complete project
+# Cleaning rules
 .PHONY: clean
 clean:
-	$(RM) $(DELOBJ) $(DEP) $(APPNAME)
+	$(RM) $(OBJ) $(DEP) $(APPNAME)
 
-# Cleans only all files with the extension .d
 .PHONY: cleandep
 cleandep:
 	$(RM) $(DEP)
 
-#################### Cleaning rules for Windows OS #####################
-# Cleans complete project
-.PHONY: cleanw
-cleanw:
-	$(DEL) $(WDELOBJ) $(DEP) $(APPNAME)$(EXE)
-
-# Cleans only all files with the extension .d
-.PHONY: cleandepw
-cleandepw:
-	$(DEL) $(DEP)
+# Run the program with "data" argument
+.PHONY: run
+run: $(APPNAME)
+	./$(APPNAME) data
