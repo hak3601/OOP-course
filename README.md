@@ -1,6 +1,6 @@
 # OOP course Team Project
 
-This is Object-oriented Programming Language (2-2) course, in 2024 Fall.
+This is a team project of Object-oriented Programming Language course, in 2024 Fall (2-2).
 
 ## Program Structure
 
